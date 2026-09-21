@@ -1,7 +1,7 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
 import {content as data, hasMedia, type StoryBeat} from '../content';
-import {C, Card, Dot, Media, Pill, R, Rail, Segmented, Shell, Track, Well, io, mix, mono, neo, p} from '../design';
+import {C, Card, Dot, FittedText, LocalMedia, Pill, R, Rail, Segmented, Shell, Track, Well, io, mix, mono, neo, p} from '../design';
 
 const Note: React.FC<{text: string; x: number; y: number; rotate?: number; dark?: boolean}> = ({text, x, y, rotate = 0, dark}) => (
   <div
@@ -35,7 +35,7 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
     <div style={{position: 'absolute', inset: 0, background: blue ? C.blue : C.surface, color: blue ? 'white' : C.ink, padding: '34px 42px', overflow: 'hidden'}}>
       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <span style={{fontFamily: mono, fontSize: 18, letterSpacing: 1, opacity: 0.7}}>project / canvas</span>
-        <Pill variant={blue ? 'blueChip' : 'mute'} size={15}>概念演示</Pill>
+        {data.demo ? <Pill variant={blue ? 'blueChip' : 'mute'} size={15}>概念演示</Pill> : null}
       </div>
       {beat.layout === 'notes' ? (
         <>
@@ -51,7 +51,7 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
           <div style={{fontSize: 29, opacity: 0.8, marginTop: 20}}>{beat.description}</div>
           <div style={{display: 'flex', alignItems: 'center', gap: 18, marginTop: 66}}>
             {beat.points.map((point, index) => (
-              <React.Fragment key={point}>
+              <React.Fragment key={`${index}-${point}`}>
                 {index > 0 ? <Connector light /> : null}
                 <Pill variant={index === beat.points.length - 1 ? 'frostOn' : 'blueChip'} size={30} style={{fontWeight: 600}}>{point}</Pill>
               </React.Fragment>
@@ -64,7 +64,7 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
           <div style={{fontSize: 47, fontWeight: 700, marginTop: 30}}>{beat.headline}</div>
           {beat.points.map((point, index) => (
             <div
-              key={point}
+              key={`${index}-${point}`}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -89,7 +89,7 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
           <div style={{fontSize: 49, fontWeight: 700, marginTop: 34}}>{beat.headline}</div>
           <div style={{display: 'flex', gap: 24, marginTop: 46}}>
             {beat.points.map((point, index) => (
-              <div key={point} style={{flex: 1, padding: '24px 26px', height: 216, borderRadius: R.inner, background: C.blue, boxShadow: neo.raisedBlue}}>
+              <div key={`${index}-${point}`} style={{flex: 1, padding: '24px 26px', height: 216, borderRadius: R.inner, background: C.blue, boxShadow: neo.raisedBlue}}>
                 <div style={{fontFamily: mono, fontSize: 18, opacity: 0.6}}>0{index + 1}</div>
                 <div style={{fontSize: 38, fontWeight: 700, marginTop: 22}}>{point}</div>
                 <div style={{height: 6, width: 74, borderRadius: R.pill, background: index === beat.points.length - 1 ? C.teal : 'rgba(255,255,255,0.7)', marginTop: 40}} />
@@ -103,7 +103,7 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
           <div style={{fontSize: 50, fontWeight: 700, marginTop: 30}}>{beat.headline}</div>
           <div style={{position: 'relative', marginTop: 56, height: 62}}>
             {beat.points.map((point, index) => (
-              <div key={point} style={{position: 'absolute', left: `${index * 50}%`, transform: 'translateX(-50%)', marginLeft: index === 0 ? 46 : index === beat.points.length - 1 ? -46 : 0}}>
+              <div key={`${index}-${point}`} style={{position: 'absolute', left: `${index * 50}%`, transform: 'translateX(-50%)', marginLeft: index === 0 ? 46 : index === beat.points.length - 1 ? -46 : 0}}>
                 <Pill variant={index === activeStage ? 'chipOn' : 'chip'} size={30} style={{fontWeight: 600}}>{point}</Pill>
               </div>
             ))}
@@ -132,13 +132,15 @@ export const Story: React.FC<{beatIndices?: number[]; durationInFrames?: number;
   const current = Math.min(lastIndex, switches.filter((switchFrame) => switchFrame <= f).length - 1);
   const local = f - switches[current];
   const word = p(local, 5, 17);
-  const expansion = 0;
+  const activeBeat = beats[current];
+  const expansion = beatIndices[current] === 4 && hasMedia(activeBeat.media)
+    ? p(local, Math.max(24, beatDuration - 37), Math.max(44, beatDuration - 17), io)
+    : 0;
   const timelineT = current === lastIndex ? p(local, 20, 72, io) : 0;
   const x = mix(110, 0, expansion);
   const y = mix(285, 0, expansion);
   const w = mix(850, 1920, expansion);
   const h = mix(510, 1080, expansion);
-  const activeBeat = beats[current];
   return (
     <Shell>
       <div style={{position: 'absolute', inset: '0 0 0 1030px', background: C.pale, opacity: 1 - expansion}} />
@@ -161,7 +163,15 @@ export const Story: React.FC<{beatIndices?: number[]; durationInFrames?: number;
                 opacity: expansion > 0 && index !== lastIndex ? 1 - expansion : 1,
               }}
             >
-              {hasMedia(beat.media) ? <Media asset={beat.media} /> : <SampleCard beat={beat} t={index === lastIndex ? timelineT : 0} />}
+              <SampleCard beat={beat} t={index === lastIndex ? timelineT : 0} />
+              {hasMedia(beat.media) ? (
+                <LocalMedia
+                  asset={beat.media}
+                  from={Math.round(switches[index])}
+                  durationInFrames={Math.ceil(durationInFrames - switches[index])}
+                  style={{position: 'absolute', inset: 0}}
+                />
+              ) : null}
             </Card>
           ))}
         </div>
@@ -170,9 +180,16 @@ export const Story: React.FC<{beatIndices?: number[]; durationInFrames?: number;
         <Pill variant={current < 2 ? 'chip' : 'frost'} size={20} style={{fontWeight: 600, letterSpacing: 3}}>{activeBeat.section}</Pill>
         <div style={{fontSize: 58, fontWeight: 400, marginTop: 40}}>{activeBeat.lead}</div>
         <div style={{height: 169, overflow: 'hidden'}}>
-          <div style={{fontSize: 133, fontWeight: 700, letterSpacing: -6, lineHeight: 1.2, color: current < 2 ? C.blue : C.teal, opacity: word, transform: `translateY(${30 * (1 - word)}px)`}}>
-            {activeBeat.keyword}<span style={{color: C.ink}}>。</span>
-          </div>
+          <FittedText
+            text={activeBeat.keyword}
+            measurementText={`${activeBeat.keyword}。`}
+            suffix={<span style={{color: C.ink}}>。</span>}
+            maxWidth={700}
+            maxFontSize={133}
+            minFontSize={72}
+            letterSpacing={-6}
+            style={{lineHeight: 1.2, color: current < 2 ? C.blue : C.teal, opacity: word, transform: `translateY(${30 * (1 - word)}px)`}}
+          />
         </div>
         <div style={{fontSize: 31, lineHeight: 1.7, maxWidth: 600, marginTop: 30, opacity: word}}>{activeBeat.description}</div>
         <Segmented count={beats.length} pos={step} width={Math.max(240, beats.length * 84)} style={{marginTop: 48}} />

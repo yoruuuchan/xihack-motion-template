@@ -1,3 +1,7 @@
+import {CHAPTER_DATA, DIAL_EXIT_MOTION_FRAMES, DIAL_SCENE_OVERLAP, FPS, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterSceneDuration, chapterSceneStart, chapterStart, dialClickFrame, dialExitMotionStart, dialPressPeak, dialTurnEnd} from './timeline-config.mjs';
+
+export {DIAL_EXIT_MOTION_FRAMES, DIAL_SCENE_OVERLAP, FPS, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterSceneDuration, chapterSceneStart, chapterStart, dialClickFrame, dialExitMotionStart, dialPressPeak, dialTurnEnd};
+
 export type ChapterId = 'team' | 'problem' | 'solution' | 'people' | 'today' | 'next';
 
 export type Chapter = {
@@ -11,20 +15,7 @@ export type Chapter = {
 
 // First music-locked cut: source audio 00:56.03–01:44.63 at ~123 BPM.
 // Boundaries follow detected bar/arrangement changes while preserving reading holds.
-export const CHAPTERS: readonly Chapter[] = [
-  {id: 'team', code: '00', label: '团队 / 项目', durationInFrames: 260, dialFrames: 45, dialTarget: 1},
-  {id: 'problem', code: '01', label: '问题', durationInFrames: 202, dialFrames: 30, dialTarget: 2},
-  {id: 'solution', code: '02', label: '方案', durationInFrames: 317, dialFrames: 30, dialTarget: 3},
-  {id: 'people', code: '03', label: '我们', durationInFrames: 260, dialFrames: 30, dialTarget: 4},
-  {id: 'today', code: '04', label: '今天', durationInFrames: 260, dialFrames: 30, dialTarget: 5},
-  {id: 'next', code: '05', label: '下一步', durationInFrames: 159, dialFrames: 24, dialTarget: 6},
-] as const;
-
-export const DIAL_SCENE_OVERLAP = 6;
-export const TOTAL_DURATION = CHAPTERS.reduce((sum, chapter) => sum + chapter.durationInFrames, 0);
-
-export const chapterStart = (index: number) =>
-  CHAPTERS.slice(0, index).reduce((sum, chapter) => sum + chapter.durationInFrames, 0);
+export const CHAPTERS = CHAPTER_DATA as readonly Chapter[];
 
 export const chapterAtFrame = (frame: number) => {
   const found = CHAPTERS.findIndex(

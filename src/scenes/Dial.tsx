@@ -2,7 +2,7 @@ import React from 'react';
 import {interpolateColors, useCurrentFrame} from 'remotion';
 import {content as data} from '../content';
 import {C, Pill, Shell, Small, io, mix, mono, neo, p} from '../design';
-import {DIAL_SCENE_OVERLAP, type ChapterId} from '../timeline';
+import {CHAPTERS, DIAL_SCENE_OVERLAP, dialExitMotionStart, dialTurnEnd, type ChapterId} from '../timeline';
 
 // DIRECTION: the rotary selector chooses a section, then yields to that section's scene.
 // It is a transition device, not a permanent overlay. DialCue drives all six chapters
@@ -10,12 +10,11 @@ import {DIAL_SCENE_OVERLAP, type ChapterId} from '../timeline';
 
 export const DETENTS = [
   {angle: -150, num: '', word: '待机'},
-  {angle: -100, num: '00', word: '团队'},
-  {angle: -50, num: '01', word: '问题'},
-  {angle: 0, num: '02', word: '方案'},
-  {angle: 50, num: '03', word: '我们'},
-  {angle: 100, num: '04', word: '今天'},
-  {angle: 150, num: '05', word: '下一步'},
+  ...CHAPTERS.map((chapter, index) => ({
+    angle: -100 + index * 50,
+    num: chapter.code,
+    word: chapter.label.split(' / ')[0],
+  })),
 ];
 
 const DIAL = {cx: 470, cy: 540, size: 374};
@@ -116,21 +115,34 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
   const f = useCurrentFrame();
   const from = DETENTS[Math.max(0, Math.min(DETENTS.length - 1, fromIndex))];
   const to = DETENTS[Math.max(0, Math.min(DETENTS.length - 1, toIndex))];
-  const turnEnd = Math.max(12, durationInFrames - 15);
+  const turnEnd = dialTurnEnd(durationInFrames);
   const turn = p(f, 1, turnEnd, io);
   const snap = Math.sin(p(f, turnEnd - 4, turnEnd + 4, io) * Math.PI) * 2.8;
   const press = p(f, turnEnd - 2, turnEnd + 2) - p(f, turnEnd + 2, turnEnd + 7);
-  const exit = p(
+  const motionExit = p(
     f,
-    durationInFrames - DIAL_SCENE_OVERLAP,
+    dialExitMotionStart(durationInFrames),
     durationInFrames - 1,
+    io,
+  );
+  const fadeExit = p(
+    f,
+    durationInFrames - DIAL_SCENE_OVERLAP - 3,
+    durationInFrames - 1,
+    io,
+  );
+  const textExit = p(
+    f,
+    durationInFrames - DIAL_SCENE_OVERLAP - 3,
+    durationInFrames - DIAL_SCENE_OVERLAP,
     io,
   );
   const angle = mix(from.angle, to.angle, turn) + snap;
   const active = turn > 0.7 ? toIndex : fromIndex;
   const motion = exitMotion[chapterId];
+  const lit = Math.min(1, 0.68 + Math.max(0, press) * 0.32);
   return (
-    <div style={{position: 'absolute', inset: 0, opacity: 1 - Math.min(1, exit * 2)}}>
+    <div style={{position: 'absolute', inset: 0, opacity: 1 - Math.min(1, fadeExit * 2)}}>
       <Shell>
         <div style={{position: 'absolute', inset: 0, background: 'repeating-linear-gradient(90deg, transparent 0 119px, rgba(14,21,37,0.025) 119px 120px)'}} />
         <div
@@ -138,20 +150,20 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
             position: 'absolute',
             inset: 0,
             transformOrigin: '720px 540px',
-            translate: `${260 + motion.x * exit}px ${motion.y * exit}px`,
-            scale: mix(1, motion.scale, exit),
-            rotate: `${motion.rotate * exit}deg`,
+            translate: `${260 + motion.x * motionExit}px ${motion.y * motionExit}px`,
+            scale: mix(1, motion.scale, motionExit),
+            rotate: `${motion.rotate * motionExit}deg`,
           }}
         >
-          <Knob angle={angle} press={press} lit={1} active={active} />
+          <Knob angle={angle} press={press} lit={lit} active={active} />
         </div>
         <div
           style={{
             position: 'absolute',
             left: 1190,
             top: 360,
-            opacity: p(f, 4, 12) * (1 - exit),
-            translate: `${motion.textX * exit}px ${mix(24, 0, p(f, 4, 12))}px`,
+            opacity: p(f, 4, 12) * (1 - textExit),
+            translate: `${motion.textX * motionExit}px ${mix(24, 0, p(f, 4, 12))}px`,
           }}
         >
           <div style={{fontFamily: mono, fontSize: 22, letterSpacing: 4, color: C.faint}}>CHAPTER / {to.num}</div>

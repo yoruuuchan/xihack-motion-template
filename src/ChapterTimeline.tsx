@@ -1,7 +1,7 @@
 import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {C, mono} from './design';
-import {CHAPTERS, DIAL_SCENE_OVERLAP, TOTAL_DURATION, chapterAtFrame, chapterStart} from './timeline';
+import {CHAPTERS, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterAtFrame, chapterSceneDuration, chapterSceneStart, chapterStart, dialPressPeak} from './timeline';
 
 const formatTime = (seconds: number) => {
   const safe = Math.max(0, seconds);
@@ -15,16 +15,21 @@ export const ChapterTimeline = () => {
   const {fps} = useVideoConfig();
   const {chapter, index: activeIndex} = chapterAtFrame(frame);
   const localFrame = frame - chapterStart(activeIndex);
-  const sceneStart = chapter.dialFrames - DIAL_SCENE_OVERLAP;
+  const sceneStart = chapterSceneStart(chapter);
   const sceneFrame = localFrame - sceneStart;
-  const progressSceneEnd = chapter.durationInFrames - 34;
-  const onOpeningBlue = chapter.id === 'team' && sceneFrame >= 0 && sceneFrame < 66;
-  const onProgressBlue = chapter.id === 'today' && localFrame >= sceneStart && localFrame < progressSceneEnd;
+  const progressSceneEnd = chapterSceneDuration(chapter) - PROGRESS_CLOSING_WIPE_FRAMES + 1;
+  const onOpeningBlue = chapter.id === 'team' && sceneFrame >= 0 && sceneFrame < OPENING_TIMELINE_BLUE_END;
+  const onProgressBlue = chapter.id === 'today' && sceneFrame >= 0 && sceneFrame < progressSceneEnd;
   const onBlue = onOpeningBlue || onProgressBlue;
   const ink = onBlue ? 'rgba(255,255,255,0.94)' : C.ink;
   const quiet = onBlue ? 'rgba(255,255,255,0.48)' : 'rgba(14,21,37,0.38)';
   const line = onBlue ? 'rgba(255,255,255,0.28)' : 'rgba(14,21,37,0.16)';
   const progress = interpolate(frame, [0, TOTAL_DURATION - 1], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+  const clickPeak = dialPressPeak(chapter.dialFrames);
+  const clickPulse = interpolate(localFrame, [clickPeak - 2, clickPeak, clickPeak + 5], [0, 1, 0], {
     extrapolateLeft: 'clamp',
     extrapolateRight: 'clamp',
   });
@@ -43,9 +48,9 @@ export const ChapterTimeline = () => {
               style={{
                 position: 'absolute',
                 left: `${left}%`,
-                top: 22,
-                width: 2,
-                height: 18,
+                top: 22 - (index === activeIndex ? clickPulse * 3 : 0),
+                width: 2 + (index === activeIndex ? clickPulse * 2 : 0),
+                height: 18 + (index === activeIndex ? clickPulse * 6 : 0),
                 background: index <= activeIndex ? (onBlue ? 'white' : C.teal) : line,
               }}
             />
@@ -57,7 +62,7 @@ export const ChapterTimeline = () => {
                 display: 'flex',
                 gap: 8,
                 whiteSpace: 'nowrap',
-                fontSize: 16,
+                fontSize: index === activeIndex ? 21 : 16,
                 letterSpacing: 1,
                 color: index === activeIndex ? ink : quiet,
                 fontWeight: index === activeIndex ? 700 : 500,

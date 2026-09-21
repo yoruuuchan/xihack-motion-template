@@ -1,10 +1,11 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
 import {content as data, hasMedia, type ProgressItem} from '../content';
-import {C, Card, Media, Pill, R, Rail, Segmented, Shell, Small, io, mix, mono, neo, p, wash} from '../design';
+import {C, Card, LocalMedia, Media, Pill, R, Rail, Segmented, Shell, Small, io, mix, mono, neo, p, wash} from '../design';
+import {PROGRESS_CLOSING_WIPE_FRAMES} from '../timeline';
 
 // Empty media slot reads as a sunken well; real media sits on the raised card face.
-const Portrait: React.FC<{index: number}> = ({index}) => {
+const Portrait: React.FC<{index: number; showLabel: boolean}> = ({index, showLabel}) => {
   const tone = index % 2 ? C.blue : C.pale2;
   return (
     <div style={{position: 'absolute', inset: 18, borderRadius: R.inner, background: C.sunken, boxShadow: neo.insetDeep, overflow: 'hidden'}}>
@@ -13,16 +14,14 @@ const Portrait: React.FC<{index: number}> = ({index}) => {
         <circle cx={200 + index * 8} cy="230" r="72" fill={tone} />
         <path d="M38 600V479C38 370 116 334 200 334C284 334 362 370 362 479V600Z" fill={tone} />
       </svg>
-      <div style={{position: 'absolute', bottom: 22, left: 22}}>
-        <Pill variant="mute" size={16} style={{letterSpacing: 2}}>人物素材位 / 0{index + 1}</Pill>
-      </div>
+      {showLabel ? <div style={{position: 'absolute', top: 22, right: 22}}><Pill variant="mute" size={16} style={{letterSpacing: 2}}>人物素材位 / 0{index + 1}</Pill></div> : null}
     </div>
   );
 };
 
 export const Team: React.FC<{durationInFrames?: number}> = ({durationInFrames = 232}) => {
   const f = useCurrentFrame();
-  const memberCount = data.members.length;
+  const memberCount = 4;
   const focusStart = 24;
   const togetherStart = durationInFrames - 70;
   const memberWindow = (togetherStart - focusStart) / memberCount;
@@ -30,8 +29,8 @@ export const Team: React.FC<{durationInFrames?: number}> = ({durationInFrames = 
   const together = p(f, togetherStart, togetherStart + 30, io);
   const entrance = p(f, 0, 24);
   const active = data.members[idx];
-  const gap = memberCount <= 4 ? 27 : 22;
-  const cardWidth = Math.min(405, (1700 - gap * (memberCount - 1)) / memberCount);
+  const gap = 27;
+  const cardWidth = 405;
   const rowWidth = cardWidth * memberCount + gap * (memberCount - 1);
   const rowLeft = (1920 - rowWidth) / 2;
   return (
@@ -45,14 +44,14 @@ export const Team: React.FC<{durationInFrames?: number}> = ({durationInFrames = 
         const selected = i === idx;
         const focusIn = focusStart + i * memberWindow;
         const focusOut = focusStart + (i + 1) * memberWindow;
-        const activeAmount = (i === 0 ? 1 : p(f, focusIn, focusIn + 18)) - (i === memberCount - 1 ? 0 : p(f, focusOut, focusOut + 18));
+        const activeAmount = (i === 0 ? 1 : p(f, focusIn, focusIn + 12)) - (i === memberCount - 1 ? 0 : p(f, focusOut, focusOut + 12));
         const cardY = mix(mix(345, 305, activeAmount), 321, together);
         const cardH = mix(mix(487, 527, activeAmount), 480, together);
         const appear = p(f, i * 4, 24 + i * 4);
         const ring = selected || together > 0.5 ? `, 0 0 0 3px ${C.blue}` : '';
         return (
           <div
-            key={member.name}
+            key={`${i}-${member.name}`}
             style={{
               position: 'absolute',
               left: rowLeft + i * (cardWidth + gap),
@@ -66,7 +65,23 @@ export const Team: React.FC<{durationInFrames?: number}> = ({durationInFrames = 
               boxShadow: (selected ? neo.lifted : neo.raised) + ring,
             }}
           >
-            {hasMedia(member.media) ? <Media asset={member.media} /> : <Portrait index={i} />}
+            {hasMedia(member.media) ? <Media asset={member.media} /> : <Portrait index={i} showLabel={data.demo} />}
+            <div
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                bottom: 0,
+                padding: '54px 24px 19px',
+                color: hasMedia(member.media) ? 'white' : C.ink,
+                background: hasMedia(member.media)
+                  ? 'linear-gradient(transparent, rgba(14,21,37,0.82))'
+                  : 'linear-gradient(transparent, rgba(239,242,248,0.96))',
+              }}
+            >
+              <div style={{fontSize: 30, fontWeight: 700}}>{member.name}</div>
+              <div style={{fontSize: 17, letterSpacing: 1, marginTop: 7, opacity: 0.78}}>{member.role}</div>
+            </div>
           </div>
         );
       })}
@@ -77,7 +92,7 @@ export const Team: React.FC<{durationInFrames?: number}> = ({durationInFrames = 
       <div style={{position: 'absolute', left: 110, top: 863, opacity: together, fontSize: 45, fontWeight: 700}}>
         一起讨论。一起动手。<span style={{color: C.teal}}>一起往前。</span>
       </div>
-      {!data.members.some((member) => hasMedia(member.media)) ? (
+      {data.demo && !data.members.some((member) => hasMedia(member.media)) ? (
         <div style={{position: 'absolute', right: 110, top: 232}}>
           <Pill variant="mute" size={18}>演示占位 · 现场替换为人物实拍</Pill>
         </div>
@@ -91,12 +106,12 @@ const Sketch: React.FC<{item: ProgressItem}> = ({item}) => {
     <div style={{position: 'absolute', inset: 0, background: C.surface, padding: '52px 64px'}}>
       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <Small style={{fontSize: 20, color: C.faint}}>FIELD NOTES / DAY 01</Small>
-        <Pill variant="mute" size={16}>示例草图</Pill>
+        {data.demo ? <Pill variant="mute" size={16}>示例草图</Pill> : <Pill variant="frost" size={16}>现场进展</Pill>}
       </div>
       <div style={{fontSize: 54, fontWeight: 700, marginTop: 40}}>{item.title}</div>
       <div style={{display: 'flex', gap: 24, alignItems: 'center', marginTop: 56}}>
         {item.points.map((point, i) => (
-          <React.Fragment key={point}>
+          <React.Fragment key={`${i}-${point}`}>
             {i > 0 ? <div style={{width: 36, height: 3, borderRadius: R.pill, background: C.teal, flexShrink: 0}} /> : null}
             <div
               style={{
@@ -118,9 +133,7 @@ const Sketch: React.FC<{item: ProgressItem}> = ({item}) => {
           </React.Fragment>
         ))}
       </div>
-      <div style={{marginTop: 48}}>
-        <Pill variant="mute" size={20}>实拍 / 白板 / 原型录屏素材位</Pill>
-      </div>
+      {data.demo ? <div style={{marginTop: 48}}><Pill variant="mute" size={20}>实拍 / 白板 / 原型录屏素材位</Pill></div> : null}
     </div>
   );
 };
@@ -128,14 +141,14 @@ const Sketch: React.FC<{item: ProgressItem}> = ({item}) => {
 export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrames = 247}) => {
   const f = useCurrentFrame();
   const progressCount = data.progress.length;
-  const activeDuration = durationInFrames - 35;
+  const activeDuration = durationInFrames - PROGRESS_CLOSING_WIPE_FRAMES;
   const segmentDuration = activeDuration / progressCount;
   const idx = Math.min(progressCount - 1, Math.floor(f / segmentDuration));
   let pos = 0;
   for (let index = 1; index < progressCount; index++) pos += p(f, index * segmentDuration, index * segmentDuration + 13);
   const localFrame = f - idx * segmentDuration;
-  const enter = p(localFrame, 0, 18);
-  const closing = p(f, durationInFrames - 35, durationInFrames - 1, io);
+  const enter = p(localFrame, 0, progressCount === 4 ? 10 : 18);
+  const closing = p(f, durationInFrames - PROGRESS_CLOSING_WIPE_FRAMES, durationInFrames - 1, io);
   const r = data.progress[idx];
   return (
     <Shell bg={C.blue}>
@@ -145,7 +158,15 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
         <div style={{fontSize: 75, fontWeight: 700, marginTop: 10}}>今天，向前一步。</div>
       </div>
       <Card onBlue style={{position: 'absolute', left: 110, top: 329, width: 1040, height: 570, overflow: 'hidden', transform: `translateY(${24 * (1 - enter)}px) scale(${mix(1, 0.97, closing)})`, opacity: enter}}>
-        {hasMedia(r.media) ? <Media asset={r.media} /> : <Sketch item={r} />}
+        <Sketch item={r} />
+        {hasMedia(r.media) ? (
+          <LocalMedia
+            asset={r.media}
+            from={Math.floor(idx * segmentDuration)}
+            durationInFrames={Math.ceil(durationInFrames - idx * segmentDuration)}
+            style={{position: 'absolute', inset: 0}}
+          />
+        ) : null}
       </Card>
       <div style={{position: 'absolute', left: 1230, top: 385, width: 590, color: 'white'}}>
         <div style={{fontSize: 95, fontWeight: 700, letterSpacing: -5, opacity: 0.25}}>0{idx + 1}</div>
@@ -153,7 +174,20 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
         <div style={{fontSize: 31, lineHeight: 1.8, marginTop: 30, maxWidth: 540, opacity: enter}}>{r.description}</div>
         <Segmented count={progressCount} pos={pos} width={Math.max(180, progressCount * 100)} onBlue style={{marginTop: 44}} />
       </div>
-      <div style={{position: 'absolute', inset: 0, background: wash(C.base), clipPath: `inset(${100 * (1 - closing)}% 0 0 0)`}} />
+      <div style={{position: 'absolute', inset: 0, zIndex: 10, background: wash(C.base), clipPath: `inset(${100 * (1 - closing)}% 0 0 0)`}}>
+        <div style={{position: 'absolute', left: 110, right: 110, top: 560}}>
+          <Small style={{color: C.tealDeep}}>DAY ONE / CHECKPOINT</Small>
+          <div style={{fontSize: 68, fontWeight: 700, marginTop: 12}}>今天，我们推进了这些。</div>
+          <div style={{display: 'grid', gridTemplateColumns: `repeat(${progressCount}, minmax(0, 1fr))`, gap: 20, marginTop: 46}}>
+            {data.progress.map((item, index) => (
+              <div key={`${index}-${item.title}`} style={{padding: '24px 25px', borderRadius: R.inner, background: C.surface, boxShadow: neo.raised, display: 'flex', alignItems: 'center', gap: 18}}>
+                <span style={{fontFamily: mono, fontSize: 18, color: C.tealDeep}}>0{index + 1}</span>
+                <span style={{fontSize: 26, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{item.title}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </Shell>
   );
 };

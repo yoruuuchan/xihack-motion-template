@@ -1,7 +1,7 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
 import {content as data} from '../content';
-import {C, Pill, Shell, Small, mix, p, wash} from '../design';
+import {C, FittedText, Pill, Shell, Small, mix, p, wash} from '../design';
 
 export const Opening: React.FC<{durationInFrames?: number}> = ({durationInFrames = 175}) => {
   const f = useCurrentFrame();
@@ -29,15 +29,22 @@ export const Opening: React.FC<{durationInFrames?: number}> = ({durationInFrames
           whiteSpace: 'nowrap',
         }}
       >
-        <div style={{fontSize: 174, fontWeight: 700, letterSpacing: -6}}>{data.team.name}</div>
-        <Small style={{marginTop: 30, opacity: 1 - handoff}}>DIFFERENT MINDS. ONE NEXT STEP.</Small>
+        <FittedText text={data.team.name} maxWidth={1480} maxFontSize={174} minFontSize={92} letterSpacing={-6} />
+        <Small style={{marginTop: 30, opacity: 1 - handoff}}>{data.team.tagline}</Small>
       </div>
       <div style={{position: 'absolute', left: 116, top: 318, opacity: reveal, transform: `translateY(${105 * (1 - reveal) - exit * 25}px)`}}>
         <Pill variant="frost" size={20} style={{fontWeight: 600, letterSpacing: 3}}>INTRODUCING OUR PROJECT</Pill>
-        <div style={{fontSize: 260, lineHeight: 1.12, fontWeight: 700, letterSpacing: -16, marginLeft: -11, marginTop: 14}}>
-          {data.project.name}<span style={{color: C.teal}}>.</span>
-        </div>
-        <div style={{fontSize: 47, marginTop: 20, opacity: p(f, 90, 112)}}>{data.project.oneLiner}</div>
+        <FittedText
+          text={data.project.name}
+          measurementText={`${data.project.name}.`}
+          suffix={<span style={{color: C.teal}}>.</span>}
+          maxWidth={1480}
+          maxFontSize={260}
+          minFontSize={104}
+          letterSpacing={-4}
+          style={{marginLeft: -11, marginTop: 14, lineHeight: 1.12}}
+        />
+        <FittedText text={data.project.oneLiner} maxWidth={1510} maxFontSize={47} minFontSize={28} fontWeight={400} style={{marginTop: 20, opacity: p(f, 90, 112)}} />
       </div>
       <div style={{position: 'absolute', right: 68, top: 350, writingMode: 'vertical-rl', color: 'white', fontSize: 21, letterSpacing: 5, opacity: handoff}}>TEAM / PROJECT</div>
       <div style={{position: 'absolute', left: 120, bottom: 142, fontSize: 21, color: onBase ? C.muted : 'white'}}>一起，把想法往前推一步。</div>

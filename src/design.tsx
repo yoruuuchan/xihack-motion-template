@@ -1,5 +1,6 @@
 import React from 'react';
-import {AbsoluteFill, Easing, Img, OffthreadVideo, interpolate, staticFile, useVideoConfig} from 'remotion';
+import {fitText} from '@remotion/layout-utils';
+import {AbsoluteFill, Easing, Img, OffthreadVideo, Sequence, interpolate, staticFile, useVideoConfig} from 'remotion';
 import {loadFont} from '@remotion/fonts';
 import {resolveMedia, type MediaInput} from './content';
 
@@ -71,6 +72,53 @@ export const Small: React.FC<{children: React.ReactNode; style?: React.CSSProper
   <div style={{fontSize: 22, fontWeight: 600, letterSpacing: 3, ...style}}>{children}</div>
 );
 
+type FittedTextProps = {
+  text: string;
+  measurementText?: string;
+  suffix?: React.ReactNode;
+  maxWidth: number;
+  maxFontSize: number;
+  minFontSize: number;
+  fontWeight?: number;
+  letterSpacing?: number;
+  style?: React.CSSProperties;
+};
+
+export const FittedText: React.FC<FittedTextProps> = ({text, measurementText, suffix, maxWidth, maxFontSize, minFontSize, fontWeight = 700, letterSpacing = 0, style}) => {
+  const measured = Math.min(
+    maxFontSize,
+    fitText({
+      text: measurementText ?? text,
+      withinWidth: maxWidth,
+      fontFamily: font,
+      fontWeight,
+      letterSpacing: `${letterSpacing}px`,
+      validateFontIsLoaded: false,
+    }).fontSize,
+  );
+  const fontSize = Math.max(minFontSize, measured);
+  const scaleX = measured < minFontSize ? measured / minFontSize : 1;
+  const customTransform = style?.transform ?? '';
+  return (
+    <div
+      style={{
+        width: maxWidth / scaleX,
+        maxWidth: `${100 / scaleX}%`,
+        whiteSpace: 'nowrap',
+        fontSize,
+        fontWeight,
+        letterSpacing,
+        lineHeight: 1,
+        ...style,
+        transform: `scaleX(${scaleX}) ${customTransform}`.trim(),
+        transformOrigin: style?.transformOrigin ?? 'left center',
+      }}
+    >
+      {text}{suffix}
+    </div>
+  );
+};
+
 export const Media: React.FC<{asset: MediaInput; style?: React.CSSProperties}> = ({asset, style}) => {
   const {fps} = useVideoConfig();
   const item = resolveMedia(asset);
@@ -85,6 +133,21 @@ export const Media: React.FC<{asset: MediaInput; style?: React.CSSProperties}> =
     <OffthreadVideo src={staticFile(item.src)} muted trimBefore={Math.round(item.trimStart * fps)} style={mediaStyle} />
   ) : (
     <Img src={staticFile(item.src)} style={mediaStyle} />
+  );
+};
+
+export const LocalMedia: React.FC<{
+  asset: MediaInput;
+  from: number;
+  durationInFrames: number;
+  style?: React.CSSProperties;
+}> = ({asset, from, durationInFrames, style}) => {
+  const item = resolveMedia(asset);
+  if (!/\.(mp4|mov|webm)$/i.test(item.src)) return <Media asset={asset} style={style} />;
+  return (
+    <Sequence from={from} durationInFrames={Math.max(1, durationInFrames)} layout="none">
+      <Media asset={asset} style={style} />
+    </Sequence>
   );
 };
 

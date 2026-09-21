@@ -1,0 +1,21 @@
+export const FPS: number;
+export const DIAL_SCENE_OVERLAP: number;
+export const DIAL_EXIT_MOTION_FRAMES: number;
+export const OPENING_TIMELINE_BLUE_END: number;
+export const PROGRESS_CLOSING_WIPE_FRAMES: number;
+export const CHAPTER_DATA: readonly {
+  id: string;
+  code: string;
+  label: string;
+  durationInFrames: number;
+  dialFrames: number;
+  dialTarget: number;
+}[];
+export const TOTAL_DURATION: number;
+export const chapterStart: (index: number) => number;
+export const chapterSceneStart: (chapter: {dialFrames: number}) => number;
+export const chapterSceneDuration: (chapter: {durationInFrames: number; dialFrames: number}) => number;
+export const dialTurnEnd: (dialFrames: number) => number;
+export const dialPressPeak: (dialFrames: number) => number;
+export const dialClickFrame: (index: number) => number;
+export const dialExitMotionStart: (dialFrames: number) => number;
