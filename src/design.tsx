@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, Easing, Img, OffthreadVideo, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Easing, Img, OffthreadVideo, interpolate, staticFile, useVideoConfig} from 'remotion';
 import {loadFont} from '@remotion/fonts';
 import {resolveMedia, type MediaInput} from './content';
 
@@ -66,12 +66,6 @@ export const R = {card: 40, inner: 28, pill: 999};
 const baseWash = `radial-gradient(120% 80% at 80% -10%, rgba(79,108,232,0.07), transparent 60%), radial-gradient(90% 70% at 0% 100%, rgba(30,168,160,0.05), transparent 55%), ${C.base}`;
 const blueWash = `radial-gradient(120% 80% at 80% -10%, rgba(255,255,255,0.08), transparent 60%), radial-gradient(90% 70% at 0% 100%, rgba(24,39,99,0.18), transparent 55%), ${C.blue}`;
 export const wash = (bg: string) => (bg === C.blue ? blueWash : baseWash);
-
-export const Mark: React.FC<{size?: number; color?: string}> = ({size = 70, color = C.teal}) => (
-  <svg width={size} height={size} viewBox="0 0 80 80" fill="none">
-    <path d="M12 54V26h30M28 54h40V26M42 26l-12 14 12 14" stroke={color} strokeWidth="9" strokeLinecap="square" strokeLinejoin="miter" />
-  </svg>
-);
 
 export const Small: React.FC<{children: React.ReactNode; style?: React.CSSProperties}> = ({children, style}) => (
   <div style={{fontSize: 22, fontWeight: 600, letterSpacing: 3, ...style}}>{children}</div>
@@ -182,20 +176,14 @@ export const Tile: React.FC<{size: number; variant?: 'primary' | 'surface' | 'on
 };
 
 export const DemoStamp = () => (
-  <div style={{position: 'absolute', right: 80, bottom: 26}}>
+  <div style={{position: 'absolute', right: 80, bottom: 116, zIndex: 55}}>
     <Pill variant="mute" size={18} style={{letterSpacing: 2}}>DEMO · 演示内容</Pill>
   </div>
 );
 
-export const Rail: React.FC<{label: string; duration: number; event: string; meta: string; light?: boolean}> = ({label, duration, event, meta, light}) => {
-  const f = useCurrentFrame();
-  return (
-    <>
-      <div style={{position: 'absolute', top: 52, left: 80, right: 80, display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: light ? 'white' : C.ink}}>
-        <Small>{event} <span style={{opacity: 0.45}}> / </span> {meta}</Small>
-        <Pill variant={light ? 'blueOn' : 'chipOn'} size={20} style={{fontWeight: 600, letterSpacing: 3}}>{label}</Pill>
-      </div>
-      <Track progress={f / duration} width={1760} onBlue={light} style={{position: 'absolute', left: 80, bottom: 66}} />
-    </>
-  );
-};
+export const Rail: React.FC<{label: string; event: string; meta: string; light?: boolean}> = ({label, event, meta, light}) => (
+  <div style={{position: 'absolute', top: 52, left: 80, right: 80, display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: light ? 'white' : C.ink}}>
+    <Small>{event} <span style={{opacity: 0.45}}> / </span> {meta}</Small>
+    <Pill variant={light ? 'blueOn' : 'chipOn'} size={20} style={{fontWeight: 600, letterSpacing: 3}}>{label}</Pill>
+  </div>
+);

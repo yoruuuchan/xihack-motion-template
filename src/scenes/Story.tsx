@@ -1,7 +1,7 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
 import {content as data, hasMedia, type StoryBeat} from '../content';
-import {C, Card, Dot, Mark, Media, Pill, R, Rail, Segmented, Shell, Tile, Track, Well, io, mix, mono, neo, p} from '../design';
+import {C, Card, Dot, Media, Pill, R, Rail, Segmented, Shell, Track, Well, io, mix, mono, neo, p} from '../design';
 
 const Note: React.FC<{text: string; x: number; y: number; rotate?: number; dark?: boolean}> = ({text, x, y, rotate = 0, dark}) => (
   <div
@@ -116,31 +116,37 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
   );
 };
 
-export const Story = () => {
+export const Story: React.FC<{beatIndices?: number[]; durationInFrames?: number; railLabel?: string}> = ({
+  beatIndices = [0, 1, 2, 3, 4],
+  durationInFrames = 540,
+  railLabel = 'PROJECT STORY',
+}) => {
   const f = useCurrentFrame();
-  const switches = data.story.map((_, index) => index * 105);
-  const lastIndex = data.story.length - 1;
+  const beats = beatIndices.map((index) => data.story[index]);
+  const beatDuration = durationInFrames / beats.length;
+  const switches = beats.map((_, index) => index * beatDuration);
+  const lastIndex = beats.length - 1;
   // 16-frame rolling window inherited from WordRelayFilmstrip.tsx v3.
   let step = 0;
   for (const switchFrame of switches.slice(1)) step += p(f, switchFrame, switchFrame + 16, io);
   const current = Math.min(lastIndex, switches.filter((switchFrame) => switchFrame <= f).length - 1);
   const local = f - switches[current];
   const word = p(local, 5, 17);
-  const expansion = p(f, switches[lastIndex] + 64, 539, io);
+  const expansion = 0;
   const timelineT = current === lastIndex ? p(local, 20, 72, io) : 0;
   const x = mix(110, 0, expansion);
   const y = mix(285, 0, expansion);
   const w = mix(850, 1920, expansion);
   const h = mix(510, 1080, expansion);
-  const activeBeat = data.story[current];
+  const activeBeat = beats[current];
   return (
     <Shell>
       <div style={{position: 'absolute', inset: '0 0 0 1030px', background: C.pale, opacity: 1 - expansion}} />
-      <Rail label="02 / PROJECT STORY" duration={540} event={data.event.name} meta={data.event.meta} />
+      <Rail label={railLabel} event={data.event.name} meta={data.event.meta} />
       <Well deep style={{position: 'absolute', left: 52, top: 150, width: 958, height: 780, borderRadius: 48, opacity: 1 - expansion}} />
       <div style={{position: 'absolute', left: x, top: y, width: w, height: h, zIndex: 4, transformOrigin: '0 0', clipPath: 'inset(-135px -58px -135px -58px)'}}>
         <div style={{position: 'absolute', width: 850, height: 510, transformOrigin: '0 0', transform: `scale(${w / 850}, ${h / 510})`}}>
-          {data.story.map((beat, index) => (
+          {beats.map((beat, index) => (
             <Card
               key={`${beat.layout}-${index}`}
               lifted={index === current}
@@ -169,12 +175,8 @@ export const Story = () => {
           </div>
         </div>
         <div style={{fontSize: 31, lineHeight: 1.7, maxWidth: 600, marginTop: 30, opacity: word}}>{activeBeat.description}</div>
-        <Segmented count={data.story.length} pos={step} width={420} style={{marginTop: 48}} />
+        <Segmented count={beats.length} pos={step} width={Math.max(240, beats.length * 84)} style={{marginTop: 48}} />
       </div>
-      <Tile size={96} variant="surface" style={{position: 'absolute', right: 100, bottom: 104, opacity: 1 - expansion}}>
-        <Mark size={54} />
-      </Tile>
     </Shell>
   );
 };
-

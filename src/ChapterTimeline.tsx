@@ -1,0 +1,99 @@
+import React from 'react';
+import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {C, mono} from './design';
+import {CHAPTERS, DIAL_SCENE_OVERLAP, TOTAL_DURATION, chapterAtFrame, chapterStart} from './timeline';
+
+const formatTime = (seconds: number) => {
+  const rounded = Math.max(0, Math.floor(seconds));
+  return `${String(Math.floor(rounded / 60)).padStart(2, '0')}:${String(rounded % 60).padStart(2, '0')}`;
+};
+
+export const ChapterTimeline = () => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const {chapter, index: activeIndex} = chapterAtFrame(frame);
+  const localFrame = frame - chapterStart(activeIndex);
+  const sceneStart = chapter.dialFrames - DIAL_SCENE_OVERLAP;
+  const sceneFrame = localFrame - sceneStart;
+  const progressSceneEnd = chapter.durationInFrames - 34;
+  const onOpeningBlue = chapter.id === 'team' && sceneFrame >= 0 && sceneFrame < 66;
+  const onProgressBlue = chapter.id === 'today' && localFrame >= sceneStart && localFrame < progressSceneEnd;
+  const onBlue = onOpeningBlue || onProgressBlue;
+  const ink = onBlue ? 'rgba(255,255,255,0.94)' : C.ink;
+  const quiet = onBlue ? 'rgba(255,255,255,0.48)' : 'rgba(14,21,37,0.38)';
+  const line = onBlue ? 'rgba(255,255,255,0.28)' : 'rgba(14,21,37,0.16)';
+  const progress = interpolate(frame, [0, TOTAL_DURATION - 1], [0, 1], {
+    extrapolateLeft: 'clamp',
+    extrapolateRight: 'clamp',
+  });
+
+  return (
+    <div style={{position: 'absolute', left: 80, right: 80, bottom: 30, height: 78, color: ink, fontFamily: mono, zIndex: 50}}>
+      <div style={{position: 'absolute', left: 0, right: 0, top: 30, height: 2, background: line}} />
+      <div style={{position: 'absolute', left: 0, top: 30, width: `${progress * 100}%`, height: 2, background: onBlue ? 'white' : C.teal}} />
+      {CHAPTERS.map((item, index) => {
+        const start = chapterStart(index);
+        const left = (start / TOTAL_DURATION) * 100;
+        const isLast = index === CHAPTERS.length - 1;
+        return (
+          <React.Fragment key={item.id}>
+            <div
+              style={{
+                position: 'absolute',
+                left: `${left}%`,
+                top: 22,
+                width: 2,
+                height: 18,
+                background: index <= activeIndex ? (onBlue ? 'white' : C.teal) : line,
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                left: `${left}%`,
+                top: 44,
+                display: 'flex',
+                gap: 8,
+                whiteSpace: 'nowrap',
+                fontSize: 16,
+                letterSpacing: 1,
+                color: index === activeIndex ? ink : quiet,
+                fontWeight: index === activeIndex ? 700 : 500,
+                transform: isLast ? 'translateX(-100%)' : undefined,
+              }}
+            >
+              <span>{item.code}</span>
+              <span>{item.label}</span>
+            </div>
+          </React.Fragment>
+        );
+      })}
+      <div
+        style={{
+          position: 'absolute',
+          right: 0,
+          top: 22,
+          width: 2,
+          height: 18,
+          background: frame >= TOTAL_DURATION - 1 ? (onBlue ? 'white' : C.teal) : line,
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          left: `${progress * 100}%`,
+          top: 24,
+          width: 14,
+          height: 14,
+          borderRadius: '50%',
+          background: onBlue ? 'white' : C.teal,
+          boxShadow: `0 0 0 4px ${onBlue ? 'rgba(255,255,255,0.16)' : 'rgba(30,168,160,0.14)'}`,
+          transform: 'translateX(-50%)',
+        }}
+      />
+      <div style={{position: 'absolute', right: 0, top: 0, fontSize: 15, letterSpacing: 1.5, color: quiet}}>
+        {formatTime(frame / fps)} / {formatTime(TOTAL_DURATION / fps)}
+      </div>
+    </div>
+  );
+};

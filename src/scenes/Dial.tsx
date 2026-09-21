@@ -1,13 +1,13 @@
 import React from 'react';
 import {interpolateColors, useCurrentFrame} from 'remotion';
 import {content as data} from '../content';
-import {C, Mark, Pill, Shell, Small, Tile, mix, mono, neo, p} from '../design';
+import {C, Pill, Shell, Small, mix, mono, neo, p} from '../design';
 
 // DIRECTION: the rotary selector chooses a section, then yields to that section's scene.
-// It is a transition device, not a permanent overlay. This short test covers only
-// standby → 00 team → 01 problem; the exit transition is intentionally still pending.
+// It is a transition device, not a permanent overlay. DialCue drives all six chapters
+// in the main film; DialTest keeps the interaction isolated for visual refinement.
 
-const DETENTS = [
+export const DETENTS = [
   {angle: -150, num: '', word: '待机'},
   {angle: -100, num: '00', word: '团队'},
   {angle: -50, num: '01', word: '问题'},
@@ -99,6 +99,49 @@ const Display: React.FC<{on: number; children?: React.ReactNode}> = ({on, childr
   <div style={{position: 'absolute', ...SCREEN, borderRadius: 48, background: interpolateColors(on, [0, 1], [C.sunken, '#E6EAF2']), boxShadow: neo.insetDeep, overflow: 'hidden'}}>{children}</div>
 );
 
+export const DialCue: React.FC<{fromIndex: number; toIndex: number; durationInFrames: number}> = ({fromIndex, toIndex, durationInFrames}) => {
+  const f = useCurrentFrame();
+  const from = DETENTS[Math.max(0, Math.min(DETENTS.length - 1, fromIndex))];
+  const to = DETENTS[Math.max(0, Math.min(DETENTS.length - 1, toIndex))];
+  const turnEnd = Math.max(12, durationInFrames - 15);
+  const turn = p(f, 1, turnEnd);
+  const press = p(f, turnEnd - 2, turnEnd + 2) - p(f, turnEnd + 2, turnEnd + 7);
+  const exit = p(f, durationInFrames - 10, durationInFrames - 1);
+  const angle = mix(from.angle, to.angle, turn);
+  const active = turn > 0.62 ? toIndex : fromIndex;
+  return (
+    <div style={{position: 'absolute', inset: 0, opacity: 1 - exit}}>
+      <Shell>
+        <div style={{position: 'absolute', left: 80, top: 52, opacity: p(f, 0, 6)}}>
+          <Small>{data.event.name} <span style={{opacity: 0.45}}> / </span> SELECT A CHAPTER</Small>
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            transformOrigin: '720px 540px',
+            transform: `translateX(240px) scale(${mix(1, 1.55, exit)})`,
+          }}
+        >
+          <Knob angle={angle} press={press} lit={1} active={active} />
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            left: 1200,
+            top: 388,
+            opacity: p(f, 4, 12),
+            transform: `translateY(${mix(24, 0, p(f, 4, 12))}px)`,
+          }}
+        >
+          <div style={{fontFamily: mono, fontSize: 28, letterSpacing: 4, color: C.faint}}>{to.num}</div>
+          <div style={{fontSize: 118, fontWeight: 700, letterSpacing: -5, marginTop: 8}}>{to.word}</div>
+        </div>
+      </Shell>
+    </div>
+  );
+};
+
 export const DialTest = () => {
   const f = useCurrentFrame();
   const turn1 = p(f, 20, 38);
@@ -128,10 +171,7 @@ export const DialTest = () => {
         <Knob angle={angle} press={click1 + click2} lit={lit} active={active} />
         <Display on={power}>
           <div style={{position: 'absolute', left: 80, top: 90, right: 80, opacity: Math.max(0, in00 - out00), transform: `translateY(${mix(24, 0, in00) - 24 * out00}px)`}}>
-            <div style={{display: 'flex', alignItems: 'center', gap: 32}}>
-              <Tile size={120} variant="surface"><Mark size={70} /></Tile>
-              <div style={{fontSize: 112, fontWeight: 700, letterSpacing: -4, lineHeight: 1}}>{data.team.name}</div>
-            </div>
+            <div style={{fontSize: 112, fontWeight: 700, letterSpacing: -4, lineHeight: 1}}>{data.team.name}</div>
             <Small style={{marginTop: 44, color: C.muted}}>DIFFERENT MINDS. ONE NEXT STEP.</Small>
             <div style={{fontSize: 40, marginTop: 150, color: C.muted, opacity: p(f, 84, 100)}}>{data.team.tagline}</div>
           </div>

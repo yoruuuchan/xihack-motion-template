@@ -20,14 +20,14 @@ const Portrait: React.FC<{index: number}> = ({index}) => {
   );
 };
 
-export const Team = () => {
+export const Team: React.FC<{durationInFrames?: number}> = ({durationInFrames = 232}) => {
   const f = useCurrentFrame();
   const memberCount = data.members.length;
-  const focusStart = 32;
-  const togetherStart = 337;
+  const focusStart = 24;
+  const togetherStart = durationInFrames - 70;
   const memberWindow = (togetherStart - focusStart) / memberCount;
   const idx = Math.min(memberCount - 1, Math.floor(Math.max(0, f - focusStart) / memberWindow));
-  const together = p(f, 337, 370, io);
+  const together = p(f, togetherStart, togetherStart + 30, io);
   const entrance = p(f, 0, 24);
   const active = data.members[idx];
   const gap = memberCount <= 4 ? 27 : 22;
@@ -36,7 +36,7 @@ export const Team = () => {
   const rowLeft = (1920 - rowWidth) / 2;
   return (
     <Shell>
-      <Rail label="04 / THE PEOPLE" duration={420} event={data.event.name} meta={data.event.meta} />
+      <Rail label="03 / THE PEOPLE" event={data.event.name} meta={data.event.meta} />
       <div style={{position: 'absolute', left: 110, top: 150, opacity: entrance}}>
         <Small style={{color: C.tealDeep}}>MEET THE TEAM</Small>
         <div style={{fontSize: 70, fontWeight: 700, marginTop: 14}}>不同的人，同一个下一步。</div>
@@ -125,20 +125,21 @@ const Sketch: React.FC<{item: ProgressItem}> = ({item}) => {
   );
 };
 
-export const Progress = () => {
+export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrames = 247}) => {
   const f = useCurrentFrame();
   const progressCount = data.progress.length;
-  const segmentDuration = 390 / progressCount;
+  const activeDuration = durationInFrames - 35;
+  const segmentDuration = activeDuration / progressCount;
   const idx = Math.min(progressCount - 1, Math.floor(f / segmentDuration));
   let pos = 0;
   for (let index = 1; index < progressCount; index++) pos += p(f, index * segmentDuration, index * segmentDuration + 13);
   const localFrame = f - idx * segmentDuration;
   const enter = p(localFrame, 0, 18);
-  const closing = p(f, 385, 419, io);
+  const closing = p(f, durationInFrames - 35, durationInFrames - 1, io);
   const r = data.progress[idx];
   return (
     <Shell bg={C.blue}>
-      <Rail label="05 / IN THE MAKING" duration={420} event={data.event.name} meta={data.event.meta} light />
+      <Rail label="04 / IN THE MAKING" event={data.event.name} meta={data.event.meta} light />
       <div style={{position: 'absolute', left: 110, top: 150, color: 'white'}}>
         <Small style={{opacity: 0.7}}>DAY ONE</Small>
         <div style={{fontSize: 75, fontWeight: 700, marginTop: 10}}>今天，向前一步。</div>
