@@ -1,0 +1,3 @@
+Geist and Geist Mono (Vercel) are licensed under the SIL Open Font License 1.1.
+https://github.com/vercel/geist-font/blob/main/LICENSE.TXT
+Latin subsets copied from the yoru-and-akari Console Design System self-hosted font folder.
