@@ -1,6 +1,7 @@
 import React from 'react';
-import {AbsoluteFill, Easing, Img, OffthreadVideo, interpolate, staticFile, useCurrentFrame} from 'remotion';
+import {AbsoluteFill, Easing, Img, OffthreadVideo, interpolate, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {loadFont} from '@remotion/fonts';
+import {resolveMedia, type MediaInput} from './content';
 
 loadFont({family: 'Geist', url: staticFile('fonts/Geist.woff2'), weight: '100 900'});
 loadFont({family: 'Geist Mono', url: staticFile('fonts/GeistMono.woff2'), weight: '100 900'});
@@ -76,12 +77,22 @@ export const Small: React.FC<{children: React.ReactNode; style?: React.CSSProper
   <div style={{fontSize: 22, fontWeight: 600, letterSpacing: 3, ...style}}>{children}</div>
 );
 
-export const Media: React.FC<{src: string; style?: React.CSSProperties}> = ({src, style}) =>
-  /\.(mp4|mov|webm)$/i.test(src) ? (
-    <OffthreadVideo src={staticFile(src)} style={{width: '100%', height: '100%', objectFit: 'cover', ...style}} />
+export const Media: React.FC<{asset: MediaInput; style?: React.CSSProperties}> = ({asset, style}) => {
+  const {fps} = useVideoConfig();
+  const item = resolveMedia(asset);
+  const mediaStyle: React.CSSProperties = {
+    width: '100%',
+    height: '100%',
+    objectFit: item.fit,
+    objectPosition: item.position,
+    ...style,
+  };
+  return /\.(mp4|mov|webm)$/i.test(item.src) ? (
+    <OffthreadVideo src={staticFile(item.src)} muted trimBefore={Math.round(item.trimStart * fps)} style={mediaStyle} />
   ) : (
-    <Img src={staticFile(src)} style={{width: '100%', height: '100%', objectFit: 'cover', ...style}} />
+    <Img src={staticFile(item.src)} style={mediaStyle} />
   );
+};
 
 export const Shell: React.FC<{children: React.ReactNode; bg?: string}> = ({children, bg = C.base}) => (
   <AbsoluteFill style={{background: wash(bg), color: C.ink, fontFamily: font, overflow: 'hidden'}}>{children}</AbsoluteFill>
@@ -176,12 +187,12 @@ export const DemoStamp = () => (
   </div>
 );
 
-export const Rail: React.FC<{label: string; duration: number; light?: boolean}> = ({label, duration, light}) => {
+export const Rail: React.FC<{label: string; duration: number; event: string; meta: string; light?: boolean}> = ({label, duration, event, meta, light}) => {
   const f = useCurrentFrame();
   return (
     <>
       <div style={{position: 'absolute', top: 52, left: 80, right: 80, display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: light ? 'white' : C.ink}}>
-        <Small>XiHack 2026 <span style={{opacity: 0.45}}> / </span> DAY 01</Small>
+        <Small>{event} <span style={{opacity: 0.45}}> / </span> {meta}</Small>
         <Pill variant={light ? 'blueOn' : 'chipOn'} size={20} style={{fontWeight: 600, letterSpacing: 3}}>{label}</Pill>
       </div>
       <Track progress={f / duration} width={1760} onBlue={light} style={{position: 'absolute', left: 80, bottom: 66}} />

@@ -1,11 +1,11 @@
 import React from 'react';
 import {interpolateColors, useCurrentFrame} from 'remotion';
-import data from '../content.json';
+import {content as data} from '../content';
 import {C, Mark, Pill, Shell, Small, Tile, mix, mono, neo, p} from '../design';
 
-// PROPOSAL: rotary-dial spine. The whole film is the front panel of one device — a wide
-// porcelain dial on the left, an inset display on the right. Each detent is a section.
-// Test only: standby → 00 team (power on, camera pulls back) → 01 friction.
+// DIRECTION: the rotary selector chooses a section, then yields to that section's scene.
+// It is a transition device, not a permanent overlay. This short test covers only
+// standby → 00 team → 01 problem; the exit transition is intentionally still pending.
 
 const DETENTS = [
   {angle: -150, num: '', word: '待机'},
@@ -117,29 +117,29 @@ export const DialTest = () => {
   const active = turn2 > 0.98 ? 2 : turn1 > 0.98 ? 1 : 0;
   const s = mix(1.9, 1, zoom);
   const tx = mix(620, 0, zoom);
-  const first = data.relay[0];
+  const first = data.story[0];
 
   return (
     <Shell>
       <div style={{position: 'absolute', inset: 0, transformOrigin: `${DIAL.cx}px ${DIAL.cy}px`, transform: `translateX(${tx}px) scale(${s})`}}>
         <div style={{position: 'absolute', left: 80, top: 52, opacity: p(f, 70, 84)}}>
-          <Small style={engraved}>{data.event} / {data.location}</Small>
+          <Small style={engraved}>{data.event.name} / {data.event.meta}</Small>
         </div>
         <Knob angle={angle} press={click1 + click2} lit={lit} active={active} />
         <Display on={power}>
           <div style={{position: 'absolute', left: 80, top: 90, right: 80, opacity: Math.max(0, in00 - out00), transform: `translateY(${mix(24, 0, in00) - 24 * out00}px)`}}>
             <div style={{display: 'flex', alignItems: 'center', gap: 32}}>
               <Tile size={120} variant="surface"><Mark size={70} /></Tile>
-              <div style={{fontSize: 112, fontWeight: 700, letterSpacing: -4, lineHeight: 1}}>{data.team}</div>
+              <div style={{fontSize: 112, fontWeight: 700, letterSpacing: -4, lineHeight: 1}}>{data.team.name}</div>
             </div>
             <Small style={{marginTop: 44, color: C.muted}}>DIFFERENT MINDS. ONE NEXT STEP.</Small>
-            <div style={{fontSize: 40, marginTop: 150, color: C.muted, opacity: p(f, 84, 100)}}>{data.tagline}</div>
+            <div style={{fontSize: 40, marginTop: 150, color: C.muted, opacity: p(f, 84, 100)}}>{data.team.tagline}</div>
           </div>
           <div style={{position: 'absolute', left: 80, top: 90, right: 80, opacity: in01, transform: `translateY(${mix(24, 0, in01)}px)`}}>
-            <Pill variant="chip" size={20} style={{fontWeight: 600, letterSpacing: 3}}>{first.label}</Pill>
-            <div style={{fontSize: 58, marginTop: 44}}>当想法</div>
+            <Pill variant="chip" size={20} style={{fontWeight: 600, letterSpacing: 3}}>{first.section}</Pill>
+            <div style={{fontSize: 58, marginTop: 44}}>{first.lead}</div>
             <div style={{fontSize: 150, fontWeight: 700, letterSpacing: -6, lineHeight: 1.15, color: C.blue, opacity: word, transform: `translateY(${30 * (1 - word)}px)`}}>
-              {first.verb}<span style={{color: C.ink}}>。</span>
+              {first.keyword}<span style={{color: C.ink}}>。</span>
             </div>
             <div style={{fontSize: 31, lineHeight: 1.7, marginTop: 24, color: C.muted, opacity: word}}>{first.description}</div>
           </div>

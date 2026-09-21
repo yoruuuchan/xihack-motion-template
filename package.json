@@ -1,1 +1,24 @@
-{"name":"xihack-relay-demo","version":"0.1.0","private":true,"type":"module","scripts":{"studio":"remotion studio src/index.ts --no-open","render":"remotion render src/index.ts XiHackRelay out/xihack-relay-demo.mp4 --codec=h264 --crf=19 --concurrency=2 --timeout=120000","check":"tsc --noEmit"},"dependencies":{"@remotion/cli":"4.0.441","@remotion/fonts":"4.0.441","remotion":"4.0.441","react":"19.2.4","react-dom":"19.2.4"},"devDependencies":{"typescript":"5.9.3","@types/react":"19.2.14","@types/react-dom":"19.2.3"}}
+{
+  "name": "xihack-motion-template",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts --no-open",
+    "render": "remotion render src/index.ts XiHackTeamIntro out/xihack-team-intro.mp4 --codec=h264 --crf=19 --concurrency=2 --timeout=120000",
+    "preflight": "node scripts/preflight.mjs",
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@remotion/cli": "4.0.441",
+    "@remotion/fonts": "4.0.441",
+    "remotion": "4.0.441",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3"
+  }
+}

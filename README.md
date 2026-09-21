@@ -1,27 +1,69 @@
-# XiHack · Relay 动效演示
+# XiHack Motion Template
 
-60 秒，1920×1080，30fps。视觉走 yoru-and-akari Console 设计系统的 Akari 主题：冷瓷底、皇家蓝大色块，唯一辅助强调色为 Frost `#1EA8A0`，无橘色。结构语言是 Console 的新拟态——卡片只靠双色阴影成形（外凸 / 内凹），胶囊 chip 与徽章，内凹轨 + 外凸活动块的分段指示器，内凹滑杆 + 白色旋钮的进度条；空素材位显示为内凹槽，放入真实素材后变成外凸卡面。所有配方集中在 `src/design.tsx` 的 `neo` 与原语组件（Card / Well / Pill / Segmented / Track / Tile）。音乐暂空。
+一个为 XiHack 首日团队介绍准备的 Remotion 工程：60 秒、1920×1080、30fps。现场只需要替换项目内容和素材，不需要改场景代码。
 
-示例队名、项目、成员、进展及产品界面均为演示，不是真实参赛内容。成员段为明确标注的人物素材占位；进展段为示例草图。此版本用于看分镜、色彩、动效及整体节奏。
+这个仓库同时保留两条线：
 
-## 使用
+- `XiHackTeamIntro`：可完整导出的 60 秒结构基线。它来自 9 月 20 日的 Akari / filmstrip 主片，目前只承担“内容和时间轴可运行”的职责，**不代表视觉定稿**。
+- `DialTest`：8 秒旋钮选段试验。方向已经明确为“旋钮选择主题 → 转场进入主题场景 → 旋钮离场”，不是让大旋钮常驻整片；目前只做到待机、团队、问题三个状态，细节仍要逐项优化。
+
+## 现场使用
 
 ```powershell
 npm install
+npm run preflight
 npm run studio
 npm run render
 ```
 
-填写 `src/content.json`：team、project、tagline、relay、members、progress、next。当前 demo 按4名成员、5个接力段、3条进展排版；本轮没有制作任意人数自动排版。正式模板根据现场人数再调整。
+默认导出到 `out/xihack-team-intro.mp4`。Remotion Studio 中选择 `DialTest` 可单独检查旋钮试验。
 
-图片和视频放入 `public/`，对应 `media` 填相对路径，例如 `members/a.mp4`，不要加 public 前缀。支持 png/jpg 等图片和 mp4/mov/webm；素材应覆盖对应片段长度，提前裁好入点。音乐同样放 public，填写 music。真实资料全部替换后再把 demo 改为 false。
+现场只改 [`src/content.json`](src/content.json) 与 `public/` 下的素材：
 
-默认 `npm run render` 导出 `out/xihack-relay-demo.mp4`。本地预览可以拖动时间轴。素材替换后建议只看对应段落和一次最终成片，不做重复测试矩阵。
+1. 填 `team.name`、`team.tagline`。
+2. 填 `project.name`、`project.oneLiner`、`project.nextStep`。
+3. 把 `story` 的五段换成当前项目的“问题 → 洞察 → 方案 → 原型 → 价值”。五段是当前 60 秒时间轴的固定叙事槽，不再绑定 Relay 项目。
+4. 填 1–6 名 `members`。
+5. 填 1–4 条 `progress`，记录当天真正完成的事。
+6. 把图片、视频和音乐放进 `public/`，在对应 `media` / `music.src` 中填写相对路径，不要带 `public/` 前缀。
+7. 运行 `npm run preflight`，再预览或导出。
 
-本机 demo 为避免重复下载，以目录链接复用相邻 yoru-motion-system 的同版本 node_modules。迁移到另一台机器时，只带源文件、public 和 package.json，再执行 npm install；不要复制此依赖目录链接。
+`story[].layout` 是视觉版式，不是项目类型。当前可选值为 `notes`、`focus`、`list`、`steps`、`timeline`；每段的 `points` 固定填三项。成员和进展数量会自动重新分配卡片宽度与停留时间。
 
-## 参考与边界
+最简单的素材写法是字符串：
 
-见 `docs/REFERENCE-LOCK.md`。借用了 Shotcraft 的文字与素材同步步进语法，未复制上游页面占位代码。新拟态阴影、圆角、胶囊、分段控件的配方来自设计系统的 README 与 `preview/` 卡片，按视频尺度放大约 2.5 倍。新动画数值为待用户审美确认的演示选择。演示图形为本项目绘制。
+```json
+"media": "members/member-a.mp4"
+```
 
-字体：Latin 用 Geist 与 Geist Mono（设计系统自托管的 Latin 子集，SIL OFL），中文用 Source Han Sans SC（SIL OFL），全部随工程本地加载。Remotion 的使用受其自身许可约束。
+需要控制裁切或视频入点时，也可以写成对象：
+
+```json
+"media": {
+  "src": "demo/product.mp4",
+  "fit": "cover",
+  "position": "50% 35%",
+  "trimStart": 1.2
+}
+```
+
+`fit` 支持 `cover` / `contain`，`position` 使用 CSS `object-position` 语法，`trimStart` 单位为秒。故事、人物和进展中的视频默认静音，避免多个素材音轨叠加；只有 `music.src` 会进入成片声音，`music.volume` 为 0–1。
+
+`preflight` 会检查段落数量、成员/进展范围、素材路径和常见文字溢出风险。`demo` 改为 `false` 后会移除右下角演示戳。真实参赛内容可以只保留在本地，不必提交到仓库。
+
+## 工程结构
+
+- `src/content.json`：唯一的现场内容入口。
+- `src/content.ts`：内容类型、运行时校验与媒体默认值。
+- `src/scenes/Story.tsx`：通用的五段项目叙事，不包含 Relay 专属词汇。
+- `src/scenes/Field.tsx`：自适应 1–6 人、1–4 条进展。
+- `src/scenes/Dial.tsx`：旋钮方向试验；暂未接入 60 秒主片。
+- `src/design.tsx`：颜色、字体、阴影和基础视觉组件。
+- `scripts/preflight.mjs`：现场替换后的单次快速检查。
+- `docs/REFERENCE-LOCK.md`：已经确认与尚未确认的视觉边界。
+
+## 视觉与版权说明
+
+当前主片使用 yoru-and-akari Console 设计系统的 Akari 色值和新拟态原语；这一版已经被明确判定为不够好看，保留它是为了让后续优化有稳定的代码和时间轴基线，而不是延续这套审美。下一阶段以 `DialTest` 为起点逐个确认旋钮、转场、构图、字体层级和素材进入方式。
+
+字体：Latin 使用 Geist / Geist Mono，中文使用 Source Han Sans SC，均以 SIL OFL 随工程本地加载。Remotion 的使用受其自身许可约束。

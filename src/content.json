@@ -1,28 +1,98 @@
 {
-  "team": "接力小队",
-  "project": "Relay",
-  "tagline": "让好想法，接上下一步。",
-  "event": "XiHack 2026",
-  "location": "西安 · DAY 01",
+  "event": {
+    "name": "XiHack 2026",
+    "meta": "西安 · DAY 01"
+  },
+  "team": {
+    "name": "你的团队名",
+    "tagline": "不同背景，一起把一个问题做明白。"
+  },
+  "project": {
+    "name": "项目名",
+    "oneLiner": "用一句话说清：为谁，解决什么问题。",
+    "nextStep": "下一步，完成第一次真实验证。"
+  },
   "demo": true,
-  "music": "",
-  "relay": [
-    {"label":"THE FRICTION", "verb":"散落", "description":"想法很多，下一步却不清楚。", "kind":"scatter", "media":""},
-    {"label":"THE QUESTION", "verb":"对齐", "description":"怎样让每个人知道，从哪里开始？", "kind":"align", "media":""},
-    {"label":"OUR APPROACH / 01", "verb":"收集", "description":"把讨论，放到同一个地方。", "kind":"collect", "media":""},
-    {"label":"OUR APPROACH / 02", "verb":"拆解", "description":"把方向，变成可以动手的小事。", "kind":"tasks", "media":""},
-    {"label":"OUR APPROACH / 03", "verb":"接力", "description":"让下一步，有人接住。", "kind":"handoff", "media":""}
+  "music": {
+    "src": "",
+    "volume": 0.25
+  },
+  "story": [
+    {
+      "section": "THE PROBLEM",
+      "lead": "我们看到",
+      "keyword": "问题",
+      "description": "一句话描述具体用户在具体场景里的阻碍。",
+      "headline": "问题发生在哪里？",
+      "layout": "notes",
+      "points": ["具体场景", "目标用户", "关键阻碍"],
+      "media": ""
+    },
+    {
+      "section": "THE INSIGHT",
+      "lead": "真正关键是",
+      "keyword": "洞察",
+      "description": "说明你们为何选择这个切入点。",
+      "headline": "找到值得解决的那一处。",
+      "layout": "focus",
+      "points": ["真实需求", "现有缺口", "突破机会"],
+      "media": ""
+    },
+    {
+      "section": "THE SOLUTION / 01",
+      "lead": "我们的方案先",
+      "keyword": "聚焦",
+      "description": "说清方案的核心机制，而不是功能清单。",
+      "headline": "一个清楚的解决方向。",
+      "layout": "list",
+      "points": ["核心能力", "使用方式", "带来的改变"],
+      "media": ""
+    },
+    {
+      "section": "THE SOLUTION / 02",
+      "lead": "然后把它",
+      "keyword": "做出",
+      "description": "展示原型如何让方案落地。",
+      "headline": "从概念，到可体验。",
+      "layout": "steps",
+      "points": ["定义", "搭建", "验证"],
+      "media": ""
+    },
+    {
+      "section": "THE VALUE",
+      "lead": "最终我们要",
+      "keyword": "验证",
+      "description": "用真实反馈判断方案是否创造价值。",
+      "headline": "让结果回到真实的人。",
+      "layout": "timeline",
+      "points": ["尝试", "反馈", "调整"],
+      "media": ""
+    }
   ],
   "members": [
-    {"name":"成员 A", "role":"产品 · 定义问题", "media":""},
-    {"name":"成员 B", "role":"设计 · 让想法可见", "media":""},
-    {"name":"成员 C", "role":"开发 · 让原型运行", "media":""},
-    {"name":"成员 D", "role":"验证 · 回到真实场景", "media":""}
+    {"name": "成员 A", "role": "产品 · 定义问题", "media": ""},
+    {"name": "成员 B", "role": "设计 · 让想法可见", "media": ""},
+    {"name": "成员 C", "role": "开发 · 让原型运行", "media": ""},
+    {"name": "成员 D", "role": "验证 · 回到真实场景", "media": ""}
   ],
-  "progress":[
-    {"title":"聚焦问题", "description":"一个具体场景，一次共同决定。", "media":""},
-    {"title":"做出草图", "description":"把想法摆到桌面上。", "media":""},
-    {"title":"准备验证", "description":"让第一位使用者试一试。", "media":""}
-  ],
-  "next":"下一步，跑通第一次接力。"
+  "progress": [
+    {
+      "title": "锁定问题",
+      "description": "把今天确认的场景、用户和关键阻碍写在这里。",
+      "points": ["场景", "用户", "阻碍"],
+      "media": ""
+    },
+    {
+      "title": "做出原型",
+      "description": "把今天完成的草图、交互或可运行版本写在这里。",
+      "points": ["草图", "交互", "原型"],
+      "media": ""
+    },
+    {
+      "title": "拿去验证",
+      "description": "把今天拿到的反馈，以及下一轮要改什么写在这里。",
+      "points": ["尝试", "反馈", "调整"],
+      "media": ""
+    }
+  ]
 }

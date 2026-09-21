@@ -7,7 +7,7 @@ const list=frames.length?frames:[55,175,290,500,710,950,1400,1740];
 const serveUrl=await bundle({entryPoint:path.resolve('src/index.ts'),outDir:path.resolve('out/bundle')});
 const browser=await openBrowser('chrome',{browserExecutable:executable});
 try {
- const composition=await selectComposition({serveUrl,id:'XiHackRelay',puppeteerInstance:browser});
+ const composition=await selectComposition({serveUrl,id:'XiHackTeamIntro',puppeteerInstance:browser});
  for(const frame of list) {
   await renderStill({serveUrl,composition,frame,scale:1,output:`out/review-${frame}.png`,puppeteerInstance:browser});
   console.log(`Reviewed frame ${frame}`);
