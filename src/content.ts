@@ -40,7 +40,13 @@ export type ProjectContent = {
   team: {name: string; tagline: string};
   project: {name: string; oneLiner: string; nextStep: string};
   demo: boolean;
-  music: {src: string; volume: number};
+  music: {
+    src: string;
+    volume: number;
+    trimStart: number;
+    fadeIn: number;
+    fadeOut: number;
+  };
   story: [StoryBeat, StoryBeat, StoryBeat, StoryBeat, StoryBeat];
   members: Member[];
   progress: ProgressItem[];
@@ -93,6 +99,9 @@ const parseContent = (value: unknown): ProjectContent => {
   const music = record(root.music, 'music');
   text(music.src, 'music.src');
   if (typeof music.volume !== 'number' || music.volume < 0 || music.volume > 1) fail('music.volume', 'a number from 0 to 1');
+  if (typeof music.trimStart !== 'number' || music.trimStart < 0) fail('music.trimStart', 'a non-negative number of seconds');
+  if (typeof music.fadeIn !== 'number' || music.fadeIn < 0) fail('music.fadeIn', 'a non-negative number of seconds');
+  if (typeof music.fadeOut !== 'number' || music.fadeOut < 0) fail('music.fadeOut', 'a non-negative number of seconds');
 
   if (!Array.isArray(root.story) || root.story.length !== 5) fail('story', 'an array of exactly 5 beats');
   const layouts: StoryLayout[] = ['notes', 'focus', 'list', 'steps', 'timeline'];

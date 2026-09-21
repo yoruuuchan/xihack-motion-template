@@ -4,8 +4,10 @@ import {C, mono} from './design';
 import {CHAPTERS, DIAL_SCENE_OVERLAP, TOTAL_DURATION, chapterAtFrame, chapterStart} from './timeline';
 
 const formatTime = (seconds: number) => {
-  const rounded = Math.max(0, Math.floor(seconds));
-  return `${String(Math.floor(rounded / 60)).padStart(2, '0')}:${String(rounded % 60).padStart(2, '0')}`;
+  const safe = Math.max(0, seconds);
+  const whole = Math.floor(safe);
+  const tenths = Math.floor((safe - whole) * 10 + 1e-6);
+  return `${String(Math.floor(whole / 60)).padStart(2, '0')}:${String(whole % 60).padStart(2, '0')}.${tenths}`;
 };
 
 export const ChapterTimeline = () => {

@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill,Audio,Composition,Sequence,staticFile} from 'remotion';
+import {AbsoluteFill,Composition,Sequence} from 'remotion';
 import {Opening} from './scenes/Opening';
 import {Story} from './scenes/Story';
 import {Team,Progress} from './scenes/Field';
@@ -8,6 +8,7 @@ import {DialCue, DialTest} from './scenes/Dial';
 import {DemoStamp,font} from './design';
 import {content as data} from './content';
 import {ChapterTimeline} from './ChapterTimeline';
+import {Soundtrack} from './Soundtrack';
 import {CHAPTERS, DIAL_SCENE_OVERLAP, TOTAL_DURATION, chapterStart} from './timeline';
 
 const chapterScene = (id: (typeof CHAPTERS)[number]['id'], durationInFrames: number) => {
@@ -30,12 +31,12 @@ const Film = () => (
             {chapterScene(chapter.id, sceneDuration)}
           </Sequence>
           <Sequence durationInFrames={chapter.dialFrames} name={`${chapter.label} / DIAL`}>
-            <DialCue fromIndex={Math.max(0, chapter.dialTarget - 1)} toIndex={chapter.dialTarget} durationInFrames={chapter.dialFrames} />
+            <DialCue chapterId={chapter.id} fromIndex={Math.max(0, chapter.dialTarget - 1)} toIndex={chapter.dialTarget} durationInFrames={chapter.dialFrames} />
           </Sequence>
         </Sequence>
       );
     })}
-    {data.music.src ? <Audio src={staticFile(data.music.src)} volume={data.music.volume} /> : null}
+    <Soundtrack />
     <ChapterTimeline />
     {data.demo ? <DemoStamp /> : null}
   </AbsoluteFill>

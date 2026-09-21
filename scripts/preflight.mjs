@@ -41,7 +41,7 @@ const warnLength = (value, limit, label) => {
 
 const data = readJson();
 if (data) {
-  if (!Array.isArray(data.story) || data.story.length !== 5) errors.push('story must contain exactly 5 beats for the current 60-second timeline.');
+  if (!Array.isArray(data.story) || data.story.length !== 5) errors.push('story must contain exactly 5 beats for the current project narrative.');
   if (!Array.isArray(data.members) || data.members.length < 1 || data.members.length > 6) errors.push('members must contain 1 to 6 people.');
   if (!Array.isArray(data.progress) || data.progress.length < 1 || data.progress.length > 4) errors.push('progress must contain 1 to 4 items.');
 
@@ -71,6 +71,10 @@ if (data) {
     });
   }
   checkMedia(data.music?.src ?? '', 'music.src', true);
+  for (const key of ['trimStart', 'fadeIn', 'fadeOut']) {
+    if (typeof data.music?.[key] !== 'number' || data.music[key] < 0) errors.push(`music.${key} must be a non-negative number of seconds.`);
+  }
+  if (typeof data.music?.volume !== 'number' || data.music.volume < 0 || data.music.volume > 1) errors.push('music.volume must be a number from 0 to 1.');
 }
 
 for (const warning of warnings) console.warn(`WARN  ${warning}`);

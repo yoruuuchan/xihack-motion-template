@@ -14,8 +14,11 @@
   },
   "demo": true,
   "music": {
-    "src": "",
-    "volume": 0.25
+    "src": "music/alanajordan-brazilian-tropicalia-instrumental-01-485592.mp3",
+    "volume": 0.62,
+    "trimStart": 56.03,
+    "fadeIn": 0.25,
+    "fadeOut": 1.2
   },
   "story": [
     {

@@ -4,7 +4,7 @@
 
 当前有两个 composition：
 
-- `XiHackTeamIntro`：当前为 48 秒的无 BGM 结构剪辑。六个章节都由旋钮短暂选档，再缩放 / 淡出进入内容；旋钮不会常驻。48 秒不是目标时长，拿到 BGM 后会根据乐句、重拍和文字阅读停顿重新分配。
+- `XiHackTeamIntro`：当前为 48.6 秒的 BGM 对拍版本。六个章节都由旋钮短暂选档，再以不同方向缩放 / 推进进入内容；旋钮不会常驻。章节边界同时服从乐句、重拍和文字阅读停顿，不为凑满一分钟拉长。
 - `DialTest`：8 秒旋钮组件试验，用于单独检查材质、档位、按压和离场；不再与主片割裂成另一条叙事方案。
 
 底部是主片唯一的全局进度信息：章节刻度按真实帧数比例排列，游标与时间码跟随当前帧。修改 `src/timeline.ts` 的章节时长，会同时更新场景排布和时间标尺。
@@ -49,7 +49,7 @@ npm run render
 }
 ```
 
-`fit` 支持 `cover` / `contain`，`position` 使用 CSS `object-position` 语法，`trimStart` 单位为秒。故事、人物和进展中的视频默认静音，避免多个素材音轨叠加；只有 `music.src` 会进入成片声音，`music.volume` 为 0–1。
+`fit` 支持 `cover` / `contain`，`position` 使用 CSS `object-position` 语法，`trimStart` 单位为秒。故事、人物和进展中的视频默认静音，避免多个素材音轨叠加；只有 `music.src` 会进入成片声音。音乐可配置 `volume`、`trimStart`、`fadeIn` 和 `fadeOut`，后三项单位均为秒。
 
 `preflight` 会检查段落数量、成员/进展范围、素材路径和常见文字溢出风险。`demo` 改为 `false` 后会移除右下角演示戳。真实参赛内容可以只保留在本地，不必提交到仓库。
 
@@ -58,6 +58,7 @@ npm run render
 - `src/content.json`：唯一的现场内容入口。
 - `src/content.ts`：内容类型、运行时校验与媒体默认值。
 - `src/timeline.ts`：六章时长、旋钮停留和主片总时长的单一来源。
+- `src/Soundtrack.tsx`：BGM 裁切、头尾淡化和旋钮机械点击声。
 - `src/ChapterTimeline.tsx`：按实际帧数绘制章节刻度、游标和时间码。
 - `src/scenes/Story.tsx`：通用的五段项目叙事，不包含 Relay 专属词汇。
 - `src/scenes/Field.tsx`：自适应 1–6 人、1–4 条进展。
@@ -70,8 +71,8 @@ npm run render
 
 当前主片仍沿用部分 yoru-and-akari Console 设计系统的 Akari 色值和新拟态原语；这一版尚未获得视觉批准。现阶段先确认信息结构、旋钮职责和真实时间标尺，再逐项优化旋钮材质、转场、构图、字体层级和素材进入方式。此前生成的团队图形标志已经完全删除，正式标识未提供前不再用占位图形冒充 logo。
 
-## BGM 交接建议
+## 当前 BGM
 
-可以现在就提供完整音频文件，或给 2–3 首候选和来源 / 授权信息，不需要提前剪成一分钟。优先选择有清晰 4 / 8 小节结构、前后有呼吸空间、中段有一次明显抬升、能在 40–55 秒形成完整段落的音乐；纯音乐或人声稀疏会更容易承载现场文字。拿到音乐后再测拍点并调整章节边界，不会为了“每拍都切”牺牲阅读停顿。
+当前使用 Alanajordan 的 `Brazilian Tropicalia Instrumental 01`，从原曲约 `00:56.03` 起取 48.6 秒，并在片头 / 片尾做短淡化。音乐文件因授权与仓库体积不进入 Git；把下载文件放到 `public/music/alanajordan-brazilian-tropicalia-instrumental-01-485592.mp3` 即可复现带声音的导出。来源和许可说明见 [`public/music/README.md`](public/music/README.md)。
 
 字体：Latin 使用 Geist / Geist Mono，中文使用 Source Han Sans SC，均以 SIL OFL 随工程本地加载。Remotion 的使用受其自身许可约束。
