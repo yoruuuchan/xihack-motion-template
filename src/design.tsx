@@ -62,8 +62,26 @@ export const neo = {
   segActiveBlue: '0 6px 16px rgba(24,39,99,0.35)',
   panel: '-18px -18px 46px rgba(255,255,255,0.82), 22px 24px 48px rgba(119,135,171,0.34), inset 2px 2px 1px rgba(255,255,255,0.94), inset -2px -2px 3px rgba(107,123,158,0.20)',
   panelBlue: '-14px -14px 38px rgba(255,255,255,0.10), 20px 22px 44px rgba(24,39,99,0.46), inset 2px 2px 1px rgba(255,255,255,0.16), inset -2px -2px 3px rgba(20,32,82,0.34)',
+  face: 'inset 2px 2px 1px rgba(255,255,255,0.90), inset -3px -3px 8px rgba(107,123,158,0.16)',
+  faceBlue: 'inset 2px 2px 1px rgba(255,255,255,0.16), inset -4px -4px 10px rgba(20,32,82,0.26)',
+  pressedBlue: 'inset 6px 6px 14px rgba(24,39,99,0.38), inset -4px -4px 10px rgba(255,255,255,0.13)',
+  badge: '-2px -2px 5px rgba(255,255,255,0.78), 3px 3px 7px rgba(119,135,171,0.24), inset 1px 1px 0 rgba(255,255,255,0.72)',
+  badgeInset: 'inset 2px 2px 5px rgba(119,135,171,0.27), inset -2px -2px 5px rgba(255,255,255,0.74)',
 };
 export const R = {card: 40, inner: 28, pill: 999};
+
+// Subtle gradients describe the direction of light; they are material surfaces, not decorative color effects.
+export const material = {
+  surface: 'linear-gradient(145deg, #FAFBFE 0%, #F0F3F8 48%, #E4E9F2 100%)',
+  elevated: 'linear-gradient(145deg, #FFFFFF 0%, #F5F7FB 50%, #E8EDF5 100%)',
+  sunken: 'linear-gradient(145deg, #D5DCE7 0%, #E0E5EE 45%, #EAF0F6 100%)',
+  blue: 'linear-gradient(145deg, #637CEF 0%, #4F6CE8 48%, #3A54C7 100%)',
+  blueDeep: 'linear-gradient(145deg, #344DBB 0%, #405BCB 46%, #526DDB 100%)',
+  teal: 'linear-gradient(145deg, #35BAB2 0%, #1EA8A0 52%, #178A83 100%)',
+  tealPale: 'linear-gradient(145deg, #EBFAF8 0%, #DBF2F0 52%, #C5E8E5 100%)',
+  pale: 'linear-gradient(145deg, #EEF2FF 0%, #DCE3FE 52%, #C9D4FC 100%)',
+  white: 'linear-gradient(145deg, #FFFFFF 0%, #F7F8FB 52%, #E4E9F1 100%)',
+};
 
 // Page wash from --page-wash; the lower-left glow uses frost instead of ember.
 const baseWash = `radial-gradient(120% 80% at 80% -10%, rgba(79,108,232,0.07), transparent 60%), radial-gradient(90% 70% at 0% 100%, rgba(30,168,160,0.05), transparent 55%), ${C.base}`;
@@ -163,9 +181,8 @@ export const MaterialPlate: React.FC<{children?: React.ReactNode; onBlue?: boole
       position: 'relative',
       borderRadius: 52,
       background: onBlue
-        ? 'linear-gradient(145deg, rgba(88,116,234,0.98) 0%, rgba(57,79,184,0.98) 100%)'
-        : 'linear-gradient(145deg, rgba(249,251,254,0.98) 0%, rgba(222,228,238,0.98) 100%)',
-      border: onBlue ? '1px solid rgba(255,255,255,0.14)' : '1px solid rgba(255,255,255,0.82)',
+        ? material.blue
+        : material.surface,
       boxShadow: onBlue ? neo.panelBlue : neo.panel,
       boxSizing: 'border-box',
       overflow: 'hidden',
@@ -192,10 +209,9 @@ export const MaterialPlate: React.FC<{children?: React.ReactNode; onBlue?: boole
 export const Card: React.FC<{children?: React.ReactNode; lifted?: boolean; onBlue?: boolean; style?: React.CSSProperties}> = ({children, lifted, onBlue, style}) => (
   <div
     style={{
-      background: 'linear-gradient(145deg, #F9FBFE 0%, #E5EAF3 100%)',
-      border: onBlue ? '1px solid rgba(255,255,255,0.16)' : '1px solid rgba(255,255,255,0.78)',
+      background: material.surface,
       borderRadius: R.card,
-      boxShadow: `${onBlue ? neo.raisedBlue : lifted ? neo.lifted : neo.raised}, inset 1px 1px 0 rgba(255,255,255,0.92), inset -1px -1px 0 rgba(107,123,158,0.16)`,
+      boxShadow: `${onBlue ? neo.raisedBlue : lifted ? neo.lifted : neo.raised}, ${neo.face}`,
       boxSizing: 'border-box',
       ...style,
     }}
@@ -208,11 +224,10 @@ export const Well: React.FC<{children?: React.ReactNode; deep?: boolean; onBlue?
   <div
     style={{
       background: onBlue
-        ? 'linear-gradient(145deg, #3B55C8 0%, #4863D7 100%)'
-        : 'linear-gradient(145deg, #D8DEE8 0%, #E5EAF2 100%)',
-      border: onBlue ? '1px solid rgba(24,39,99,0.34)' : '1px solid rgba(124,139,173,0.20)',
+        ? material.blueDeep
+        : material.sunken,
       borderRadius: R.card,
-      boxShadow: `${onBlue ? neo.insetBlue : deep ? neo.insetDeep : neo.inset}, inset 1px 1px 0 rgba(107,123,158,0.18)`,
+      boxShadow: onBlue ? neo.insetBlue : deep ? neo.insetDeep : neo.inset,
       boxSizing: 'border-box',
       ...style,
     }}
@@ -223,14 +238,14 @@ export const Well: React.FC<{children?: React.ReactNode; deep?: boolean; onBlue?
 
 type PillVariant = 'chip' | 'chipOn' | 'mute' | 'frost' | 'info' | 'blueChip' | 'blueOn' | 'frostOn';
 const pillStyles: Record<PillVariant, React.CSSProperties> = {
-  chip: {background: C.base, color: C.muted, boxShadow: neo.chip},
-  chipOn: {background: C.blue, color: 'white', boxShadow: neo.pressed},
-  frostOn: {background: C.teal, color: 'white', boxShadow: neo.pressed},
-  mute: {background: C.sunken, color: C.faint},
-  frost: {background: C.tealPale, color: C.tealDeep},
-  info: {background: C.pale, color: C.deep},
-  blueChip: {background: C.blue, color: 'white', boxShadow: neo.raisedBlue},
-  blueOn: {background: C.elevated, color: C.ink, boxShadow: neo.segActiveBlue},
+  chip: {background: material.surface, color: C.muted, boxShadow: `${neo.chip}, ${neo.face}`},
+  chipOn: {background: material.blue, color: 'white', boxShadow: neo.pressedBlue},
+  frostOn: {background: material.teal, color: 'white', boxShadow: neo.pressedBlue},
+  mute: {background: material.sunken, color: C.faint, boxShadow: neo.badgeInset},
+  frost: {background: material.tealPale, color: C.tealDeep, boxShadow: neo.badge},
+  info: {background: material.pale, color: C.deep, boxShadow: neo.badge},
+  blueChip: {background: material.blue, color: 'white', boxShadow: `${neo.raisedBlue}, ${neo.faceBlue}`},
+  blueOn: {background: material.elevated, color: C.ink, boxShadow: `${neo.segActiveBlue}, ${neo.face}`},
 };
 export const Pill: React.FC<{children: React.ReactNode; variant?: PillVariant; size?: number; style?: React.CSSProperties}> = ({children, variant = 'chip', size = 24, style}) => (
   <div
@@ -253,7 +268,16 @@ export const Pill: React.FC<{children: React.ReactNode; variant?: PillVariant; s
 );
 
 export const Dot: React.FC<{color?: string; size?: number}> = ({color = C.teal, size = 14}) => (
-  <div style={{width: size, height: size, borderRadius: R.pill, background: color, flexShrink: 0}} />
+  <div
+    style={{
+      width: size,
+      height: size,
+      borderRadius: R.pill,
+      background: `radial-gradient(circle at 32% 28%, rgba(255,255,255,0.76) 0 11%, ${color} 34%, ${color} 100%)`,
+      boxShadow: 'inset -2px -2px 4px rgba(14,21,37,0.18), 2px 2px 5px rgba(119,135,171,0.22)',
+      flexShrink: 0,
+    }}
+  />
 );
 
 // Sunken pill track with a raised pill that slides between numbered segments (toggles-segmented.html).
@@ -261,8 +285,8 @@ export const Segmented: React.FC<{count: number; pos: number; width: number; hei
   const pad = 7;
   const segW = (width - pad * 2) / count;
   return (
-    <div style={{position: 'relative', width, height, borderRadius: R.pill, background: onBlue ? C.blueDeep : C.sunken, boxShadow: onBlue ? neo.trackBlue : neo.track, ...style}}>
-      <div style={{position: 'absolute', top: pad, left: pad + pos * segW, width: segW, height: height - pad * 2, borderRadius: R.pill, background: onBlue ? C.elevated : C.surface, boxShadow: onBlue ? neo.segActiveBlue : neo.segActive}} />
+    <div style={{position: 'relative', width, height, borderRadius: R.pill, background: onBlue ? material.blueDeep : material.sunken, boxShadow: onBlue ? neo.trackBlue : neo.track, ...style}}>
+      <div style={{position: 'absolute', top: pad, left: pad + pos * segW, width: segW, height: height - pad * 2, borderRadius: R.pill, background: material.elevated, boxShadow: `${onBlue ? neo.segActiveBlue : neo.segActive}, ${neo.face}`}} />
       {Array.from({length: count}, (_, i) => (
         <div key={i} style={{position: 'absolute', top: 0, left: pad + i * segW, width: segW, height, display: 'grid', placeItems: 'center', fontFamily: mono, fontSize: 19, fontWeight: 500, color: Math.abs(pos - i) < 0.5 ? C.ink : onBlue ? 'rgba(255,255,255,0.55)' : C.faint}}>
           0{i + 1}
@@ -277,9 +301,9 @@ export const Track: React.FC<{progress: number; width: number; onBlue?: boolean;
   const h = 14;
   const fillW = Math.max(h, width * progress);
   return (
-    <div style={{position: 'relative', width, height: h, borderRadius: R.pill, background: onBlue ? C.blueDeep : C.sunken, boxShadow: onBlue ? neo.trackBlue : neo.track, ...style}}>
+    <div style={{position: 'relative', width, height: h, borderRadius: R.pill, background: onBlue ? material.blueDeep : material.sunken, boxShadow: onBlue ? neo.trackBlue : neo.track, ...style}}>
       <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: fillW, borderRadius: R.pill, background: onBlue ? 'white' : `linear-gradient(90deg, #6E89F2, ${C.blue})`}} />
-      {knob ? <div style={{position: 'absolute', top: h / 2 - 18, left: fillW - 18, width: 36, height: 36, borderRadius: R.pill, background: 'white', boxShadow: neo.knob}} /> : null}
+      {knob ? <div style={{position: 'absolute', top: h / 2 - 18, left: fillW - 18, width: 36, height: 36, borderRadius: R.pill, background: material.white, boxShadow: `${neo.knob}, ${neo.face}`}} /> : null}
     </div>
   );
 };
@@ -287,9 +311,9 @@ export const Track: React.FC<{progress: number; width: number; onBlue?: boolean;
 // 14-rounded squircle at 40px in the avatar recipe; same proportion here.
 export const Tile: React.FC<{size: number; variant?: 'primary' | 'surface' | 'onBlue'; children?: React.ReactNode; style?: React.CSSProperties}> = ({size, variant = 'primary', children, style}) => {
   const look: Record<string, React.CSSProperties> = {
-    primary: {background: C.blue, boxShadow: neo.primary},
-    surface: {background: C.surface, boxShadow: neo.raised},
-    onBlue: {background: C.blue, boxShadow: neo.raisedBlue},
+    primary: {background: material.blue, boxShadow: `${neo.primary}, ${neo.faceBlue}`},
+    surface: {background: material.surface, boxShadow: `${neo.raised}, ${neo.face}`},
+    onBlue: {background: material.blue, boxShadow: `${neo.raisedBlue}, ${neo.faceBlue}`},
   };
   return (
     <div style={{width: size, height: size, borderRadius: size * 0.35, display: 'grid', placeItems: 'center', ...look[variant], ...style}}>{children}</div>

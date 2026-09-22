@@ -1,7 +1,7 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
 import {content as data, hasMedia, type StoryBeat} from '../content';
-import {C, Card, Dot, FittedText, LocalMedia, MaterialPlate, Pill, R, Rail, Segmented, Shell, Track, Well, io, mix, mono, neo, p} from '../design';
+import {C, Card, Dot, FittedText, LocalMedia, MaterialPlate, Pill, R, Rail, Segmented, Shell, Track, Well, io, material, mix, mono, neo, p} from '../design';
 
 const Note: React.FC<{text: string; x: number; y: number; rotate?: number; dark?: boolean}> = ({text, x, y, rotate = 0, dark}) => (
   <div
@@ -12,9 +12,9 @@ const Note: React.FC<{text: string; x: number; y: number; rotate?: number; dark?
       width: 270,
       padding: '26px 28px',
       borderRadius: R.inner,
-      background: dark ? C.blue : C.surface,
+      background: dark ? material.blue : material.surface,
       color: dark ? 'white' : C.ink,
-      boxShadow: dark ? neo.pressed : neo.raised,
+      boxShadow: dark ? `${neo.raisedBlue}, ${neo.faceBlue}` : `${neo.raised}, ${neo.face}`,
       transform: `rotate(${rotate}deg)`,
       fontSize: 30,
       fontWeight: 700,
@@ -32,7 +32,17 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
   const blue = beat.layout === 'focus' || beat.layout === 'steps';
   const activeStage = Math.round(t * (beat.points.length - 1));
   return (
-    <div style={{position: 'absolute', inset: 0, background: blue ? C.blue : C.surface, color: blue ? 'white' : C.ink, padding: '34px 42px', overflow: 'hidden'}}>
+    <div
+      style={{
+        position: 'absolute',
+        inset: 0,
+        background: blue ? material.blue : material.surface,
+        color: blue ? 'white' : C.ink,
+        boxShadow: blue ? neo.faceBlue : neo.face,
+        padding: '34px 42px',
+        overflow: 'hidden',
+      }}
+    >
       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <span style={{fontFamily: mono, fontSize: 18, letterSpacing: 1, opacity: 0.7}}>project / canvas</span>
         {data.demo ? <Pill variant={blue ? 'blueChip' : 'mute'} size={15}>概念演示</Pill> : null}
@@ -74,8 +84,8 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
                 fontWeight: 500,
                 padding: '18px 28px',
                 borderRadius: R.inner,
-                background: C.surface,
-                boxShadow: index === 1 ? neo.selected : neo.raised,
+                background: material.surface,
+                boxShadow: index === 1 ? neo.selected : `${neo.raised}, ${neo.face}`,
               }}
             >
               <Dot color={index === 1 ? C.blue : C.teal} />
@@ -89,7 +99,7 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
           <div style={{fontSize: 49, fontWeight: 700, marginTop: 34}}>{beat.headline}</div>
           <div style={{display: 'flex', gap: 24, marginTop: 46}}>
             {beat.points.map((point, index) => (
-              <div key={`${index}-${point}`} style={{flex: 1, padding: '24px 26px', height: 216, borderRadius: R.inner, background: C.blue, boxShadow: neo.raisedBlue}}>
+              <div key={`${index}-${point}`} style={{flex: 1, padding: '24px 26px', height: 216, borderRadius: R.inner, background: material.blue, boxShadow: `${neo.raisedBlue}, ${neo.faceBlue}`}}>
                 <div style={{fontFamily: mono, fontSize: 18, opacity: 0.6}}>0{index + 1}</div>
                 <div style={{fontSize: 38, fontWeight: 700, marginTop: 22}}>{point}</div>
                 <div style={{height: 6, width: 74, borderRadius: R.pill, background: index === beat.points.length - 1 ? C.teal : 'rgba(255,255,255,0.7)', marginTop: 40}} />

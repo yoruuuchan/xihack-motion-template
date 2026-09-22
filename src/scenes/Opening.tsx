@@ -72,7 +72,6 @@ export const Opening: React.FC<{durationInFrames?: number}> = ({durationInFrames
         <FittedText text={data.project.oneLiner} maxWidth={1510} maxFontSize={47} minFontSize={28} fontWeight={400} style={{marginTop: 20, opacity: p(f, 90, 112)}} />
       </div>
       <div style={{position: 'absolute', right: 68, top: 350, writingMode: 'vertical-rl', color: 'white', fontSize: 21, letterSpacing: 5, opacity: handoff}}>TEAM / PROJECT</div>
-      <div style={{position: 'absolute', left: 120, bottom: 142, fontSize: 21, color: onBase ? C.muted : 'white'}}>一起，把想法往前推一步。</div>
     </Shell>
   );
 };

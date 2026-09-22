@@ -72,3 +72,17 @@ Reference Compare：正式导出前批量抽取关键帧，对照已读取的参
 - 新增共享 `MaterialPlate`，并强化 `Card` / `Well` 的高光边、接触阴影、内凹暗部和表面渐变。开场、Story、今天与收尾采用大面积材质承载面；人物章节及四张占位人物卡未改。
 - 在不改变章节边界和原有 6 帧“旋钮 → 正文”交叠的前提下，为每次“正文 → 下一枚旋钮”增加 10 帧入场。上一章末帧在这 10 帧冻结为底图，旋钮使用同一家族的横移、纵移与景深缩放变体进入；选择结束后仍完整离场，不常驻正文。
 - 问题 / 方案 / 今天的语义行运动分别延长到约 23–39 帧的分层窗口，保留异向聚拢、共轴铰链和浅层 2.5D 三种性格；最终文字位置、稳定阅读段和全片 1458 帧时长不变。
+
+2026-09-22（新拟态完整载体审计）：
+
+用户要求继续找出所有“像扁平色块的地方”并改为新拟态，同时删除开场底部“一起，把想法往前推一步。”。本轮把“色块”定义为承担信息、选择状态或素材容器职责的可见面，不把页面底色、时间标尺细线、连接线、状态点以及未来替换的真实照片 / 视频强行卡片化。人物章节的四张占位人物卡继续遵守上一轮例外，不参与材质深化。
+
+| 镜头 / 载体 | 可定位来源 | 本轮借用什么 |
+|---|---|---|
+| Story 五种 `SampleCard` 内部画布 | `yoru-and-akari Console Design System/preview/shadows-neo.html`、`preview/channel-cards.html` | 浅色 / 蓝色画布改为有表面渐变、边缘高光和内侧受光的材质面；外层 Card 继续承担 raised / lifted 深度 |
+| notes / list / steps 的直接色块 | 同上 README「Shadows — the core motif」「Selected / active」 | 普通项使用 raised 表面，选中项使用 inset / selected 关系；蓝色项同时保留白色高光与深蓝接触阴影，不再只填纯 `#4F6CE8` |
+| Today 的 `Sketch`、步骤块与收束总结行 | `preview/settings-rows.html`、`preview/channel-cards.html` | 大画布使用浅瓷材质面，步骤和总结行使用 raised / pressed 两档，保留原有信息密度与构图 |
+| 全片语义 Pill / badge / chip | `preview/badges-chips.html`、`preview/toggles-segmented.html` | chip 保留 raised / pressed；原本无阴影的 mute / frost / info 增加非常浅的浮雕或内嵌受光，不能继续读成纯色标签 |
+| `DialTest` 显示面与可复用 Tile | `preview/shadows-neo.html` | 使用同一浅瓷 / 蓝色材质填充与 inset / raised 配方，避免测试合成仍保留旧扁平面 |
+
+页面 wash、蓝色满幅章节背景与开场擦拭仍是环境表面，不额外套大卡；否则会破坏层级并让全片像堆叠软塑料。开场底部句子直接删除，不以另一句装饰文案替代。

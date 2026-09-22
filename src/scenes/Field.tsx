@@ -1,7 +1,7 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
 import {content as data, hasMedia, type ProgressItem} from '../content';
-import {C, Card, LocalMedia, MaterialPlate, Media, Pill, R, Rail, Segmented, Shell, Small, io, mix, mono, neo, p, wash} from '../design';
+import {C, Card, LocalMedia, MaterialPlate, Media, Pill, R, Rail, Segmented, Shell, Small, io, material, mix, mono, neo, p, wash} from '../design';
 import {PROGRESS_CLOSING_WIPE_FRAMES} from '../timeline';
 
 // Empty media slot reads as a sunken well; real media sits on the raised card face.
@@ -103,7 +103,7 @@ export const Team: React.FC<{durationInFrames?: number}> = ({durationInFrames = 
 
 const Sketch: React.FC<{item: ProgressItem}> = ({item}) => {
   return (
-    <div style={{position: 'absolute', inset: 0, background: C.surface, padding: '52px 64px'}}>
+    <div style={{position: 'absolute', inset: 0, background: material.surface, boxShadow: neo.face, padding: '52px 64px'}}>
       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
         <Small style={{fontSize: 20, color: C.faint}}>FIELD NOTES / DAY 01</Small>
         {data.demo ? <Pill variant="mute" size={16}>示例草图</Pill> : <Pill variant="frost" size={16}>现场进展</Pill>}
@@ -118,9 +118,9 @@ const Sketch: React.FC<{item: ProgressItem}> = ({item}) => {
                 width: 205,
                 height: 180,
                 borderRadius: R.inner,
-                background: i === 1 ? C.blue : C.surface,
+                background: i === 1 ? material.blue : material.surface,
                 color: i === 1 ? 'white' : C.ink,
-                boxShadow: i === 1 ? neo.pressed : neo.raised,
+                boxShadow: i === 1 ? neo.pressedBlue : `${neo.raised}, ${neo.face}`,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
@@ -222,7 +222,7 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
           <div style={{fontSize: 68, fontWeight: 700, marginTop: 12}}>今天，我们推进了这些。</div>
           <div style={{display: 'grid', gridTemplateColumns: `repeat(${progressCount}, minmax(0, 1fr))`, gap: 20, marginTop: 46}}>
             {data.progress.map((item, index) => (
-              <div key={`${index}-${item.title}`} style={{padding: '24px 25px', borderRadius: R.inner, background: C.surface, boxShadow: neo.raised, display: 'flex', alignItems: 'center', gap: 18}}>
+              <div key={`${index}-${item.title}`} style={{padding: '24px 25px', borderRadius: R.inner, background: material.surface, boxShadow: `${neo.raised}, ${neo.face}`, display: 'flex', alignItems: 'center', gap: 18}}>
                 <span style={{fontFamily: mono, fontSize: 18, color: C.tealDeep}}>0{index + 1}</span>
                 <span style={{fontSize: 26, fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{item.title}</span>
               </div>

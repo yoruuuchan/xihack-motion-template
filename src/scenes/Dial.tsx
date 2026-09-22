@@ -98,9 +98,24 @@ const Knob: React.FC<{angle: number; press: number; lit: number; active: number}
   );
 };
 
-const Display: React.FC<{on: number; children?: React.ReactNode}> = ({on, children}) => (
-  <div style={{position: 'absolute', ...SCREEN, borderRadius: 48, background: interpolateColors(on, [0, 1], [C.sunken, '#E6EAF2']), boxShadow: neo.insetDeep, overflow: 'hidden'}}>{children}</div>
-);
+const Display: React.FC<{on: number; children?: React.ReactNode}> = ({on, children}) => {
+  const lightStop = interpolateColors(on, [0, 1], ['#D4DBE6', '#F7F9FC']);
+  const shadeStop = interpolateColors(on, [0, 1], ['#E1E6EF', '#E5EAF2']);
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        ...SCREEN,
+        borderRadius: 48,
+        background: `linear-gradient(145deg, ${lightStop} 0%, ${shadeStop} 100%)`,
+        boxShadow: `${neo.insetDeep}, ${neo.face}`,
+        overflow: 'hidden',
+      }}
+    >
+      {children}
+    </div>
+  );
+};
 
 const exitMotion: Record<ChapterId, {scale: number; x: number; y: number; rotate: number; textX: number}> = {
   team: {scale: 1.72, x: -40, y: 10, rotate: 0, textX: 90},
