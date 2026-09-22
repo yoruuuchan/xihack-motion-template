@@ -10,6 +10,16 @@ Updated: 2026-09-22
 - The repository was clean and synchronized with `origin/main` when this handoff was written.
 - Do not restart the design direction or reintroduce rejected experiments in a new session. Continue from the current main branch and the locks below.
 
+## Latest creative feedback
+
+These three points supersede the previous next-pass ordering:
+
+1. The neumorphic / skeuomorphic feeling is still concentrated in buttons and controls. Other carriers remain too flat; the next material pass must extend a coherent raised / inset / contact relationship across panels, media wells, cards, rails, and large scene surfaces.
+2. The selector has chapter-specific exit motion but effectively appears without an entrance transition. Give each return to the selector an intentional handoff from the preceding content, using a small family of different ingress types while keeping the selector temporary.
+3. The three new text-motion families settle too quickly at normal speed. Lengthen their readable motion phase; do not merely slow every interpolation or consume the stable reading hold.
+
+Do not interpret point 1 as “increase every shadow.” Strengthen material hierarchy through coordinated highlights, contact shadows, inset depth, edge response, and surface separation. Keep the image crisp enough for projection.
+
 ## Latest verified carrier
 
 - Local file: `out/xihack-team-intro.mp4` (ignored by Git).
@@ -53,11 +63,13 @@ The final MP4 itself has been checked for Chinese, Latin, digits, punctuation, w
 
 ## Highest-value next iteration
 
-Re-evaluate these only after watching the current carrier and, preferably, after real event content or representative high-density test content is available:
+Start with the latest three-point creative feedback, using representative high-density content if real event material is not yet available:
 
-1. Strengthen one or two causal handoffs from selector motion into the first content mass, especially solution and closing, without increasing the six-frame visible overlap.
-2. Tune the three new text-motion families in context rather than adding more effects. Adjust only the chapter whose normal-speed motion feels too weak, too busy, or insufficiently distinct.
-3. Replace demonstration people/progress/story media with real photos, whiteboards, recordings, and prototype footage; then decide how much raw on-site texture the today chapter should retain.
+1. Run a scene-wide material-depth pass so that the large content carriers belong to the same tactile system as the buttons and dial.
+2. Design selector ingress transitions and their causal handoff from the outgoing chapter; use a coherent family rather than six unrelated tricks.
+3. Extend and retune the existing problem / solution / today text entrances, preserving their different personalities and the later reading hold.
+
+After those three items, replace demonstration people/progress/story media with real photos, whiteboards, recordings, and prototype footage; then decide how much raw on-site texture the today chapter should retain.
 
 Do not start the next pass by changing colors, adding decorative UI, or expanding the runtime.
 

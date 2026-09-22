@@ -158,3 +158,31 @@ Execution rule: work file by file, keep this checklist current, and render only 
 - [x] Generate a normal-speed preview of all three new entrance families for the design review.
 - [x] Yoru reviewed the current carrier and rated it 70/100; preserve it as a paused iteration baseline, not final creative approval.
 - [x] Render and inspect the final MP4, including font fallback checks for Chinese, Latin, digits, and punctuation.
+
+## Phase 6 — Material depth, selector ingress, and motion duration (future pass)
+
+### Material system
+
+- [ ] Audit which large carriers still read as flat: scene panels, media wells, cards, rails, and background surfaces.
+- [ ] Extend the existing raised / lifted / inset hierarchy through shared tokens instead of isolated one-off shadows.
+- [ ] Balance highlight edges, contact shadows, inset depth, and surface separation; do not globally increase blur or darkness.
+- [ ] Check the material pass on both cold-porcelain and blue scenes at projection distance.
+
+### Selector ingress
+
+- [ ] Add an explicit ingress phase to the shared dial timing instead of letting each `DialCue` appear fully formed.
+- [ ] Design a small coherent family of ingress transitions from outgoing content into the selector; chapter variation is allowed, random effect switching is not.
+- [ ] Preserve the temporary-selector rule and the existing six-frame selector-to-content visible overlap.
+- [ ] Validate at least one light-background and one blue-background ingress at normal speed before rolling it across all chapters.
+
+### Text-motion duration
+
+- [ ] Retune problem, solution, and today entrances from the current short settle toward an initial 24–32-frame test range.
+- [ ] Preserve the three distinct motion personalities and return every 2.5D transform to a flat stable state.
+- [ ] Keep the stable reading hold and total chapter durations; use better acceleration, stagger, and settling rather than uniform slow motion.
+
+### Acceptance
+
+- [ ] Produce one normal-speed comparison containing selector ingress plus the three longer text entrances.
+- [ ] Inspect decisive frames and consecutive-frame strips only for the changed seams.
+- [ ] Render one full final MP4 after creative direction passes; repeat actual-carrier font fallback checks.
