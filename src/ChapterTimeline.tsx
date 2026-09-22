@@ -1,6 +1,6 @@
 import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
-import {C, mono} from './design';
+import {C, font, mono} from './design';
 import {CHAPTERS, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterAtFrame, chapterSceneDuration, chapterSceneStart, chapterStart, dialPressPeak} from './timeline';
 
 const formatTime = (seconds: number) => {
@@ -69,8 +69,8 @@ export const ChapterTimeline = () => {
                 transform: isLast ? 'translateX(-100%)' : undefined,
               }}
             >
-              <span>{item.code}</span>
-              <span>{item.label}</span>
+              <span style={{fontFamily: mono}}>{item.code}</span>
+              <span style={{fontFamily: font}}>{item.label}</span>
             </div>
           </React.Fragment>
         );
