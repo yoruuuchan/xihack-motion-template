@@ -90,6 +90,6 @@
 - 版权、字体、音乐和可再分发边界清楚。
 - 范例说明提炼的是可复用原则，而不是复制 XiHack 的旋钮、配色或文案。
 
-## 建议写回的位置
+## 写回状态
 
-若要正式升级已有工作流，优先把“八阶段流程”和“最小验收梯”写入全局 `video-motion/remotion-best-practices` skill；把已经批准的代表镜头和研究结论留在 `yoru-motion-research`。本轮只在当前项目记录提案，没有跨仓库修改或推送工作流源码。
+“八阶段流程”和“最小验收梯”已于 2026-09-22 写入全局 `video-motion/remotion-best-practices` skill，并以 `yoru-agent-skills` 提交 `60ee0ce` 推送。实际批准的代表镜头和研究结论仍应留在 `yoru-motion-research`；已停放的 `yoru-motion-system` 没有因此被重启或修改。

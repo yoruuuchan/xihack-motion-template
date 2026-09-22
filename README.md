@@ -71,6 +71,7 @@ npm run render
 - `scripts/preflight.mjs`：现场替换后的单次快速检查。
 - `docs/REFERENCE-LOCK.md`：已经确认与尚未确认的视觉边界。
 - `docs/WORKFLOW-IMPROVEMENTS.md`：从本片迭代提炼出的通用 Remotion 制作与验收流程提案。
+- `docs/HANDOFF.md`：当前 70 分基线、最终载体信息、锁定边界和下一窗口恢复入口。
 
 ## 视觉与版权说明
 

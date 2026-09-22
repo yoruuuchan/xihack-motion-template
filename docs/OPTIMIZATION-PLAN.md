@@ -156,5 +156,5 @@ Execution rule: work file by file, keep this checklist current, and render only 
 - [x] `npm run check` and `npm run preflight`.
 - [x] Review decisive entry and settled frames for problem, solution, and progress.
 - [x] Generate a normal-speed preview of all three new entrance families for the design review.
-- [ ] Yoru's normal-speed creative approval; technical verification does not substitute for this judgment.
+- [x] Yoru reviewed the current carrier and rated it 70/100; preserve it as a paused iteration baseline, not final creative approval.
 - [x] Render and inspect the final MP4, including font fallback checks for Chinese, Latin, digits, and punctuation.
