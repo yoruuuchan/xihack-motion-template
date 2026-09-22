@@ -2,7 +2,7 @@ import {existsSync, readFileSync} from 'node:fs';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {validateContent} from '../src/content-validation.mjs';
-import {CHAPTER_DATA, DIAL_SCENE_OVERLAP, FPS, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION} from '../src/timeline-config.mjs';
+import {CHAPTER_DATA, DIAL_SCENE_OVERLAP, FPS, PROGRESS_CLOSING_HOLD_FRAMES, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION} from '../src/timeline-config.mjs';
 
 const root = process.cwd();
 const contentPath = path.join(root, 'src', 'content.json');
@@ -162,7 +162,8 @@ if (data) {
   const today = chapter('today');
   const progressCount = Array.isArray(data.progress) && data.progress.length > 0 ? data.progress.length : 1;
   const progressBudget = (sceneFrames(today) - PROGRESS_CLOSING_WIPE_FRAMES) / progressCount / FPS;
-  info.push(`progress reading budget: ${progressBudget.toFixed(2)}s per item for ${progressCount} item(s), followed by a ${(PROGRESS_CLOSING_WIPE_FRAMES / FPS).toFixed(2)}s recap wipe.`);
+  const recapRevealSeconds = (PROGRESS_CLOSING_WIPE_FRAMES - PROGRESS_CLOSING_HOLD_FRAMES) / FPS;
+  info.push(`progress reading budget: ${progressBudget.toFixed(2)}s per item for ${progressCount} item(s), followed by a ${recapRevealSeconds.toFixed(2)}s recap reveal and ${(PROGRESS_CLOSING_HOLD_FRAMES / FPS).toFixed(2)}s settled hold.`);
   if (Array.isArray(data.progress)) {
     data.progress.forEach((item, index) => {
       warnLength(item?.title, 10, `progress[${index}].title`);

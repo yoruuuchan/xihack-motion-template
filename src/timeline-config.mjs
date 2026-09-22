@@ -4,6 +4,7 @@ export const DIAL_EXIT_MOTION_FRAMES = 11;
 export const DIAL_INGRESS_FRAMES = 10;
 export const OPENING_TIMELINE_BLUE_END = 66;
 export const PROGRESS_CLOSING_WIPE_FRAMES = 35;
+export const PROGRESS_CLOSING_HOLD_FRAMES = 15;
 
 export const CHAPTER_DATA = [
   {id: 'team', code: '00', label: '团队 / 项目', durationInFrames: 260, dialFrames: 45, dialTarget: 1},

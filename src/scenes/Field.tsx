@@ -2,7 +2,7 @@ import React from 'react';
 import {useCurrentFrame} from 'remotion';
 import {content as data, hasMedia, type ProgressItem} from '../content';
 import {C, Card, LocalMedia, MaterialPlate, Media, Pill, R, Rail, Segmented, Shell, Small, io, material, mix, mono, neo, p, wash} from '../design';
-import {PROGRESS_CLOSING_WIPE_FRAMES} from '../timeline';
+import {PROGRESS_CLOSING_HOLD_FRAMES, PROGRESS_CLOSING_WIPE_FRAMES} from '../timeline';
 
 // Empty media slot reads as a sunken well; real media sits on the raised card face.
 const Portrait: React.FC<{index: number; showLabel: boolean}> = ({index, showLabel}) => {
@@ -152,7 +152,12 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
   const titleIn = p(localFrame, 5, 29);
   const descriptionIn = p(localFrame, 11, 35);
   const segmentedIn = p(localFrame, 18, 39);
-  const closing = p(f, durationInFrames - PROGRESS_CLOSING_WIPE_FRAMES, durationInFrames - 1, io);
+  const closing = p(
+    f,
+    durationInFrames - PROGRESS_CLOSING_WIPE_FRAMES,
+    durationInFrames - PROGRESS_CLOSING_HOLD_FRAMES,
+    io,
+  );
   const r = data.progress[idx];
   return (
     <Shell bg={C.blue}>
@@ -216,8 +221,8 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
         </div>
       </div>
       <div style={{position: 'absolute', inset: 0, zIndex: 10, background: wash(C.base), clipPath: `inset(${100 * (1 - closing)}% 0 0 0)`}}>
-        <MaterialPlate style={{position: 'absolute', left: 72, top: 492, width: 1776, height: 410}} />
-        <div style={{position: 'absolute', left: 110, right: 110, top: 560}}>
+        <MaterialPlate style={{position: 'absolute', left: 72, top: 300, width: 1776, height: 410}} />
+        <div style={{position: 'absolute', left: 110, right: 110, top: 368}}>
           <Small style={{color: C.tealDeep}}>DAY ONE / CHECKPOINT</Small>
           <div style={{fontSize: 68, fontWeight: 700, marginTop: 12}}>今天，我们推进了这些。</div>
           <div style={{display: 'grid', gridTemplateColumns: `repeat(${progressCount}, minmax(0, 1fr))`, gap: 20, marginTop: 46}}>

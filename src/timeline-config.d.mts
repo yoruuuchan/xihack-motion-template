@@ -4,6 +4,7 @@ export const DIAL_EXIT_MOTION_FRAMES: number;
 export const DIAL_INGRESS_FRAMES: number;
 export const OPENING_TIMELINE_BLUE_END: number;
 export const PROGRESS_CLOSING_WIPE_FRAMES: number;
+export const PROGRESS_CLOSING_HOLD_FRAMES: number;
 export const CHAPTER_DATA: readonly {
   id: string;
   code: string;

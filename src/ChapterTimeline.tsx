@@ -1,7 +1,7 @@
 import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {C, font, mono} from './design';
-import {CHAPTERS, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterAtFrame, chapterSceneDuration, chapterSceneStart, chapterStart, dialPressPeak} from './timeline';
+import {CHAPTERS, DIAL_INGRESS_FRAMES, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterAtFrame, chapterSceneDuration, chapterSceneStart, chapterStart, dialPressPeak} from './timeline';
 
 const formatTime = (seconds: number) => {
   const safe = Math.max(0, seconds);
@@ -13,8 +13,10 @@ const formatTime = (seconds: number) => {
 export const ChapterTimeline = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const {chapter, index: activeIndex} = chapterAtFrame(frame);
-  const localFrame = frame - chapterStart(activeIndex);
+  const {chapter, index: timelineIndex} = chapterAtFrame(frame);
+  const displayFrame = Math.max(0, frame - DIAL_INGRESS_FRAMES);
+  const {index: activeIndex} = chapterAtFrame(displayFrame);
+  const localFrame = frame - chapterStart(timelineIndex);
   const sceneStart = chapterSceneStart(chapter);
   const sceneFrame = localFrame - sceneStart;
   const progressSceneEnd = chapterSceneDuration(chapter) - PROGRESS_CLOSING_WIPE_FRAMES + 1;
