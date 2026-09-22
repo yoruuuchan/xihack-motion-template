@@ -1,6 +1,7 @@
 export const FPS: number;
 export const DIAL_SCENE_OVERLAP: number;
 export const DIAL_EXIT_MOTION_FRAMES: number;
+export const DIAL_INGRESS_FRAMES: number;
 export const OPENING_TIMELINE_BLUE_END: number;
 export const PROGRESS_CLOSING_WIPE_FRAMES: number;
 export const CHAPTER_DATA: readonly {
@@ -19,3 +20,4 @@ export const dialTurnEnd: (dialFrames: number) => number;
 export const dialPressPeak: (dialFrames: number) => number;
 export const dialClickFrame: (index: number) => number;
 export const dialExitMotionStart: (dialFrames: number) => number;
+export const dialIngressEnd: (dialFrames: number) => number;

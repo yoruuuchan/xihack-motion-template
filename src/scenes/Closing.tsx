@@ -1,7 +1,7 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
 import {content as data} from '../content';
-import {C, FittedText, Shell, Small, p} from '../design';
+import {C, FittedText, MaterialPlate, Shell, Small, mix, p} from '../design';
 
 export const Closing: React.FC<{durationInFrames?: number}> = ({durationInFrames = 133}) => {
   const f = useCurrentFrame();
@@ -10,6 +10,18 @@ export const Closing: React.FC<{durationInFrames?: number}> = ({durationInFrames
   const period = p(f, 16, 32);
   return (
     <Shell>
+      <MaterialPlate
+        style={{
+          position: 'absolute',
+          left: 72,
+          top: 142,
+          width: 1500,
+          height: 720,
+          opacity: enter,
+          translate: `0 ${28 * (1 - enter)}px`,
+          scale: mix(0.988, 1, enter),
+        }}
+      />
       <div style={{position: 'absolute', left: 110, top: 52}}>
         <Small>{data.event.name} / {data.event.meta}</Small>
       </div>

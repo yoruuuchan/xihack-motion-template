@@ -1,7 +1,7 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
 import {content as data, hasMedia, type StoryBeat} from '../content';
-import {C, Card, Dot, FittedText, LocalMedia, Pill, R, Rail, Segmented, Shell, Track, Well, io, mix, mono, neo, p} from '../design';
+import {C, Card, Dot, FittedText, LocalMedia, MaterialPlate, Pill, R, Rail, Segmented, Shell, Track, Well, io, mix, mono, neo, p} from '../design';
 
 const Note: React.FC<{text: string; x: number; y: number; rotate?: number; dark?: boolean}> = ({text, x, y, rotate = 0, dark}) => (
   <div
@@ -133,11 +133,11 @@ export const Story: React.FC<{beatIndices?: number[]; durationInFrames?: number;
   const local = f - switches[current];
   const problemChapter = beatIndices[0] === 0;
   const solutionChapter = beatIndices[0] === 2;
-  const labelIn = p(local, 0, 9);
-  const leadIn = p(local, 0, problemChapter ? 13 : 15);
-  const keywordIn = p(local, 3, problemChapter ? 17 : 18);
-  const descriptionIn = p(local, 7, problemChapter ? 20 : 21);
-  const segmentedIn = p(local, 11, 23);
+  const labelIn = p(local, 0, 15);
+  const leadIn = p(local, 0, problemChapter ? 25 : 27);
+  const keywordIn = p(local, 5, problemChapter ? 30 : 32);
+  const descriptionIn = p(local, 11, problemChapter ? 35 : 37);
+  const segmentedIn = p(local, 18, 39);
   const activeBeat = beats[current];
   const expansion = beatIndices[current] === 4 && hasMedia(activeBeat.media)
     ? p(local, Math.max(24, beatDuration - 37), Math.max(44, beatDuration - 17), io)
@@ -149,7 +149,7 @@ export const Story: React.FC<{beatIndices?: number[]; durationInFrames?: number;
   const h = mix(510, 1080, expansion);
   return (
     <Shell>
-      <div style={{position: 'absolute', inset: '0 0 0 1030px', background: C.pale, opacity: 1 - expansion}} />
+      <MaterialPlate style={{position: 'absolute', left: 1038, top: 132, width: 822, height: 812, opacity: 1 - expansion}} />
       <Rail label={railLabel} event={data.event.name} meta={data.event.meta} />
       <Well deep style={{position: 'absolute', left: 52, top: 150, width: 958, height: 780, borderRadius: 48, opacity: 1 - expansion}} />
       <div style={{position: 'absolute', left: x, top: y, width: w, height: h, zIndex: 4, transformOrigin: '0 0', clipPath: 'inset(-135px -58px -135px -58px)'}}>

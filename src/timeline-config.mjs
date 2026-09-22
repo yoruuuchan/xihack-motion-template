@@ -1,6 +1,7 @@
 export const FPS = 30;
 export const DIAL_SCENE_OVERLAP = 6;
 export const DIAL_EXIT_MOTION_FRAMES = 11;
+export const DIAL_INGRESS_FRAMES = 10;
 export const OPENING_TIMELINE_BLUE_END = 66;
 export const PROGRESS_CLOSING_WIPE_FRAMES = 35;
 
@@ -21,3 +22,4 @@ export const dialTurnEnd = (dialFrames) => Math.max(12, dialFrames - 15);
 export const dialPressPeak = (dialFrames) => dialTurnEnd(dialFrames) + 2;
 export const dialClickFrame = (index) => chapterStart(index) + dialPressPeak(CHAPTER_DATA[index].dialFrames);
 export const dialExitMotionStart = (dialFrames) => dialFrames - DIAL_EXIT_MOTION_FRAMES;
+export const dialIngressEnd = (dialFrames) => Math.min(DIAL_INGRESS_FRAMES, dialTurnEnd(dialFrames) - 2);

@@ -60,6 +60,8 @@ export const neo = {
   insetBlue: `inset 8px 8px 16px rgba(24,39,99,0.38), inset -6px -6px 14px ${blueHi}`,
   trackBlue: 'inset 5px 5px 12px rgba(24,39,99,0.45), inset -4px -4px 10px rgba(255,255,255,0.10)',
   segActiveBlue: '0 6px 16px rgba(24,39,99,0.35)',
+  panel: '-18px -18px 46px rgba(255,255,255,0.82), 22px 24px 48px rgba(119,135,171,0.34), inset 2px 2px 1px rgba(255,255,255,0.94), inset -2px -2px 3px rgba(107,123,158,0.20)',
+  panelBlue: '-14px -14px 38px rgba(255,255,255,0.10), 20px 22px 44px rgba(24,39,99,0.46), inset 2px 2px 1px rgba(255,255,255,0.16), inset -2px -2px 3px rgba(20,32,82,0.34)',
 };
 export const R = {card: 40, inner: 28, pill: 999};
 
@@ -155,12 +157,68 @@ export const Shell: React.FC<{children: React.ReactNode; bg?: string}> = ({child
   <AbsoluteFill style={{background: wash(bg), color: C.ink, fontFamily: font, overflow: 'hidden'}}>{children}</AbsoluteFill>
 );
 
+export const MaterialPlate: React.FC<{children?: React.ReactNode; onBlue?: boolean; style?: React.CSSProperties}> = ({children, onBlue, style}) => (
+  <div
+    style={{
+      position: 'relative',
+      borderRadius: 52,
+      background: onBlue
+        ? 'linear-gradient(145deg, rgba(88,116,234,0.98) 0%, rgba(57,79,184,0.98) 100%)'
+        : 'linear-gradient(145deg, rgba(249,251,254,0.98) 0%, rgba(222,228,238,0.98) 100%)',
+      border: onBlue ? '1px solid rgba(255,255,255,0.14)' : '1px solid rgba(255,255,255,0.82)',
+      boxShadow: onBlue ? neo.panelBlue : neo.panel,
+      boxSizing: 'border-box',
+      overflow: 'hidden',
+      isolation: 'isolate',
+      ...style,
+    }}
+  >
+    <div
+      aria-hidden
+      style={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 0,
+        pointerEvents: 'none',
+        background: onBlue
+          ? 'linear-gradient(118deg, rgba(255,255,255,0.10), transparent 24%, transparent 70%, rgba(20,32,82,0.12))'
+          : 'linear-gradient(118deg, rgba(255,255,255,0.58), transparent 25%, transparent 72%, rgba(107,123,158,0.08))',
+      }}
+    />
+    {children}
+  </div>
+);
+
 export const Card: React.FC<{children?: React.ReactNode; lifted?: boolean; onBlue?: boolean; style?: React.CSSProperties}> = ({children, lifted, onBlue, style}) => (
-  <div style={{background: C.surface, borderRadius: R.card, boxShadow: onBlue ? neo.raisedBlue : lifted ? neo.lifted : neo.raised, ...style}}>{children}</div>
+  <div
+    style={{
+      background: 'linear-gradient(145deg, #F9FBFE 0%, #E5EAF3 100%)',
+      border: onBlue ? '1px solid rgba(255,255,255,0.16)' : '1px solid rgba(255,255,255,0.78)',
+      borderRadius: R.card,
+      boxShadow: `${onBlue ? neo.raisedBlue : lifted ? neo.lifted : neo.raised}, inset 1px 1px 0 rgba(255,255,255,0.92), inset -1px -1px 0 rgba(107,123,158,0.16)`,
+      boxSizing: 'border-box',
+      ...style,
+    }}
+  >
+    {children}
+  </div>
 );
 
 export const Well: React.FC<{children?: React.ReactNode; deep?: boolean; onBlue?: boolean; style?: React.CSSProperties}> = ({children, deep, onBlue, style}) => (
-  <div style={{background: onBlue ? C.blueDeep : C.sunken, borderRadius: R.card, boxShadow: onBlue ? neo.insetBlue : deep ? neo.insetDeep : neo.inset, ...style}}>{children}</div>
+  <div
+    style={{
+      background: onBlue
+        ? 'linear-gradient(145deg, #3B55C8 0%, #4863D7 100%)'
+        : 'linear-gradient(145deg, #D8DEE8 0%, #E5EAF2 100%)',
+      border: onBlue ? '1px solid rgba(24,39,99,0.34)' : '1px solid rgba(124,139,173,0.20)',
+      borderRadius: R.card,
+      boxShadow: `${onBlue ? neo.insetBlue : deep ? neo.insetDeep : neo.inset}, inset 1px 1px 0 rgba(107,123,158,0.18)`,
+      boxSizing: 'border-box',
+      ...style,
+    }}
+  >
+    {children}
+  </div>
 );
 
 type PillVariant = 'chip' | 'chipOn' | 'mute' | 'frost' | 'info' | 'blueChip' | 'blueOn' | 'frostOn';

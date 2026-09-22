@@ -2,7 +2,7 @@ import React from 'react';
 import {interpolateColors, useCurrentFrame} from 'remotion';
 import {content as data} from '../content';
 import {C, Pill, Shell, Small, io, mix, mono, neo, p} from '../design';
-import {CHAPTERS, DIAL_SCENE_OVERLAP, dialExitMotionStart, dialTurnEnd, type ChapterId} from '../timeline';
+import {CHAPTERS, DIAL_SCENE_OVERLAP, dialExitMotionStart, dialIngressEnd, dialTurnEnd, type ChapterId} from '../timeline';
 
 // DIRECTION: the rotary selector chooses a section, then yields to that section's scene.
 // It is a transition device, not a permanent overlay. DialCue drives all six chapters
@@ -111,11 +111,21 @@ const exitMotion: Record<ChapterId, {scale: number; x: number; y: number; rotate
   next: {scale: 0.72, x: -120, y: 0, rotate: 0, textX: 80},
 };
 
+const ingressMotion: Record<ChapterId, {scale: number; x: number; y: number; rotate: number; textX: number; textY: number}> = {
+  team: {scale: 0.82, x: 0, y: 90, rotate: -3, textX: 0, textY: 38},
+  problem: {scale: 0.94, x: -190, y: 0, rotate: -5, textX: 150, textY: 0},
+  solution: {scale: 1.22, x: 70, y: 34, rotate: 6, textX: -100, textY: 32},
+  people: {scale: 0.9, x: 0, y: -130, rotate: -4, textX: 0, textY: 72},
+  today: {scale: 0.94, x: 210, y: 0, rotate: 5, textX: -170, textY: 0},
+  next: {scale: 1.2, x: 0, y: 105, rotate: 0, textX: 90, textY: -34},
+};
+
 export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex: number; durationInFrames: number}> = ({chapterId, fromIndex, toIndex, durationInFrames}) => {
   const f = useCurrentFrame();
   const from = DETENTS[Math.max(0, Math.min(DETENTS.length - 1, fromIndex))];
   const to = DETENTS[Math.max(0, Math.min(DETENTS.length - 1, toIndex))];
   const turnEnd = dialTurnEnd(durationInFrames);
+  const ingress = p(f, 0, dialIngressEnd(durationInFrames));
   const turn = p(f, 1, turnEnd, io);
   const snap = Math.sin(p(f, turnEnd - 4, turnEnd + 4, io) * Math.PI) * 2.8;
   const press = p(f, turnEnd - 2, turnEnd + 2) - p(f, turnEnd + 2, turnEnd + 7);
@@ -140,9 +150,12 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
   const angle = mix(from.angle, to.angle, turn) + snap;
   const active = turn > 0.7 ? toIndex : fromIndex;
   const motion = exitMotion[chapterId];
+  const entry = ingressMotion[chapterId];
   const lit = Math.min(1, 0.68 + Math.max(0, press) * 0.32);
+  const shellIn = chapterId === 'team' ? 1 : ingress;
+  const textIn = p(f, Math.max(2, dialIngressEnd(durationInFrames) - 4), dialIngressEnd(durationInFrames) + 4);
   return (
-    <div style={{position: 'absolute', inset: 0, opacity: 1 - Math.min(1, fadeExit * 2)}}>
+    <div style={{position: 'absolute', inset: 0, opacity: shellIn * (1 - Math.min(1, fadeExit * 2))}}>
       <Shell>
         <div style={{position: 'absolute', inset: 0, background: 'repeating-linear-gradient(90deg, transparent 0 119px, rgba(14,21,37,0.025) 119px 120px)'}} />
         <div
@@ -150,9 +163,9 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
             position: 'absolute',
             inset: 0,
             transformOrigin: '720px 540px',
-            translate: `${260 + motion.x * motionExit}px ${motion.y * motionExit}px`,
-            scale: mix(1, motion.scale, motionExit),
-            rotate: `${motion.rotate * motionExit}deg`,
+            translate: `${260 + entry.x * (1 - ingress) + motion.x * motionExit}px ${entry.y * (1 - ingress) + motion.y * motionExit}px`,
+            scale: mix(entry.scale, 1, ingress) * mix(1, motion.scale, motionExit),
+            rotate: `${entry.rotate * (1 - ingress) + motion.rotate * motionExit}deg`,
           }}
         >
           <Knob angle={angle} press={press} lit={lit} active={active} />
@@ -162,8 +175,8 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
             position: 'absolute',
             left: 1190,
             top: 360,
-            opacity: p(f, 4, 12) * (1 - textExit),
-            translate: `${motion.textX * motionExit}px ${mix(24, 0, p(f, 4, 12))}px`,
+            opacity: textIn * (1 - textExit),
+            translate: `${entry.textX * (1 - ingress) + motion.textX * motionExit}px ${entry.textY * (1 - ingress)}px`,
           }}
         >
           <div style={{fontFamily: mono, fontSize: 22, letterSpacing: 4, color: C.faint}}>CHAPTER / {to.num}</div>

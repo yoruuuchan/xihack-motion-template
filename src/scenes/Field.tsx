@@ -1,7 +1,7 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
 import {content as data, hasMedia, type ProgressItem} from '../content';
-import {C, Card, LocalMedia, Media, Pill, R, Rail, Segmented, Shell, Small, io, mix, mono, neo, p, wash} from '../design';
+import {C, Card, LocalMedia, MaterialPlate, Media, Pill, R, Rail, Segmented, Shell, Small, io, mix, mono, neo, p, wash} from '../design';
 import {PROGRESS_CLOSING_WIPE_FRAMES} from '../timeline';
 
 // Empty media slot reads as a sunken well; real media sits on the raised card face.
@@ -148,10 +148,10 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
   for (let index = 1; index < progressCount; index++) pos += p(f, index * segmentDuration, index * segmentDuration + 13);
   const localFrame = f - idx * segmentDuration;
   const enter = p(localFrame, 0, progressCount === 4 ? 10 : 18);
-  const numberIn = p(localFrame, 0, 9);
-  const titleIn = p(localFrame, 3, 14);
-  const descriptionIn = p(localFrame, 7, 19);
-  const segmentedIn = p(localFrame, 11, 23);
+  const numberIn = p(localFrame, 0, 23);
+  const titleIn = p(localFrame, 5, 29);
+  const descriptionIn = p(localFrame, 11, 35);
+  const segmentedIn = p(localFrame, 18, 39);
   const closing = p(f, durationInFrames - PROGRESS_CLOSING_WIPE_FRAMES, durationInFrames - 1, io);
   const r = data.progress[idx];
   return (
@@ -172,6 +172,7 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
           />
         ) : null}
       </Card>
+      <MaterialPlate onBlue style={{position: 'absolute', left: 1190, top: 329, width: 660, height: 570}} />
       <div style={{position: 'absolute', left: 1230, top: 385, width: 590, color: 'white', perspective: 1050, perspectiveOrigin: '0% 45%', transformStyle: 'preserve-3d'}}>
         <div
           style={{
@@ -215,6 +216,7 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
         </div>
       </div>
       <div style={{position: 'absolute', inset: 0, zIndex: 10, background: wash(C.base), clipPath: `inset(${100 * (1 - closing)}% 0 0 0)`}}>
+        <MaterialPlate style={{position: 'absolute', left: 72, top: 492, width: 1776, height: 410}} />
         <div style={{position: 'absolute', left: 110, right: 110, top: 560}}>
           <Small style={{color: C.tealDeep}}>DAY ONE / CHECKPOINT</Small>
           <div style={{fontSize: 68, fontWeight: 700, marginTop: 12}}>今天，我们推进了这些。</div>
