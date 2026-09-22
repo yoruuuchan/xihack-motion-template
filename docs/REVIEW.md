@@ -140,3 +140,17 @@
 - 最终 MP4 通过整片解码：H.264 + AAC、1920×1080、30fps、48 kHz 立体声、48.618667 秒、8,305,733 bytes，SHA-256 `9E69E176C2DEACED260D0E60391A6572D8C62E4074391C61692909136FCB5F8B`。视觉实现提交为 `8b3915f`。
 - 从最终 MP4 本身抽取第 1295 / 1299 / 1309 / 1400 帧复核。checkpoint、标尺高亮、旋钮与收尾均无裁切或状态错位；中文由 Source Han Sans SC、Latin 由 Geist、编号与时间码由 Geist Mono 承载，未观察到非预期 fallback。
 - 本轮只修复截图暴露的边界问题，不把 78/100 阶段评价描述为最终视觉批准。完整 MP4 通过 GitHub prerelease `review-candidate-2026-09-22` 提供给外部 AI 交叉评审，原始 BGM 仍不进入 Git。
+
+## 第十五轮 · 旋钮因果接力与四／五人双版本（2026-09-23）
+
+- 先把两份交叉评审拆成接受、拒绝和少量待定，并在 `REFERENCE-LOCK` 中记录后再改代码。接受项包括：方案章的旋钮 → 正文几何接力、单一运动引擎、稳定阅读保持、克制的两段按压，以及 `demo=false` 正式出片门；扫描线、时间尺走带表演、默认静音和人物占位材质深化未采用。
+- `DialCue(solution)` 的青绿标题线在既有 6 帧 overlap 前先收成短段，再移动、旋转并落成 Story 右侧纵轴；Story 的 lead / keyword / description / segmented 由同一个 38 帧 engine 分阶段响应。第 479 / 481 / 483 / 485 / 486 / 500 / 524 帧与正常速度短预览确认接力连续，稳定态仍有阅读保持。
+- 旋钮 press 改为 contact → trigger → release 三段组合，但 `dialClickFrame()`、音效触发和章节边界未移动。
+- `content-validation.mjs` 新增 `demo=false` 占位文本硬门；preflight 会输出目标版本、团队、项目、成员、五段 story、progress、所有视觉媒体和音乐摘要。用占位内容模拟 `demo=false` 时能稳定得到 17 项错误，不再允许“技术可渲染但仍是演示文案”的成片通过生产检查。
+- 四人版继续使用 `XiHackTeamIntro` 与 `content.json`。新增 `XiHackTeamIntro5P` 与 `content-5p.json`；五人版只覆盖成员名单，并专门使用 320px 卡宽、22px 间距、16px 职责文字和 10 帧 focus transition，未改变占位肖像材质、全片时长或其他五章。
+- 五人 People 章先渲染 800–1038 帧正常速度预览，并抽检五次成员聚焦与团队合流。检查发现旧的成员身份与合流文案交叉淡化会形成重影，随后改成 12 帧退出、10 帧后再以 18 帧接入；第 969 / 975 / 981 / 987 / 993 / 999 帧确认两者不再叠字。
+- `npm run check`、`npm run preflight`、`npm run preflight:5p` 与 `git diff --check` 通过；composition 枚举为 `XiHackTeamIntro`、`XiHackTeamIntro5P`、`DialTest`。
+- 两条最终 MP4 均通过 `ffmpeg -v error -i ... -f null NUL` 全片解码，并从最终载体抽取方案接力、四／五人聚焦与合流、Today、checkpoint 和 closing 帧进行复核。中文、Latin、数字、中文／英文标点、粗细与 mono 角色均未观察到非预期 fallback。
+- 四人版：H.264 + AAC、1920×1080、30fps、48 kHz 立体声、48.618667 秒、8,128,744 bytes，SHA-256 `AE2ACADFB5FB9AB3B47835E7CC884C68E6383FAE88E91CB4BCDDBBD155202341`。
+- 五人版：H.264 + AAC、1920×1080、30fps、48 kHz 立体声、48.618667 秒、8,248,967 bytes，SHA-256 `929CF9D47D153DABF1A96B4EC3E0911E832190A94BB072EDE2BB22FB57F1DAF7`。
+- 本轮完成的是已批准建议的落地与双版本工程交付；真实成员照片尚未提供，人物卡继续被视为可替换占位，不把五人版当前肖像观感当作最终人物章批准。

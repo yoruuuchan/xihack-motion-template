@@ -27,7 +27,7 @@ npm run render:5p
 
 ## 审核版成片
 
-当前用于交叉评审的完整 MP4 发布在 [GitHub Review Candidate 2026-09-22](https://github.com/yoruuuchan/xihack-motion-template/releases/tag/review-candidate-2026-09-22)。视频作为 Release asset 提供，不把 8MB 二进制永久写进 Git 历史；对应源码、精确元数据、审核边界和可复制 prompt 见 [`docs/REVIEW-CANDIDATE.md`](docs/REVIEW-CANDIDATE.md) 与 [`docs/EXTERNAL-REVIEW-PROMPT.md`](docs/EXTERNAL-REVIEW-PROMPT.md)。
+当前用于交叉评审的四人 / 五人完整 MP4 发布在 [GitHub Four/Five-Person Candidate 2026-09-23](https://github.com/yoruuuchan/xihack-motion-template/releases/tag/four-five-candidate-2026-09-23)。视频作为 Release assets 提供，不把约 8MB 的二进制永久写进 Git 历史；对应源码、精确元数据、审核边界和可复制 prompt 见 [`docs/REVIEW-CANDIDATE.md`](docs/REVIEW-CANDIDATE.md) 与 [`docs/EXTERNAL-REVIEW-PROMPT.md`](docs/EXTERNAL-REVIEW-PROMPT.md)。
 
 四人主版本现场只改 [`src/content.json`](src/content.json) 与 `public/` 下的素材；若最终为五人，再单独修改 [`src/content-5p.json`](src/content-5p.json) 的五人名单：
 
