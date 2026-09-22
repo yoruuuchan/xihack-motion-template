@@ -4,30 +4,34 @@ Updated: 2026-09-22
 
 ## Current status
 
-- Yoru's current creative assessment is **70/100**: good enough to pause and preserve as the next iteration baseline, but not final creative approval.
-- The latest motion implementation is commit `33de6ac` (`Polish chapter-specific text motion`) on `main`.
+- The previously reviewed **70/100** carrier is preserved locally as `out/xihack-team-intro-70-baseline.mp4`; it is no longer the latest render and was not overwritten.
+- The current candidate implements the requested material-depth pass, selector ingress, and longer text motion. It is technically verified but still awaits Yoru's new creative score; do not describe it as final visual approval.
+- The latest motion implementation is commit `ed4cd2a` (`Deepen material and dial transitions`) on `main`.
 - Repository: `git@github.com:yoruuuchan/xihack-motion-template.git`.
-- The repository was clean and synchronized with `origin/main` when this handoff was written.
+- The implementation and this handoff are committed to `main`; verify synchronization with `origin/main` before resuming.
 - Do not restart the design direction or reintroduce rejected experiments in a new session. Continue from the current main branch and the locks below.
 
-## Latest creative feedback
+## Latest creative feedback — implemented in the current candidate
 
-These three points supersede the previous next-pass ordering:
+The current candidate addresses all three points from the 70/100 review:
 
-1. The neumorphic / skeuomorphic feeling is still concentrated in buttons and controls. Other carriers remain too flat; the next material pass must extend a coherent raised / inset / contact relationship across panels, media wells, cards, rails, and large scene surfaces.
-2. The selector has chapter-specific exit motion but effectively appears without an entrance transition. Give each return to the selector an intentional handoff from the preceding content, using a small family of different ingress types while keeping the selector temporary.
-3. The three new text-motion families settle too quickly at normal speed. Lengthen their readable motion phase; do not merely slow every interpolation or consume the stable reading hold.
+1. A shared material plate and strengthened Card / Well surfaces extend raised / inset / contact depth across opening, story, progress, and closing.
+2. Every returning selector now enters over a held final frame from the preceding scene, using a coherent family of lateral, vertical, and depth moves. Chapter boundaries and the six-frame selector-to-content overlap are unchanged.
+3. Problem, solution, and today text motion now uses staggered 23–39-frame windows while retaining the original stable reading holds and 48.6-second runtime.
 
 Do not interpret point 1 as “increase every shadow.” Strengthen material hierarchy through coordinated highlights, contact shadows, inset depth, edge response, and surface separation. Keep the image crisp enough for projection.
+
+Implementation exception approved by Yoru and honored in code: the people chapter and its four placeholder portrait cards are not part of the material-depth pass. They remain unchanged until real member media exists.
 
 ## Latest verified carrier
 
 - Local file: `out/xihack-team-intro.mp4` (ignored by Git).
 - H.264 + AAC, 1920×1080, 30fps, 48 kHz stereo.
 - Container duration: `48.618667s`.
-- Size: `7,181,794 bytes`.
-- SHA-256: `44E7B5FB8A7F8B0BE1354AB077238BAA0A871E27AA0166A2ECC64DA218C24A4B`.
-- Normal-speed motion excerpt: `out/text-motion-preview.mp4` (ignored by Git).
+- Size: `8,256,448 bytes`.
+- SHA-256: `FAFDAA7440CAB62FC838AE1CAA52933A476F78E5B1A64AD3C989764187A56FA6`.
+- Normal-speed ingress / text excerpt: `out/v2-motion-preview.mp4` (9.728 seconds, ignored by Git).
+- Preserved 70/100 carrier: `out/xihack-team-intro-70-baseline.mp4`, SHA-256 `44E7B5FB8A7F8B0BE1354AB077238BAA0A871E27AA0166A2ECC64DA218C24A4B` (ignored by Git).
 - Local BGM is present at `public/music/alanajordan-brazilian-tropicalia-instrumental-01-485592.mp3` and intentionally excluded from Git.
 
 The final MP4 itself has been checked for Chinese, Latin, digits, punctuation, weights, and monospace roles. No unintended font fallback was observed in this carrier.
@@ -36,8 +40,8 @@ The final MP4 itself has been checked for Chinese, Latin, digits, punctuation, w
 
 1. `docs/HANDOFF.md`
 2. `docs/REFERENCE-LOCK.md`
-3. `docs/REVIEW.md`, especially rounds 6–9
-4. `docs/OPTIMIZATION-PLAN.md`, especially Phase 5
+3. `docs/REVIEW.md`, especially rounds 8–11
+4. `docs/OPTIMIZATION-PLAN.md`, especially Phase 6
 5. `docs/WORKFLOW-IMPROVEMENTS.md`
 6. `README.md` and `src/content.json`
 
@@ -63,13 +67,13 @@ The final MP4 itself has been checked for Chinese, Latin, digits, punctuation, w
 
 ## Highest-value next iteration
 
-Start with the latest three-point creative feedback, using representative high-density content if real event material is not yet available:
+Start by watching the current full carrier at normal speed. The next useful work is content-led rather than another blanket style pass:
 
-1. Run a scene-wide material-depth pass so that the large content carriers belong to the same tactile system as the buttons and dial.
-2. Design selector ingress transitions and their causal handoff from the outgoing chapter; use a coherent family rather than six unrelated tricks.
-3. Extend and retune the existing problem / solution / today text entrances, preserving their different personalities and the later reading hold.
+1. Record only the remaining specific motion or material seams that still feel weak in the current candidate; do not reopen the whole visual system without evidence from normal-speed viewing.
+2. Replace demonstration project copy and story/progress media with the real event content, then validate text fitting, media crops, and local video clocks.
+3. Replace the four people placeholders when real portraits arrive. Their current material treatment was deliberately left untouched, so make the final people decision from the actual photos rather than from silhouettes.
 
-After those three items, replace demonstration people/progress/story media with real photos, whiteboards, recordings, and prototype footage; then decide how much raw on-site texture the today chapter should retain.
+After real whiteboards, recordings, and prototype footage arrive, decide how much raw on-site texture the today chapter should retain.
 
 Do not start the next pass by changing colors, adding decorative UI, or expanding the runtime.
 
