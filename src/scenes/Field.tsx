@@ -1,6 +1,6 @@
 import React from 'react';
 import {useCurrentFrame} from 'remotion';
-import {content as data, hasMedia, type ProgressItem} from '../content';
+import {content as data, hasMedia, type Member, type ProgressItem} from '../content';
 import {C, Card, LocalMedia, MaterialPlate, Media, Pill, R, Rail, Segmented, Shell, Small, io, material, mix, mono, neo, p, wash} from '../design';
 import {PROGRESS_CLOSING_HOLD_FRAMES, PROGRESS_CLOSING_WIPE_FRAMES} from '../timeline';
 
@@ -19,18 +19,23 @@ const Portrait: React.FC<{index: number; showLabel: boolean}> = ({index, showLab
   );
 };
 
-export const Team: React.FC<{durationInFrames?: number}> = ({durationInFrames = 232}) => {
+export const Team: React.FC<{durationInFrames?: number; members?: Member[]}> = ({durationInFrames = 232, members = data.members}) => {
   const f = useCurrentFrame();
-  const memberCount = 4;
+  const memberCount = members.length;
+  const fivePerson = memberCount === 5;
   const focusStart = 24;
   const togetherStart = durationInFrames - 70;
   const memberWindow = (togetherStart - focusStart) / memberCount;
   const idx = Math.min(memberCount - 1, Math.floor(Math.max(0, f - focusStart) / memberWindow));
   const together = p(f, togetherStart, togetherStart + 30, io);
+  const activeIdentityOut = p(f, togetherStart, togetherStart + 12, io);
+  const togetherIdentityIn = p(f, togetherStart + 10, togetherStart + 28, io);
   const entrance = p(f, 0, 24);
-  const active = data.members[idx];
-  const gap = 27;
-  const cardWidth = 405;
+  const active = members[idx];
+  // Four and five people are two authored layouts, not an arbitrary responsive grid.
+  const gap = fivePerson ? 22 : 27;
+  const cardWidth = fivePerson ? 320 : 405;
+  const focusTransition = fivePerson ? 10 : 12;
   const rowWidth = cardWidth * memberCount + gap * (memberCount - 1);
   const rowLeft = (1920 - rowWidth) / 2;
   return (
@@ -40,11 +45,11 @@ export const Team: React.FC<{durationInFrames?: number}> = ({durationInFrames = 
         <Small style={{color: C.tealDeep}}>MEET THE TEAM</Small>
         <div style={{fontSize: 70, fontWeight: 700, marginTop: 14}}>不同的人，同一个下一步。</div>
       </div>
-      {data.members.map((member, i) => {
+      {members.map((member, i) => {
         const selected = i === idx;
         const focusIn = focusStart + i * memberWindow;
         const focusOut = focusStart + (i + 1) * memberWindow;
-        const activeAmount = (i === 0 ? 1 : p(f, focusIn, focusIn + 12)) - (i === memberCount - 1 ? 0 : p(f, focusOut, focusOut + 12));
+        const activeAmount = (i === 0 ? 1 : p(f, focusIn, focusIn + focusTransition)) - (i === memberCount - 1 ? 0 : p(f, focusOut, focusOut + focusTransition));
         const cardY = mix(mix(345, 305, activeAmount), 321, together);
         const cardH = mix(mix(487, 527, activeAmount), 480, together);
         const appear = p(f, i * 4, 24 + i * 4);
@@ -79,20 +84,20 @@ export const Team: React.FC<{durationInFrames?: number}> = ({durationInFrames = 
                   : 'linear-gradient(transparent, rgba(239,242,248,0.96))',
               }}
             >
-              <div style={{fontSize: 30, fontWeight: 700}}>{member.name}</div>
-              <div style={{fontSize: 17, letterSpacing: 1, marginTop: 7, opacity: 0.78}}>{member.role}</div>
+              <div style={{fontSize: fivePerson ? 28 : 30, fontWeight: 700}}>{member.name}</div>
+              <div style={{fontSize: fivePerson ? 16 : 17, letterSpacing: fivePerson ? 0.5 : 1, marginTop: 7, opacity: 0.78, whiteSpace: 'nowrap'}}>{member.role}</div>
             </div>
           </div>
         );
       })}
-      <div style={{position: 'absolute', left: 110, top: 862, display: 'flex', gap: 28, alignItems: 'center', opacity: 1 - together}}>
+      <div style={{position: 'absolute', left: 110, top: 862, display: 'flex', gap: 28, alignItems: 'center', opacity: 1 - activeIdentityOut, transform: `translateY(${-10 * activeIdentityOut}px)`}}>
         <div style={{fontSize: 48, fontWeight: 700}}>{active.name}</div>
         <Pill variant="chip" size={24}>{active.role}</Pill>
       </div>
-      <div style={{position: 'absolute', left: 110, top: 863, opacity: together, fontSize: 45, fontWeight: 700}}>
+      <div style={{position: 'absolute', left: 110, top: 863, opacity: togetherIdentityIn, transform: `translateY(${10 * (1 - togetherIdentityIn)}px)`, fontSize: 45, fontWeight: 700}}>
         一起讨论。一起动手。<span style={{color: C.teal}}>一起往前。</span>
       </div>
-      {data.demo && !data.members.some((member) => hasMedia(member.media)) ? (
+      {data.demo && !members.some((member) => hasMedia(member.media)) ? (
         <div style={{position: 'absolute', right: 110, top: 232}}>
           <Pill variant="mute" size={18}>演示占位 · 现场替换为人物实拍</Pill>
         </div>

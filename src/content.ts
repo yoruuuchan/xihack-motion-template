@@ -1,4 +1,5 @@
 import rawContent from './content.json';
+import fivePersonMembers from './content-5p.json';
 import {validateContent} from './content-validation.mjs';
 
 export type StoryLayout = 'notes' | 'focus' | 'list' | 'steps' | 'timeline';
@@ -53,12 +54,20 @@ export type ProjectContent = {
   progress: ProgressItem[];
 };
 
-const contentIssues = validateContent(rawContent);
+const contentIssues = validateContent(rawContent, {expectedMembers: 4});
 if (contentIssues.length > 0) {
   throw new Error(`Invalid content.json:\n${contentIssues.map(({path, message}) => `- ${path} ${message}`).join('\n')}`);
 }
 
 export const content = rawContent as ProjectContent;
+
+const fivePersonRaw = {...rawContent, members: fivePersonMembers.members};
+const fivePersonIssues = validateContent(fivePersonRaw, {expectedMembers: 5});
+if (fivePersonIssues.length > 0) {
+  throw new Error(`Invalid content-5p.json:\n${fivePersonIssues.map(({path, message}) => `- ${path} ${message}`).join('\n')}`);
+}
+
+export const contentFive = fivePersonRaw as ProjectContent;
 
 export const resolveMedia = (input: MediaInput) =>
   typeof input === 'string'

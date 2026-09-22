@@ -143,11 +143,14 @@ export const Story: React.FC<{beatIndices?: number[]; durationInFrames?: number;
   const local = f - switches[current];
   const problemChapter = beatIndices[0] === 0;
   const solutionChapter = beatIndices[0] === 2;
-  const labelIn = p(local, 0, 15);
-  const leadIn = p(local, 0, problemChapter ? 25 : 27);
-  const keywordIn = p(local, 5, problemChapter ? 30 : 32);
-  const descriptionIn = p(local, 11, problemChapter ? 35 : 37);
-  const segmentedIn = p(local, 18, 39);
+  // Solution uses one motion engine: the inherited axis locks, opens the headline,
+  // then reveals the explanation. It is fully settled before the reading hold.
+  const solutionEngine = solutionChapter ? p(local, 0, 38, io) : 0;
+  const labelIn = solutionChapter ? p(solutionEngine, 0, 0.24) : p(local, 0, 15);
+  const leadIn = solutionChapter ? p(solutionEngine, 0.06, 0.48) : p(local, 0, problemChapter ? 25 : 27);
+  const keywordIn = solutionChapter ? p(solutionEngine, 0.22, 0.74) : p(local, 5, problemChapter ? 30 : 32);
+  const descriptionIn = solutionChapter ? p(solutionEngine, 0.48, 0.94) : p(local, 11, problemChapter ? 35 : 37);
+  const segmentedIn = solutionChapter ? p(solutionEngine, 0.7, 1) : p(local, 18, 39);
   const activeBeat = beats[current];
   const expansion = beatIndices[current] === 4 && hasMedia(activeBeat.media)
     ? p(local, Math.max(24, beatDuration - 37), Math.max(44, beatDuration - 17), io)
@@ -192,6 +195,25 @@ export const Story: React.FC<{beatIndices?: number[]; durationInFrames?: number;
           ))}
         </div>
       </div>
+      {solutionChapter ? (
+        <div
+          aria-hidden
+          style={{
+            position: 'absolute',
+            left: 1074,
+            top: 540,
+            width: 310,
+            height: 3,
+            borderRadius: 999,
+            background: C.teal,
+            boxShadow: '0 0 0 5px rgba(30,168,160,0.08)',
+            transform: 'translate(-50%, -50%) rotate(90deg) scaleX(1.55)',
+            transformOrigin: 'center',
+            opacity: mix(0.96, 0.28, p(local, 0, 18)),
+            zIndex: 5,
+          }}
+        />
+      ) : null}
       <div style={{position: 'absolute', left: 1092, top: 300, width: 700, opacity: 1 - expansion, zIndex: 5, perspective: 1100, perspectiveOrigin: '0% 45%', transformStyle: 'preserve-3d'}}>
         <div style={{opacity: labelIn, transform: `translate3d(${-24 * (1 - labelIn)}px, 0, 0)`, transformOrigin: 'left center'}}>
           <Pill variant={current < 2 ? 'chip' : 'frost'} size={20} style={{fontWeight: 600, letterSpacing: 3}}>{activeBeat.section}</Pill>

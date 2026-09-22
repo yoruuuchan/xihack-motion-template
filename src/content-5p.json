@@ -1,0 +1,9 @@
+{
+  "members": [
+    {"name": "成员 A", "role": "产品 · 定义问题", "media": ""},
+    {"name": "成员 B", "role": "设计 · 让想法可见", "media": ""},
+    {"name": "成员 C", "role": "开发 · 让原型运行", "media": ""},
+    {"name": "成员 D", "role": "验证 · 回到真实场景", "media": ""},
+    {"name": "成员 E", "role": "协作 · 补上关键一环", "media": ""}
+  ]
+}

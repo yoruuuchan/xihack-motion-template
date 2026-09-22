@@ -3,4 +3,8 @@ export type ContentIssue = {
   message: string;
 };
 
-export const validateContent: (value: unknown) => ContentIssue[];
+export type ContentValidationOptions = {
+  expectedMembers?: number;
+};
+
+export const validateContent: (value: unknown, options?: ContentValidationOptions) => ContentIssue[];

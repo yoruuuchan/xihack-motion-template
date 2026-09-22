@@ -7,7 +7,7 @@ Execution rule: work file by file, keep this checklist current, and render only 
 
 ## Locked decisions
 
-- [x] Team size is exactly **4 people**. Do not build 1–6-person layout branches.
+- [x] The optimized **4-person** film remains the primary composition. Add one explicit **5-person** derivative after the four-person carrier passes; do not build an arbitrary 1–6-person layout engine.
 - [x] Keep the six chapters and the 48.6-second music-led cut.
 - [x] Keep the rotary selector as a brief navigation action; it must not remain on-screen as a badge.
 - [x] Keep `DIAL_SCENE_OVERLAP` at 6 frames. Make the spatial motion start earlier instead of restoring the rejected 10–12-frame double-title overlap.
@@ -244,3 +244,25 @@ Execution rule: work file by file, keep this checklist current, and render only 
 - [x] Render the 1254–1334 normal-speed handoff excerpt before the final carrier.
 - [x] Render and decode the complete H.264 + AAC carrier.
 - [x] Inspect frames 1295 / 1299 / 1309 / 1400 from the exported MP4 and repeat the CJK / Latin / mono font-fallback check.
+
+## Phase 10 — Causal handoff, production gate, and four/five-person carriers (2026-09-22)
+
+### Record first
+
+- [x] Record the accepted review decisions in `docs/REFERENCE-LOCK.md` before visual implementation.
+- [x] Preserve the rejected scan-line, theatrical timeline, silent-default, and placeholder-portrait-polish directions.
+
+### Four-person master
+
+- [x] Give the Solution selector underline and Story text a shared geometric axis across the existing six-frame overlap.
+- [x] Drive the Solution lead / keyword / description from one staged motion engine and preserve a stable reading hold.
+- [x] Refine the selector press into a restrained contact → trigger → release curve without moving the shared click frame.
+- [x] Add a `demo=false` placeholder hard gate and a concise final-content summary to preflight.
+- [x] Run typecheck, preflight, decisive stills, one normal-speed transition preview, a full four-person render, full decode, final-carrier frames, and font-fallback review.
+
+### Five-person derivative
+
+- [x] Add a separate five-person content override and composition; inherit all non-member content from the optimized four-person master.
+- [x] Tune only the five-card width, gap, attached identity text, and focus cadence; keep placeholder portrait styling unchanged.
+- [x] Render the five-person People chapter preview first, then the complete five-person carrier after the layout passes.
+- [x] Verify H.264 + AAC, 1920×1080, 30fps, under 60 seconds, end-to-end decode, and final-carrier font behavior for both versions.

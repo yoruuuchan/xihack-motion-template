@@ -5,8 +5,11 @@
   "type": "module",
   "scripts": {
     "studio": "remotion studio src/index.ts --no-open",
-    "render": "remotion render src/index.ts XiHackTeamIntro out/xihack-team-intro.mp4 --codec=h264 --crf=19 --concurrency=2 --timeout=120000",
+    "render": "npm run render:4p",
+    "render:4p": "remotion render src/index.ts XiHackTeamIntro out/xihack-team-intro-4p-optimized.mp4 --codec=h264 --crf=19 --concurrency=2 --timeout=120000",
+    "render:5p": "remotion render src/index.ts XiHackTeamIntro5P out/xihack-team-intro-5p-optimized.mp4 --codec=h264 --crf=19 --concurrency=2 --timeout=120000",
     "preflight": "node scripts/preflight.mjs",
+    "preflight:5p": "node scripts/preflight.mjs --variant=5p",
     "check": "tsc --noEmit"
   },
   "dependencies": {

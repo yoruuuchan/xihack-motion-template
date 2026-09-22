@@ -6,7 +6,7 @@ import {Team,Progress} from './scenes/Field';
 import {Closing} from './scenes/Closing';
 import {DialCue, DialTest} from './scenes/Dial';
 import {DemoStamp,font} from './design';
-import {content as data} from './content';
+import {content as data, contentFive, type Member} from './content';
 import {ChapterTimeline} from './ChapterTimeline';
 import {Soundtrack} from './Soundtrack';
 import {CHAPTERS, DIAL_INGRESS_FRAMES, FPS, TOTAL_DURATION, chapterSceneStart, chapterStart, type ChapterId} from './timeline';
@@ -15,13 +15,16 @@ const sceneByChapter = {
   team: (durationInFrames: number) => <Opening durationInFrames={durationInFrames} />,
   problem: (durationInFrames: number) => <Story beatIndices={[0, 1]} durationInFrames={durationInFrames} railLabel="01 / THE PROBLEM" />,
   solution: (durationInFrames: number) => <Story beatIndices={[2, 3, 4]} durationInFrames={durationInFrames} railLabel="02 / THE SOLUTION" />,
-  people: (durationInFrames: number) => <Team durationInFrames={durationInFrames} />,
+  people: (durationInFrames: number, members: Member[]) => <Team durationInFrames={durationInFrames} members={members} />,
   today: (durationInFrames: number) => <Progress durationInFrames={durationInFrames} />,
   next: (durationInFrames: number) => <Closing durationInFrames={durationInFrames} />,
-} satisfies Record<ChapterId, (durationInFrames: number) => React.ReactNode>;
+} satisfies Record<ChapterId, (durationInFrames: number, members: Member[]) => React.ReactNode>;
 
-const Film = () => (
-  <AbsoluteFill style={{fontFamily: font}}>
+type FilmProps = {teamSize: 4 | 5};
+
+const Film: React.FC<FilmProps> = ({teamSize}) => {
+  const members = teamSize === 5 ? contentFive.members : data.members;
+  return <AbsoluteFill style={{fontFamily: font}}>
     {CHAPTERS.map((chapter, index) => {
       const sceneStart = chapterSceneStart(chapter);
       const sceneDuration = chapter.durationInFrames - sceneStart;
@@ -29,12 +32,12 @@ const Film = () => (
       return (
         <Sequence key={chapter.id} from={chapterStart(index)} durationInFrames={chapter.durationInFrames + holdForIngress} name={`${chapter.code} / ${chapter.label}`}>
           <Sequence from={sceneStart} durationInFrames={sceneDuration} name={`${chapter.label} / SCENE`}>
-            {sceneByChapter[chapter.id](sceneDuration)}
+            {sceneByChapter[chapter.id](sceneDuration, members)}
           </Sequence>
           {holdForIngress > 0 ? (
             <Sequence from={chapter.durationInFrames} durationInFrames={holdForIngress} name={`${chapter.label} / HOLD`}>
               <Freeze frame={sceneDuration - 1}>
-                {sceneByChapter[chapter.id](sceneDuration)}
+                {sceneByChapter[chapter.id](sceneDuration, members)}
               </Freeze>
             </Sequence>
           ) : null}
@@ -47,9 +50,10 @@ const Film = () => (
     <Soundtrack />
     <ChapterTimeline />
     {data.demo ? <DemoStamp /> : null}
-  </AbsoluteFill>
-);
+  </AbsoluteFill>;
+};
 export const Root=()=> <>
- <Composition id="XiHackTeamIntro" component={Film} width={1920} height={1080} fps={FPS} durationInFrames={TOTAL_DURATION}/>
+ <Composition id="XiHackTeamIntro" component={Film} defaultProps={{teamSize: 4}} width={1920} height={1080} fps={FPS} durationInFrames={TOTAL_DURATION}/>
+ <Composition id="XiHackTeamIntro5P" component={Film} defaultProps={{teamSize: 5}} width={1920} height={1080} fps={FPS} durationInFrames={TOTAL_DURATION}/>
  <Composition id="DialTest" component={DialTest} width={1920} height={1080} fps={FPS} durationInFrames={240}/>
 </>;

@@ -143,7 +143,10 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
   const ingress = p(f, 0, dialIngressEnd(durationInFrames));
   const turn = p(f, 1, turnEnd, io);
   const snap = Math.sin(p(f, turnEnd - 4, turnEnd + 4, io) * Math.PI) * 2.8;
-  const press = p(f, turnEnd - 2, turnEnd + 2) - p(f, turnEnd + 2, turnEnd + 7);
+  const pressRelease = p(f, turnEnd + 2, turnEnd + 7);
+  const pressContact = p(f, turnEnd - 2, turnEnd) * (1 - pressRelease);
+  const pressTrigger = p(f, turnEnd, turnEnd + 2, io) * (1 - pressRelease);
+  const press = Math.min(1, pressContact * 0.42 + pressTrigger * 0.58);
   const motionExit = p(
     f,
     dialExitMotionStart(durationInFrames),
@@ -169,6 +172,15 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
   const lit = Math.min(1, 0.68 + Math.max(0, press) * 0.32);
   const shellIn = chapterId === 'team' ? 1 : ingress;
   const textIn = p(f, Math.max(2, dialIngressEnd(durationInFrames) - 4), dialIngressEnd(durationInFrames) + 4);
+  const solutionHandoff = chapterId === 'solution'
+    ? p(f, durationInFrames - DIAL_SCENE_OVERLAP - 9, durationInFrames - DIAL_SCENE_OVERLAP, io)
+    : 0;
+  const solutionLineScale = solutionHandoff < 0.32
+    ? mix(1, 0.12, p(solutionHandoff, 0, 0.32, io))
+    : solutionHandoff < 0.74
+      ? 0.12
+      : mix(0.12, 1.55, p(solutionHandoff, 0.74, 1, io));
+  const solutionTravel = p(solutionHandoff, 0.3, 0.84, io);
   return (
     <div style={{position: 'absolute', inset: 0, opacity: shellIn * (1 - Math.min(1, fadeExit * 2))}}>
       <Shell>
@@ -196,9 +208,27 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
         >
           <div style={{fontFamily: mono, fontSize: 22, letterSpacing: 4, color: C.faint}}>CHAPTER / {to.num}</div>
           <div style={{fontSize: 136, fontWeight: 700, letterSpacing: -6, marginTop: 8}}>{to.word}</div>
-          <div style={{width: 310, height: 3, background: C.teal, marginTop: 34}} />
+          <div style={{width: 310, height: 3, background: C.teal, marginTop: 34, opacity: chapterId === 'solution' ? 0 : 1}} />
           <div style={{fontFamily: mono, fontSize: 17, letterSpacing: 3, color: C.faint, marginTop: 18}}>TURN · CLICK · ENTER</div>
         </div>
+        {chapterId === 'solution' ? (
+          <div
+            aria-hidden
+            style={{
+              position: 'absolute',
+              left: mix(1345, 1074, solutionTravel),
+              top: mix(590, 540, solutionTravel),
+              width: 310,
+              height: 3,
+              borderRadius: 999,
+              background: C.teal,
+              boxShadow: '0 0 0 5px rgba(30,168,160,0.10)',
+              transform: `translate(-50%, -50%) rotate(${90 * solutionTravel}deg) scaleX(${solutionLineScale})`,
+              transformOrigin: 'center',
+              opacity: textIn,
+            }}
+          />
+        ) : null}
       </Shell>
     </div>
   );

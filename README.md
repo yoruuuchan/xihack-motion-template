@@ -2,9 +2,10 @@
 
 一个为 XiHack 首日团队介绍准备的 Remotion 工程：一分钟以内、1920×1080、30fps。现场只需要替换项目内容和素材，不需要改场景代码。
 
-当前有两个 composition：
+当前有三个 composition：
 
-- `XiHackTeamIntro`：当前为 48.6 秒的 BGM 对拍版本。六个章节都由旋钮短暂选档；上一章末帧会先接住下一枚旋钮的方向化入场，选档后再以不同方向缩放 / 推进进入内容，旋钮不会常驻。问题、方案和今天分别使用较长的异向聚拢、克制铰链与浅层 2.5D 文字入场，其余章节保持安静对照。开场、Story、今天和收尾使用同一套以 inset / sunken 为主、raised / lifted 为辅的材质层级；人物卡仍是等待真实照片的占位结构。章节边界同时服从乐句、重拍和文字阅读停顿，不为凑满一分钟拉长。
+- `XiHackTeamIntro`：四人主版本，48.6 秒。六个章节都由旋钮短暂选档；上一章末帧会先接住下一枚旋钮的方向化入场，选档后再以不同方向缩放 / 推进进入内容，旋钮不会常驻。问题、方案和今天分别使用异向聚拢、共轴接力与浅层 2.5D 文字入场，其余章节保持安静对照。开场、Story、今天和收尾使用同一套以 inset / sunken 为主、raised / lifted 为辅的材质层级；人物卡仍是等待真实照片的占位结构。章节边界同时服从乐句、重拍和文字阅读停顿，不为凑满一分钟拉长。
+- `XiHackTeamIntro5P`：五人派生版本。除人物名单、五卡宽度 / 间距和逐人聚焦节奏外，与四人主版本共享同一套内容、时间线、声音和视觉系统。
 - `DialTest`：8 秒旋钮组件试验，用于单独检查材质、档位、按压和离场；不再与主片割裂成另一条叙事方案。
 
 底部是主片唯一的全局进度信息：章节刻度按真实帧数比例排列，游标与时间码跟随当前帧。修改 `src/timeline-config.mjs` 的章节时长，会同时更新场景排布、旋钮点击声和时间标尺。
@@ -15,24 +16,28 @@
 npm install
 npm run preflight
 npm run studio
-npm run render
+npm run render:4p
+
+# 若现场最终为五人
+npm run preflight:5p
+npm run render:5p
 ```
 
-默认导出到 `out/xihack-team-intro.mp4`。Remotion Studio 中选择 `DialTest` 可单独检查旋钮。
+四人版导出到 `out/xihack-team-intro-4p-optimized.mp4`，五人版导出到 `out/xihack-team-intro-5p-optimized.mp4`。`npm run render` 仍等价于 `render:4p`。Remotion Studio 中选择 `DialTest` 可单独检查旋钮。
 
 ## 审核版成片
 
 当前用于交叉评审的完整 MP4 发布在 [GitHub Review Candidate 2026-09-22](https://github.com/yoruuuchan/xihack-motion-template/releases/tag/review-candidate-2026-09-22)。视频作为 Release asset 提供，不把 8MB 二进制永久写进 Git 历史；对应源码、精确元数据、审核边界和可复制 prompt 见 [`docs/REVIEW-CANDIDATE.md`](docs/REVIEW-CANDIDATE.md) 与 [`docs/EXTERNAL-REVIEW-PROMPT.md`](docs/EXTERNAL-REVIEW-PROMPT.md)。
 
-现场只改 [`src/content.json`](src/content.json) 与 `public/` 下的素材：
+四人主版本现场只改 [`src/content.json`](src/content.json) 与 `public/` 下的素材；若最终为五人，再单独修改 [`src/content-5p.json`](src/content-5p.json) 的五人名单：
 
 1. 填 `team.name`、`team.tagline`。
 2. 填 `project.name`、`project.oneLiner`、`project.nextStep`。
 3. 把 `story` 的五段换成当前项目的“问题 → 洞察 → 方案 → 原型 → 价值”。五段是通用叙事槽，不再绑定 Relay 项目。
-4. 填满 **4 名** `members`。本届队伍人数已经锁定为四人，人物章按四张卡专门排版。
+4. 四人版在 `content.json` 填满 **4 名** `members`；五人版在 `content-5p.json` 填满 **5 名** `members`。两者各有明确构图，不是任意人数自动布局。
 5. 填 1–4 条 `progress`，记录当天真正完成的事。
 6. 把图片、视频和音乐放进 `public/`，在对应 `media` / `music.src` 中填写相对路径，不要带 `public/` 前缀。
-7. 运行 `npm run preflight`，再预览或导出。
+7. 四人版运行 `npm run preflight`；五人版运行 `npm run preflight:5p`。检查通过后再预览或导出。
 
 `story[].layout` 是视觉版式，不是项目类型。当前可选值为 `notes`、`focus`、`list`、`steps`、`timeline`；每段的 `points` 固定填三项。进展允许 1–4 条；四条时会自动缩短单条入场，并在章节结束前给出四项总结。
 
@@ -57,11 +62,12 @@ npm run render
 
 故事、人物和进展视频默认静音，避免多个素材音轨叠加；只有 `music.src` 会进入成片声音。音乐可配置 `volume`、`trimStart`、`fadeIn` 和 `fadeOut`，后三项单位均为秒。`fadeIn` / `fadeOut` 可填 `0` 表示不淡化；两者之和不能超过 48.6 秒。若确实需要无声导出，把 `music.src` 设为 `""`，preflight 会明确显示 silent mode；只要路径非空，音乐缺失仍会阻止导出。
 
-`preflight` 与 Studio 共用同一份内容结构校验，会检查五段故事、四名成员、进展数量、空字段、素材路径、文字风险和淡化边界。有 `ffprobe` 时还会检查音视频时长、裁切入点、编码、尺寸和旋转信息；H.264 MP4 是比赛现场最稳的动态素材格式。`demo` 改为 `false` 后会同时移除右下角演示戳和“概念演示 / 人物素材位 / 示例草图”等编辑提示，空素材仍会使用正式可看的内容卡降级。真实参赛内容可以只保留在本地，不必提交到仓库。
+`preflight` 与 Studio 共用同一份内容结构校验，会按目标版本检查五段故事、4 / 5 名成员、进展数量、空字段、素材路径、文字风险和淡化边界，并在渲染前打印项目、成员、story、progress、媒体与音乐摘要。有 `ffprobe` 时还会检查音视频时长、裁切入点、编码、尺寸和旋转信息；H.264 MP4 是比赛现场最稳的动态素材格式。`demo` 改为 `false` 后，已知占位项目名、成员名与示例说明会直接阻止出片；通过后才会移除右下角演示戳和“概念演示 / 人物素材位 / 示例草图”等编辑提示。空素材仍会使用正式可看的内容卡降级。真实参赛内容可以只保留在本地，不必提交到仓库。
 
 ## 工程结构
 
-- `src/content.json`：唯一的现场内容入口。
+- `src/content.json`：四人主版本与所有共享内容的现场入口。
+- `src/content-5p.json`：五人派生版本的成员名单覆盖；其余内容继续继承 `content.json`。
 - `src/content-validation.mjs`：Studio 与 preflight 共用的内容契约。
 - `src/content.ts`：内容类型与媒体默认值。
 - `src/timeline-config.mjs`：六章时长、帧率与共享时序的跨运行时单一来源。
@@ -69,7 +75,7 @@ npm run render
 - `src/Soundtrack.tsx`：BGM 裁切、头尾淡化和旋钮机械点击声。
 - `src/ChapterTimeline.tsx`：按实际帧数绘制章节刻度、游标和时间码。
 - `src/scenes/Story.tsx`：通用的五段项目叙事，不包含 Relay 专属词汇。
-- `src/scenes/Field.tsx`：固定四人构图、1–4 条进展。
+- `src/scenes/Field.tsx`：分别设计的四人 / 五人构图、1–4 条进展。
 - `src/scenes/Dial.tsx`：主片章节选择器和独立 `DialTest`。
 - `src/design.tsx`：颜色、字体、阴影和基础视觉组件。
 - `scripts/preflight.mjs`：现场替换后的单次快速检查。
@@ -79,7 +85,7 @@ npm run render
 
 ## 视觉与版权说明
 
-当前主片仍沿用部分 yoru-and-akari Console 设计系统的 Akari 色值和新拟态原语；这一版已经完成主要信息载体的逐块材质审计，并按用户偏好确立“内凹 > 外凸”的层级，同时保留旋钮入场和较长文字动效。页面 wash、满幅蓝底、时间标尺和连接线仍按环境 / 功能职责保持克制，不会为了拟物被强行卡片化。当前仍需用户按正常速度评片，不冒充最终视觉批准。人物章节明确保持占位版式，等真实成员照片到位后再决定其最终材质与构图。此前生成的团队图形标志已经完全删除，正式标识未提供前不再用占位图形冒充 logo。
+当前主片仍沿用部分 yoru-and-akari Console 设计系统的 Akari 色值和新拟态原语；这一版已经完成主要信息载体的逐块材质审计，并按用户偏好确立“内凹 > 外凸”的层级，同时保留旋钮入场和较长文字动效。页面 wash、满幅蓝底、时间标尺和连接线仍按环境 / 功能职责保持克制，不会为了拟物被强行卡片化。当前仍需用户按正常速度评片，不冒充最终视觉批准。人物章节的四张 / 五张卡明确保持占位版式，等真实成员照片到位后再决定最终材质与构图。此前生成的团队图形标志已经完全删除，正式标识未提供前不再用占位图形冒充 logo。
 
 ## 当前 BGM
 

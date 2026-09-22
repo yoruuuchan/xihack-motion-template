@@ -6,19 +6,33 @@ import {CHAPTER_DATA, DIAL_SCENE_OVERLAP, FPS, PROGRESS_CLOSING_HOLD_FRAMES, PRO
 
 const root = process.cwd();
 const contentPath = path.join(root, 'src', 'content.json');
+const fivePersonPath = path.join(root, 'src', 'content-5p.json');
 const publicRoot = path.join(root, 'public');
 const filmSeconds = TOTAL_DURATION / FPS;
 const errors = [];
 const warnings = [];
 const info = [];
+const variantFlag = process.argv.find((argument) => argument.startsWith('--variant='));
+const variant = variantFlag?.slice('--variant='.length) || '4p';
+const expectedMembers = variant === '5p' ? 5 : 4;
 
-const readJson = () => {
+if (!['4p', '5p'].includes(variant)) errors.push(`Unknown preflight variant "${variant}"; use 4p or 5p.`);
+
+const readJsonFile = (filename, label) => {
   try {
-    return JSON.parse(readFileSync(contentPath, 'utf8'));
+    return JSON.parse(readFileSync(filename, 'utf8'));
   } catch (error) {
-    errors.push(`src/content.json cannot be parsed: ${error instanceof Error ? error.message : String(error)}`);
+    errors.push(`${label} cannot be parsed: ${error instanceof Error ? error.message : String(error)}`);
     return null;
   }
+};
+
+const readJson = () => {
+  const base = readJsonFile(contentPath, 'src/content.json');
+  if (!base || variant !== '5p') return base;
+  const override = readJsonFile(fivePersonPath, 'src/content-5p.json');
+  if (!override) return null;
+  return {...base, members: override.members};
 };
 
 const getMediaSource = (value, label) => {
@@ -30,6 +44,7 @@ const getMediaSource = (value, label) => {
 
 const getTrimStart = (value) => value && typeof value === 'object' && typeof value.trimStart === 'number' ? value.trimStart : 0;
 const getFit = (value) => value && typeof value === 'object' && typeof value.fit === 'string' ? value.fit : 'cover';
+const getMediaLabel = (value) => typeof value === 'string' ? value.trim() : value && typeof value === 'object' && typeof value.src === 'string' ? value.src.trim() : '';
 
 let ffprobeAvailable;
 const canProbe = () => {
@@ -125,7 +140,19 @@ const sceneFrames = (item) => item.durationInFrames - (item.dialFrames - DIAL_SC
 
 const data = readJson();
 if (data) {
-  for (const issue of validateContent(data)) errors.push(`${issue.path} ${issue.message}.`);
+  for (const issue of validateContent(data, {expectedMembers})) errors.push(`${issue.path} ${issue.message}.`);
+
+  const visualMedia = [
+    ...((data.story ?? []).map((item) => getMediaLabel(item?.media))),
+    ...((data.members ?? []).map((item) => getMediaLabel(item?.media))),
+    ...((data.progress ?? []).map((item) => getMediaLabel(item?.media))),
+  ].filter(Boolean);
+  info.push(`variant: ${variant.toUpperCase()} | content mode: ${data.demo ? 'DEMO' : 'PRODUCTION'} | team: ${data.team?.name ?? 'missing'} | project: ${data.project?.name ?? 'missing'}`);
+  info.push(`members (${data.members?.length ?? 0}): ${(data.members ?? []).map((member) => member?.name ?? 'missing').join(' / ')}`);
+  info.push(`story: ${(data.story ?? []).map((beat) => beat?.keyword ?? 'missing').join(' → ')}`);
+  info.push(`progress (${data.progress?.length ?? 0}): ${(data.progress ?? []).map((item) => item?.title ?? 'missing').join(' / ')}`);
+  info.push(`visual media: ${visualMedia.length > 0 ? visualMedia.join(', ') : 'none; designed fallbacks are active'}`);
+  info.push(`music: ${data.music?.src?.trim?.() || 'silent mode'}`);
 
   warnLength(data.event?.name, 20, 'event.name');
   warnLength(data.event?.meta, 20, 'event.meta');
@@ -191,4 +218,4 @@ for (const message of info) console.log(`INFO  ${message}`);
 for (const warning of warnings) console.warn(`WARN  ${warning}`);
 for (const error of errors) console.error(`ERROR ${error}`);
 if (errors.length > 0) process.exit(1);
-console.log(`Preflight passed: 5 story beats, 4 members, ${data?.progress?.length ?? 0} progress items, ${warnings.length} warning(s).`);
+console.log(`Preflight passed: 5 story beats, ${data?.members?.length ?? 0} members, ${data?.progress?.length ?? 0} progress items, ${warnings.length} warning(s).`);

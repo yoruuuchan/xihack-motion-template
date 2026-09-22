@@ -47,7 +47,46 @@ const validateThreePoints = (issues, value, path) => {
   value.forEach((point, index) => requireText(issues, point, `${path}[${index}]`));
 };
 
-export const validateContent = (value) => {
+const exactProductionPlaceholders = new Map([
+  ['team.name', new Set(['你的团队名'])],
+  ['team.tagline', new Set(['不同背景，一起把一个问题做明白。'])],
+  ['project.name', new Set(['项目名'])],
+  ['project.oneLiner', new Set(['用一句话说清：为谁，解决什么问题。'])],
+  ['project.nextStep', new Set(['下一步，完成第一次真实验证。'])],
+]);
+
+const checkProductionPlaceholders = (issues, root) => {
+  const directValues = [
+    ['team.name', root.team?.name],
+    ['team.tagline', root.team?.tagline],
+    ['project.name', root.project?.name],
+    ['project.oneLiner', root.project?.oneLiner],
+    ['project.nextStep', root.project?.nextStep],
+  ];
+  for (const [path, value] of directValues) {
+    if (typeof value === 'string' && exactProductionPlaceholders.get(path)?.has(value.trim())) {
+      add(issues, path, 'still contains demo placeholder text while demo is false');
+    }
+  }
+
+  root.members?.forEach?.((member, index) => {
+    if (typeof member?.name === 'string' && /^(成员\s*[A-Z0-9一二三四五]+|成员姓名)$/i.test(member.name.trim())) {
+      add(issues, `members[${index}].name`, 'still contains a demo member name while demo is false');
+    }
+  });
+  root.story?.forEach?.((beat, index) => {
+    if (typeof beat?.description === 'string' && /^(一句话描述|说明你们为何|说清方案|展示原型|用真实反馈)/.test(beat.description.trim())) {
+      add(issues, `story[${index}].description`, 'still contains instructional demo copy while demo is false');
+    }
+  });
+  root.progress?.forEach?.((item, index) => {
+    if (typeof item?.description === 'string' && /^把今天/.test(item.description.trim())) {
+      add(issues, `progress[${index}].description`, 'still contains instructional demo copy while demo is false');
+    }
+  });
+};
+
+export const validateContent = (value, {expectedMembers = 4} = {}) => {
   const issues = [];
   const root = requireRecord(issues, value, 'root');
   if (!root) return issues;
@@ -98,8 +137,10 @@ export const validateContent = (value) => {
     });
   }
 
-  if (!Array.isArray(root.members) || root.members.length !== 4) {
-    add(issues, 'members', 'must be an array of exactly 4 people');
+  if (!Number.isInteger(expectedMembers) || expectedMembers < 1) {
+    add(issues, 'members', 'validator expectedMembers must be a positive integer');
+  } else if (!Array.isArray(root.members) || root.members.length !== expectedMembers) {
+    add(issues, 'members', `must be an array of exactly ${expectedMembers} people`);
   } else {
     root.members.forEach((value, index) => {
       const path = `members[${index}]`;
@@ -124,6 +165,8 @@ export const validateContent = (value) => {
       validateMedia(issues, item.media, `${path}.media`);
     });
   }
+
+  if (root.demo === false) checkProductionPlaceholders(issues, root);
 
   return issues;
 };
