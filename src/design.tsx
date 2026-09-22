@@ -60,8 +60,8 @@ export const neo = {
   insetBlue: `inset 8px 8px 16px rgba(24,39,99,0.38), inset -6px -6px 14px ${blueHi}`,
   trackBlue: 'inset 5px 5px 12px rgba(24,39,99,0.45), inset -4px -4px 10px rgba(255,255,255,0.10)',
   segActiveBlue: '0 6px 16px rgba(24,39,99,0.35)',
-  panel: '-18px -18px 46px rgba(255,255,255,0.82), 22px 24px 48px rgba(119,135,171,0.34), inset 2px 2px 1px rgba(255,255,255,0.94), inset -2px -2px 3px rgba(107,123,158,0.20)',
-  panelBlue: '-14px -14px 38px rgba(255,255,255,0.10), 20px 22px 44px rgba(24,39,99,0.46), inset 2px 2px 1px rgba(255,255,255,0.16), inset -2px -2px 3px rgba(20,32,82,0.34)',
+  panelInset: 'inset 18px 18px 38px rgba(119,135,171,0.34), inset -15px -15px 34px rgba(255,255,255,0.88), 0 2px 0 rgba(255,255,255,0.46)',
+  panelInsetBlue: 'inset 18px 18px 38px rgba(24,39,99,0.46), inset -15px -15px 34px rgba(255,255,255,0.10), 0 2px 0 rgba(255,255,255,0.07)',
   face: 'inset 2px 2px 1px rgba(255,255,255,0.90), inset -3px -3px 8px rgba(107,123,158,0.16)',
   faceBlue: 'inset 2px 2px 1px rgba(255,255,255,0.16), inset -4px -4px 10px rgba(20,32,82,0.26)',
   pressedBlue: 'inset 6px 6px 14px rgba(24,39,99,0.38), inset -4px -4px 10px rgba(255,255,255,0.13)',
@@ -181,9 +181,9 @@ export const MaterialPlate: React.FC<{children?: React.ReactNode; onBlue?: boole
       position: 'relative',
       borderRadius: 52,
       background: onBlue
-        ? material.blue
-        : material.surface,
-      boxShadow: onBlue ? neo.panelBlue : neo.panel,
+        ? material.blueDeep
+        : material.sunken,
+      boxShadow: onBlue ? neo.panelInsetBlue : neo.panelInset,
       boxSizing: 'border-box',
       overflow: 'hidden',
       isolation: 'isolate',
@@ -198,8 +198,8 @@ export const MaterialPlate: React.FC<{children?: React.ReactNode; onBlue?: boole
         zIndex: 0,
         pointerEvents: 'none',
         background: onBlue
-          ? 'linear-gradient(118deg, rgba(255,255,255,0.10), transparent 24%, transparent 70%, rgba(20,32,82,0.12))'
-          : 'linear-gradient(118deg, rgba(255,255,255,0.58), transparent 25%, transparent 72%, rgba(107,123,158,0.08))',
+          ? 'linear-gradient(145deg, rgba(20,32,82,0.18), transparent 30%, transparent 70%, rgba(255,255,255,0.08))'
+          : 'linear-gradient(145deg, rgba(107,123,158,0.10), transparent 30%, transparent 70%, rgba(255,255,255,0.38))',
       }}
     />
     {children}
@@ -238,14 +238,14 @@ export const Well: React.FC<{children?: React.ReactNode; deep?: boolean; onBlue?
 
 type PillVariant = 'chip' | 'chipOn' | 'mute' | 'frost' | 'info' | 'blueChip' | 'blueOn' | 'frostOn';
 const pillStyles: Record<PillVariant, React.CSSProperties> = {
-  chip: {background: material.surface, color: C.muted, boxShadow: `${neo.chip}, ${neo.face}`},
+  chip: {background: material.sunken, color: C.muted, boxShadow: neo.badgeInset},
   chipOn: {background: material.blue, color: 'white', boxShadow: neo.pressedBlue},
   frostOn: {background: material.teal, color: 'white', boxShadow: neo.pressedBlue},
   mute: {background: material.sunken, color: C.faint, boxShadow: neo.badgeInset},
-  frost: {background: material.tealPale, color: C.tealDeep, boxShadow: neo.badge},
-  info: {background: material.pale, color: C.deep, boxShadow: neo.badge},
-  blueChip: {background: material.blue, color: 'white', boxShadow: `${neo.raisedBlue}, ${neo.faceBlue}`},
-  blueOn: {background: material.elevated, color: C.ink, boxShadow: `${neo.segActiveBlue}, ${neo.face}`},
+  frost: {background: material.tealPale, color: C.tealDeep, boxShadow: neo.badgeInset},
+  info: {background: material.pale, color: C.deep, boxShadow: neo.badgeInset},
+  blueChip: {background: material.blueDeep, color: 'white', boxShadow: neo.pressedBlue},
+  blueOn: {background: material.elevated, color: C.ink, boxShadow: neo.badgeInset},
 };
 export const Pill: React.FC<{children: React.ReactNode; variant?: PillVariant; size?: number; style?: React.CSSProperties}> = ({children, variant = 'chip', size = 24, style}) => (
   <div

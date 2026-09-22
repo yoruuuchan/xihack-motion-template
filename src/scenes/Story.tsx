@@ -36,9 +36,9 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
       style={{
         position: 'absolute',
         inset: 0,
-        background: blue ? material.blue : material.surface,
+        background: blue ? material.blueDeep : material.sunken,
         color: blue ? 'white' : C.ink,
-        boxShadow: blue ? neo.faceBlue : neo.face,
+        boxShadow: blue ? neo.insetBlue : neo.insetDeep,
         padding: '34px 42px',
         overflow: 'hidden',
       }}
@@ -84,8 +84,8 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
                 fontWeight: 500,
                 padding: '18px 28px',
                 borderRadius: R.inner,
-                background: material.surface,
-                boxShadow: index === 1 ? neo.selected : `${neo.raised}, ${neo.face}`,
+                background: material.sunken,
+                boxShadow: index === 1 ? neo.selected : neo.inset,
               }}
             >
               <Dot color={index === 1 ? C.blue : C.teal} />
@@ -99,7 +99,7 @@ export const SampleCard: React.FC<{beat: StoryBeat; t?: number}> = ({beat, t = 0
           <div style={{fontSize: 49, fontWeight: 700, marginTop: 34}}>{beat.headline}</div>
           <div style={{display: 'flex', gap: 24, marginTop: 46}}>
             {beat.points.map((point, index) => (
-              <div key={`${index}-${point}`} style={{flex: 1, padding: '24px 26px', height: 216, borderRadius: R.inner, background: material.blue, boxShadow: `${neo.raisedBlue}, ${neo.faceBlue}`}}>
+              <div key={`${index}-${point}`} style={{flex: 1, padding: '24px 26px', height: 216, borderRadius: R.inner, background: material.blueDeep, boxShadow: neo.insetBlue}}>
                 <div style={{fontFamily: mono, fontSize: 18, opacity: 0.6}}>0{index + 1}</div>
                 <div style={{fontSize: 38, fontWeight: 700, marginTop: 22}}>{point}</div>
                 <div style={{height: 6, width: 74, borderRadius: R.pill, background: index === beat.points.length - 1 ? C.teal : 'rgba(255,255,255,0.7)', marginTop: 40}} />
