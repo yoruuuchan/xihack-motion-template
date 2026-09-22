@@ -148,6 +148,10 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
   for (let index = 1; index < progressCount; index++) pos += p(f, index * segmentDuration, index * segmentDuration + 13);
   const localFrame = f - idx * segmentDuration;
   const enter = p(localFrame, 0, progressCount === 4 ? 10 : 18);
+  const numberIn = p(localFrame, 0, 9);
+  const titleIn = p(localFrame, 3, 14);
+  const descriptionIn = p(localFrame, 7, 19);
+  const segmentedIn = p(localFrame, 11, 23);
   const closing = p(f, durationInFrames - PROGRESS_CLOSING_WIPE_FRAMES, durationInFrames - 1, io);
   const r = data.progress[idx];
   return (
@@ -168,11 +172,47 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
           />
         ) : null}
       </Card>
-      <div style={{position: 'absolute', left: 1230, top: 385, width: 590, color: 'white'}}>
-        <div style={{fontSize: 95, fontWeight: 700, letterSpacing: -5, opacity: 0.25}}>0{idx + 1}</div>
-        <div style={{fontSize: 64, fontWeight: 700, marginTop: 25, opacity: enter}}>{r.title}</div>
-        <div style={{fontSize: 31, lineHeight: 1.8, marginTop: 30, maxWidth: 540, opacity: enter}}>{r.description}</div>
-        <Segmented count={progressCount} pos={pos} width={Math.max(180, progressCount * 100)} onBlue style={{marginTop: 44}} />
+      <div style={{position: 'absolute', left: 1230, top: 385, width: 590, color: 'white', perspective: 1050, perspectiveOrigin: '0% 45%', transformStyle: 'preserve-3d'}}>
+        <div
+          style={{
+            fontSize: 95,
+            fontWeight: 700,
+            letterSpacing: -5,
+            opacity: numberIn * 0.25,
+            transformOrigin: 'left bottom',
+            transform: `translate3d(0, ${-26 * (1 - numberIn)}px, ${-120 * (1 - numberIn)}px) rotateX(${14 * (1 - numberIn)}deg)`,
+          }}
+        >
+          0{idx + 1}
+        </div>
+        <div
+          style={{
+            fontSize: 64,
+            fontWeight: 700,
+            marginTop: 25,
+            opacity: titleIn,
+            transformOrigin: 'left center',
+            transform: `translate3d(${128 * (1 - titleIn)}px, 0, ${48 * (1 - titleIn)}px) rotateY(${-12 * (1 - titleIn)}deg)`,
+          }}
+        >
+          {r.title}
+        </div>
+        <div
+          style={{
+            fontSize: 31,
+            lineHeight: 1.8,
+            marginTop: 30,
+            maxWidth: 540,
+            opacity: descriptionIn,
+            transformOrigin: 'left top',
+            transform: `translate3d(0, ${72 * (1 - descriptionIn)}px, ${-34 * (1 - descriptionIn)}px) rotateX(${-9 * (1 - descriptionIn)}deg)`,
+          }}
+        >
+          {r.description}
+        </div>
+        <div style={{opacity: segmentedIn, transform: `translate3d(0, ${20 * (1 - segmentedIn)}px, ${-16 * (1 - segmentedIn)}px)`}}>
+          <Segmented count={progressCount} pos={pos} width={Math.max(180, progressCount * 100)} onBlue style={{marginTop: 44}} />
+        </div>
       </div>
       <div style={{position: 'absolute', inset: 0, zIndex: 10, background: wash(C.base), clipPath: `inset(${100 * (1 - closing)}% 0 0 0)`}}>
         <div style={{position: 'absolute', left: 110, right: 110, top: 560}}>

@@ -131,7 +131,13 @@ export const Story: React.FC<{beatIndices?: number[]; durationInFrames?: number;
   for (const switchFrame of switches.slice(1)) step += p(f, switchFrame, switchFrame + 16, io);
   const current = Math.min(lastIndex, switches.filter((switchFrame) => switchFrame <= f).length - 1);
   const local = f - switches[current];
-  const word = p(local, 5, 17);
+  const problemChapter = beatIndices[0] === 0;
+  const solutionChapter = beatIndices[0] === 2;
+  const labelIn = p(local, 0, 9);
+  const leadIn = p(local, 0, problemChapter ? 13 : 15);
+  const keywordIn = p(local, 3, problemChapter ? 17 : 18);
+  const descriptionIn = p(local, 7, problemChapter ? 20 : 21);
+  const segmentedIn = p(local, 11, 23);
   const activeBeat = beats[current];
   const expansion = beatIndices[current] === 4 && hasMedia(activeBeat.media)
     ? p(local, Math.max(24, beatDuration - 37), Math.max(44, beatDuration - 17), io)
@@ -176,9 +182,26 @@ export const Story: React.FC<{beatIndices?: number[]; durationInFrames?: number;
           ))}
         </div>
       </div>
-      <div style={{position: 'absolute', left: 1092, top: 300, width: 700, opacity: 1 - expansion, zIndex: 5}}>
-        <Pill variant={current < 2 ? 'chip' : 'frost'} size={20} style={{fontWeight: 600, letterSpacing: 3}}>{activeBeat.section}</Pill>
-        <div style={{fontSize: 58, fontWeight: 400, marginTop: 40}}>{activeBeat.lead}</div>
+      <div style={{position: 'absolute', left: 1092, top: 300, width: 700, opacity: 1 - expansion, zIndex: 5, perspective: 1100, perspectiveOrigin: '0% 45%', transformStyle: 'preserve-3d'}}>
+        <div style={{opacity: labelIn, transform: `translate3d(${-24 * (1 - labelIn)}px, 0, 0)`, transformOrigin: 'left center'}}>
+          <Pill variant={current < 2 ? 'chip' : 'frost'} size={20} style={{fontWeight: 600, letterSpacing: 3}}>{activeBeat.section}</Pill>
+        </div>
+        <div
+          style={{
+            fontSize: 58,
+            fontWeight: 400,
+            marginTop: 40,
+            opacity: leadIn,
+            transformOrigin: 'left center',
+            transform: problemChapter
+              ? `translate3d(0, ${-82 * (1 - leadIn)}px, ${-24 * (1 - leadIn)}px) rotateX(${12 * (1 - leadIn)}deg)`
+              : solutionChapter
+                ? `translate3d(0, ${58 * (1 - leadIn)}px, ${-18 * (1 - leadIn)}px) rotateZ(${8 * (1 - leadIn)}deg)`
+                : `translateY(${30 * (1 - leadIn)}px)`,
+          }}
+        >
+          {activeBeat.lead}
+        </div>
         <div style={{height: 169, overflow: 'hidden'}}>
           <FittedText
             text={activeBeat.keyword}
@@ -188,11 +211,39 @@ export const Story: React.FC<{beatIndices?: number[]; durationInFrames?: number;
             maxFontSize={133}
             minFontSize={72}
             letterSpacing={-6}
-            style={{lineHeight: 1.2, color: current < 2 ? C.blue : C.teal, opacity: word, transform: `translateY(${30 * (1 - word)}px)`}}
+            style={{
+              lineHeight: 1.2,
+              color: current < 2 ? C.blue : C.teal,
+              opacity: keywordIn,
+              transformOrigin: 'left center',
+              transform: problemChapter
+                ? `translate3d(${152 * (1 - keywordIn)}px, 0, ${34 * (1 - keywordIn)}px) rotateY(${-10 * (1 - keywordIn)}deg)`
+                : solutionChapter
+                  ? `translate3d(${-22 * (1 - keywordIn)}px, ${12 * (1 - keywordIn)}px, ${28 * (1 - keywordIn)}px) rotateY(${-11 * (1 - keywordIn)}deg) rotateZ(${2.5 * (1 - keywordIn)}deg)`
+                  : `translateY(${30 * (1 - keywordIn)}px)`,
+            }}
           />
         </div>
-        <div style={{fontSize: 31, lineHeight: 1.7, maxWidth: 600, marginTop: 30, opacity: word}}>{activeBeat.description}</div>
-        <Segmented count={beats.length} pos={step} width={Math.max(240, beats.length * 84)} style={{marginTop: 48}} />
+        <div
+          style={{
+            fontSize: 31,
+            lineHeight: 1.7,
+            maxWidth: 600,
+            marginTop: 30,
+            opacity: descriptionIn,
+            transformOrigin: 'left center',
+            transform: problemChapter
+              ? `translate3d(0, ${76 * (1 - descriptionIn)}px, ${-20 * (1 - descriptionIn)}px) rotateX(${-8 * (1 - descriptionIn)}deg)`
+              : solutionChapter
+                ? `translate3d(0, ${-54 * (1 - descriptionIn)}px, ${-22 * (1 - descriptionIn)}px) rotateZ(${-7 * (1 - descriptionIn)}deg)`
+                : `translateY(${24 * (1 - descriptionIn)}px)`,
+          }}
+        >
+          {activeBeat.description}
+        </div>
+        <div style={{opacity: segmentedIn, transform: `translateY(${18 * (1 - segmentedIn)}px)`}}>
+          <Segmented count={beats.length} pos={step} width={Math.max(240, beats.length * 84)} style={{marginTop: 48}} />
+        </div>
       </div>
     </Shell>
   );

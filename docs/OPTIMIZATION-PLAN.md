@@ -127,3 +127,34 @@ Execution rule: work file by file, keep this checklist current, and render only 
 - [x] Final full render with H.264 video, AAC audio, 1920×1080, 30fps, under 60 seconds.
 - [x] Key frames extracted from the final MP4, not only Studio renders.
 - [x] Commit and push; raw BGM remains ignored.
+
+## Phase 5 — Chapter-specific text motion (2026-09-22)
+
+### `docs/REFERENCE-LOCK.md`
+
+- [x] Record the user's flexible motion brief as permission to choose the best-fit effect rather than reproduce a prescribed fan or fly-in.
+- [x] Lock the scope to semantic-line motion, sparse CSS 2.5D, stable reading holds, and no new Three.js dependency.
+
+### `src/scenes/Story.tsx`
+
+- [x] Give the problem chapter an asymmetric three-line convergence without changing the final layout.
+- [x] Give the solution chapter a restrained shared-axis hinge/fan entrance that fully straightens before the reading hold.
+- [x] Keep beat switching, media clocks, final-solution expansion, and text fitting intact.
+
+### `src/scenes/Field.tsx`
+
+- [x] Give the progress number, title, and description a shallow CSS perspective stack.
+- [x] Keep four-item timing, local media clocks, recap wipe, and stable text positions intact.
+
+### Deliberate restraint
+
+- [x] Preserve the existing opening handoff, four-person focus behavior, and quiet closing instead of adding a new effect to every scene.
+- [x] Keep all motion frame-driven and dependency-free.
+
+### Acceptance
+
+- [x] `npm run check` and `npm run preflight`.
+- [x] Review decisive entry and settled frames for problem, solution, and progress.
+- [x] Generate a normal-speed preview of all three new entrance families for the design review.
+- [ ] Yoru's normal-speed creative approval; technical verification does not substitute for this judgment.
+- [x] Render and inspect the final MP4, including font fallback checks for Chinese, Latin, digits, and punctuation.
