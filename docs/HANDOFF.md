@@ -5,10 +5,10 @@ Updated: 2026-09-22
 ## Current status
 
 - The previously reviewed **70/100** carrier is preserved locally as `out/xihack-team-intro-70-baseline.mp4`; it is no longer the latest render and was not overwritten.
-- The current candidate implements the requested material-depth pass, selector ingress, longer text motion, complete flat-carrier audit, and Yoru's inset-first preference. It is technically verified but still awaits Yoru's new creative score; do not describe it as final visual approval.
-- The latest visual implementation is commit `7e7cc68` (`Prefer inset surfaces throughout the film`) on `main`; the preceding complete carrier audit is `4260a51`.
+- Yoru currently rates the candidate at about **78/100**: it is a solid iteration base, not final visual approval. The screenshot-reported Today checkpoint / `04 → 05` boundary defect has been repaired after that rating.
+- The latest visual implementation is commit `8b3915f` (`Fix the Today checkpoint handoff`) on `main`; the preceding inset-first carrier is `7e7cc68`.
 - Repository: `git@github.com:yoruuuchan/xihack-motion-template.git`.
-- The implementation and this handoff are committed to `main`; verify synchronization with `origin/main` before resuming.
+- The implementation and this handoff are committed to `main`; verify synchronization with `origin/main` before resuming. A public review carrier is attached to the `review-candidate-2026-09-22` GitHub prerelease rather than committed as a repository blob.
 - Do not restart the design direction or reintroduce rejected experiments in a new session. Continue from the current main branch and the locks below.
 
 ## Latest creative feedback — implemented in the current candidate
@@ -32,13 +32,16 @@ Implementation exception approved by Yoru and honored in code: the people chapte
 - Local file: `out/xihack-team-intro.mp4` (ignored by Git).
 - H.264 + AAC, 1920×1080, 30fps, 48 kHz stereo.
 - Container duration: `48.618667s`.
-- Size: `8,352,412 bytes`.
-- SHA-256: `7A904D5D7BEE11F45E89F19660E1485CFA08E31317F0E09E8832CBCC992106C7`.
+- Size: `8,305,733 bytes`.
+- SHA-256: `9E69E176C2DEACED260D0E60391A6572D8C62E4074391C61692909136FCB5F8B`.
+- Public review release: `https://github.com/yoruuuchan/xihack-motion-template/releases/tag/review-candidate-2026-09-22`.
+- Direct review MP4: `https://github.com/yoruuuchan/xihack-motion-template/releases/download/review-candidate-2026-09-22/xihack-team-intro-review.mp4`.
+- Normal-speed checkpoint handoff excerpt: `out/checkpoint-handoff-preview.mp4` (ignored by Git).
 - Normal-speed ingress / text excerpt: `out/v2-motion-preview.mp4` (9.728 seconds, ignored by Git).
 - Preserved 70/100 carrier: `out/xihack-team-intro-70-baseline.mp4`, SHA-256 `44E7B5FB8A7F8B0BE1354AB077238BAA0A871E27AA0166A2ECC64DA218C24A4B` (ignored by Git).
 - Local BGM is present at `public/music/alanajordan-brazilian-tropicalia-instrumental-01-485592.mp3` and intentionally excluded from Git.
 
-The final MP4 itself has been checked for Chinese, Latin, digits, punctuation, weights, and monospace roles. No unintended font fallback was observed in this carrier.
+The final MP4 itself has been checked for Chinese, Latin, digits, punctuation, weights, and monospace roles. No unintended font fallback was observed in this carrier. Frames 1295 / 1299 / 1309 also verify that the centered checkpoint remains `04 今天` until the next selector has visibly entered, then hands the ruler to `05 下一步`.
 
 ## Read first in the next session
 
@@ -68,7 +71,7 @@ The final MP4 itself has been checked for Chinese, Latin, digits, punctuation, w
 - Do not restore the deleted Core/RIFT experiment or the generated team mark.
 - Do not make the dial a persistent chapter badge.
 - Do not add a circular portal, forced blackout ending, arbitrary scene builder, or dependency upgrade merely for novelty.
-- Do not promote this film to a gold example yet. It has a 70/100 paused-baseline assessment and still uses demonstration content.
+- Do not promote this film to a gold example yet. The current candidate is about 78/100, the preserved earlier carrier is the 70/100 paused baseline, and both still use demonstration content.
 
 ## Highest-value next iteration
 

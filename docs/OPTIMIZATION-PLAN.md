@@ -223,3 +223,24 @@ Execution rule: work file by file, keep this checklist current, and render only 
 - [x] Render a full H.264 + AAC carrier and decode it end to end with no ffmpeg error.
 - [x] Inspect frames 70 / 330 / 540 / 950 / 1120 / 1295 / 1380 from the exported MP4; confirm the people placeholders remain unchanged.
 - [x] Check Chinese, Latin, digits, punctuation, weights, and monospace roles in the exported carrier; no unintended fallback observed.
+
+## Phase 9 — Today checkpoint handoff repair (2026-09-22)
+
+### `src/scenes/Field.tsx` + shared timing
+
+- [x] Move the recap plate and its content from the accidental lower-third resting position into a centered checkpoint composition.
+- [x] Keep the existing 35-frame recap budget, finish the reveal after 20 frames, and preserve a 15-frame fully settled reading hold.
+- [x] Export the hold duration through the shared browser / preflight timeline contract.
+
+### `src/ChapterTimeline.tsx`
+
+- [x] Keep the true progress line, playhead, timecode, background state, and click pulse on the actual frame.
+- [x] Delay only the active chapter label by the shared 10-frame selector ingress so the visible outgoing scene is never cleanly paired with the next chapter name.
+
+### Acceptance
+
+- [x] `npm run check`, `npm run preflight`, and `git diff --check`.
+- [x] Inspect source-rendered frames 1264 / 1274 / 1284 / 1295 / 1299 / 1304 / 1309 / 1313.
+- [x] Render the 1254–1334 normal-speed handoff excerpt before the final carrier.
+- [x] Render and decode the complete H.264 + AAC carrier.
+- [x] Inspect frames 1295 / 1299 / 1309 / 1400 from the exported MP4 and repeat the CJK / Latin / mono font-fallback check.
