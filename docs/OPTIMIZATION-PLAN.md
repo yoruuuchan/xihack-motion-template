@@ -186,3 +186,40 @@ Execution rule: work file by file, keep this checklist current, and render only 
 - [x] Produce one normal-speed comparison containing selector ingress plus the three longer text entrances.
 - [x] Inspect decisive frames and consecutive-frame strips only for the changed seams.
 - [x] Render one full final MP4 after creative direction passes; repeat actual-carrier font fallback checks.
+
+## Phase 7 — Complete tactile carrier audit and opening copy trim (2026-09-22)
+
+### Surface classification
+
+- [x] Audit every remaining direct background in `src/` and distinguish information / state / media carriers from environmental washes, functional lines, status points, physical dial parts, and real media.
+- [x] Keep page washes, the full-bleed blue chapter, the true chapter timeline, and thin connectors as environmental or functional surfaces instead of wrapping them in decorative cards.
+- [x] Preserve the approved exception: the people chapter and its four placeholder portrait cards remain unchanged until real member media exists.
+
+### Tactile material pass
+
+- [x] Add shared directional material gradients and face-light recipes in `src/design.tsx`; reuse them in Card, Well, Pill, Segmented, Track, Tile, and `MaterialPlate`.
+- [x] Give all five Story fallback canvases and their notes / list / steps elements raised, pressed, or inset relationships instead of pure flat fills.
+- [x] Give Today's fallback canvas, step blocks, and recap rows the same surface hierarchy on both light and blue backgrounds.
+- [x] Bring the isolated `DialTest` display surface into the same material system without changing the main selector mechanics.
+- [x] Delete the opening-bottom sentence `一起，把想法往前推一步。` without replacement copy.
+
+## Phase 8 — Inset-first hierarchy (2026-09-22)
+
+### Preference lock
+
+- [x] Record the user's explicit material preference as **inset > raised** in this project's Reference Lock.
+- [x] Record the same preference, its semantic use, and its restraint boundary in the source DESIGN system's `SKILL.md` and `README.md`.
+
+### Film application
+
+- [x] Make large presentation plates, Story fallback canvases, list rows, Today's fallback canvas, step blocks, recap rows, and semantic badges predominantly inset / sunken.
+- [x] Retain raised / lifted depth for pick-up-able or operable foreground objects such as notes, media cards, the selector, and active thumbs.
+- [x] Keep page planes, functional lines, and the people placeholders unchanged.
+
+### Acceptance
+
+- [x] `npm run check`, `npm run preflight`, and `git diff --check`.
+- [x] Inspect frames 70 / 330 / 420 / 540 / 640 / 735 / 950 / 1120 / 1295 / 1380 before export.
+- [x] Render a full H.264 + AAC carrier and decode it end to end with no ffmpeg error.
+- [x] Inspect frames 70 / 330 / 540 / 950 / 1120 / 1295 / 1380 from the exported MP4; confirm the people placeholders remain unchanged.
+- [x] Check Chinese, Latin, digits, punctuation, weights, and monospace roles in the exported carrier; no unintended fallback observed.
