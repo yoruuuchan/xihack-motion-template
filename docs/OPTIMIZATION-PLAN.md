@@ -275,3 +275,12 @@ Execution rule: work file by file, keep this checklist current, and render only 
 - [x] Preserve the four-person master and five-person derivative as separate complete carriers; keep their preceding `*-optimized.mp4` files for A/B.
 - [x] Inspect the Opening → Problem, five-person People → Today, and Today → Next seams, then export and decode both complete MP4s.
 - [x] Confirm that exported frames preserve the People placeholders, true timeline progress, and intended CJK / Latin / mono fonts.
+
+## Phase 12 — Three-beat Today progression (2026-09-23)
+
+- [x] Record the approved lock → expand → resolve motion purpose and reference sources before changing visual code.
+- [x] Keep the three project-agnostic progress items, but stop repeating the same sketch layout and three-layer 2.5D entrance for every item.
+- [x] Hold the previous item briefly beneath each incoming card so the left evidence area does not flash empty at the item boundary; keep media on its item-local clock.
+- [x] Preserve the existing checkpoint reveal, chapter boundaries, BGM, timeline, and four/five-person People layouts.
+- [x] Render a Today excerpt and both complete MP4s; run typecheck, both preflights, full decode, final-frame layout and font review.
+- [ ] Obtain a normal-speed human judgment of the updated three-beat rhythm before calling its aesthetics approved.

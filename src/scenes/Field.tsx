@@ -1,7 +1,7 @@
 import React from 'react';
-import {useCurrentFrame} from 'remotion';
+import {Freeze, useCurrentFrame} from 'remotion';
 import {content as data, hasMedia, type Member, type ProgressItem} from '../content';
-import {C, Card, LocalMedia, MaterialPlate, Media, Pill, R, Rail, Segmented, Shell, Small, io, material, mix, mono, neo, p, wash} from '../design';
+import {C, Card, FittedText, LocalMedia, MaterialPlate, Media, Pill, R, Rail, Segmented, Shell, Small, io, material, mix, mono, neo, p, wash} from '../design';
 import {PROGRESS_CLOSING_HOLD_FRAMES, PROGRESS_CLOSING_WIPE_FRAMES} from '../timeline';
 
 // Empty media slot reads as a sunken well; real media sits on the raised card face.
@@ -106,7 +106,12 @@ export const Team: React.FC<{durationInFrames?: number; members?: Member[]}> = (
   );
 };
 
-const Sketch: React.FC<{item: ProgressItem}> = ({item}) => {
+type ProgressStage = 'lock' | 'expand' | 'resolve';
+
+const progressStage = (index: number, count: number): ProgressStage =>
+  index === 0 ? 'lock' : index === count - 1 ? 'resolve' : 'expand';
+
+const Sketch: React.FC<{item: ProgressItem; stage: ProgressStage}> = ({item, stage}) => {
   return (
     <div style={{position: 'absolute', inset: 0, background: material.sunken, boxShadow: neo.insetDeep, padding: '52px 64px'}}>
       <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -114,31 +119,38 @@ const Sketch: React.FC<{item: ProgressItem}> = ({item}) => {
         {data.demo ? <Pill variant="mute" size={16}>示例草图</Pill> : <Pill variant="frost" size={16}>现场进展</Pill>}
       </div>
       <div style={{fontSize: 54, fontWeight: 700, marginTop: 40}}>{item.title}</div>
-      <div style={{display: 'flex', gap: 24, alignItems: 'center', marginTop: 56}}>
-        {item.points.map((point, i) => (
-          <React.Fragment key={`${i}-${point}`}>
-            {i > 0 ? <div style={{width: 36, height: 3, borderRadius: R.pill, background: C.teal, flexShrink: 0}} /> : null}
-            <div
-              style={{
-                width: 205,
-                height: 180,
-                borderRadius: R.inner,
-                background: i === 1 ? material.blueDeep : material.sunken,
-                color: i === 1 ? 'white' : C.ink,
-                boxShadow: i === 1 ? neo.insetBlue : neo.inset,
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                paddingLeft: 29,
-              }}
-            >
+      {stage === 'lock' ? (
+        <div style={{display: 'flex', gap: 24, alignItems: 'center', marginTop: 56}}>
+          {item.points.map((point, i) => (
+            <React.Fragment key={`${i}-${point}`}>
+              {i > 0 ? <div style={{width: 36, height: 3, borderRadius: R.pill, background: C.teal, flexShrink: 0}} /> : null}
+              <div style={{width: 205, height: 180, borderRadius: R.inner, background: i === 1 ? material.blueDeep : material.sunken, color: i === 1 ? 'white' : C.ink, boxShadow: i === 1 ? neo.insetBlue : neo.inset, display: 'flex', flexDirection: 'column', justifyContent: 'center', paddingLeft: 29}}>
+                <div style={{fontFamily: mono, fontSize: 18, opacity: 0.6}}>0{i + 1}</div>
+                <FittedText text={point} maxWidth={150} maxFontSize={40} minFontSize={24} style={{marginTop: 14}} />
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
+      ) : stage === 'expand' ? (
+        <div style={{display: 'grid', gridTemplateColumns: '188px 1fr 188px', gap: 22, height: 222, marginTop: 43}}>
+          {item.points.map((point, i) => (
+            <div key={`${i}-${point}`} style={{borderRadius: R.inner, background: i === 1 ? material.blueDeep : material.sunken, color: i === 1 ? 'white' : C.ink, boxShadow: i === 1 ? neo.insetBlue : neo.insetDeep, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 25px'}}>
               <div style={{fontFamily: mono, fontSize: 18, opacity: 0.6}}>0{i + 1}</div>
-              <div style={{fontSize: 40, fontWeight: 700, marginTop: 14}}>{point}</div>
+              <FittedText text={point} maxWidth={i === 1 ? 430 : 138} maxFontSize={i === 1 ? 54 : 35} minFontSize={24} style={{marginTop: 15}} />
             </div>
-          </React.Fragment>
-        ))}
-      </div>
-      {data.demo ? <div style={{marginTop: 48}}><Pill variant="mute" size={20}>实拍 / 白板 / 原型录屏素材位</Pill></div> : null}
+          ))}
+        </div>
+      ) : (
+        <div style={{display: 'grid', gap: 13, marginTop: 34}}>
+          {item.points.map((point, i) => (
+            <div key={`${i}-${point}`} style={{height: 78, borderRadius: R.inner, background: i === 2 ? material.blueDeep : material.sunken, color: i === 2 ? 'white' : C.ink, boxShadow: i === 2 ? neo.insetBlue : neo.inset, display: 'flex', alignItems: 'center', gap: 28, padding: '0 30px'}}>
+              <div style={{fontFamily: mono, fontSize: 19, opacity: 0.65}}>0{i + 1}</div>
+              <FittedText text={point} maxWidth={730} maxFontSize={35} minFontSize={24} />
+            </div>
+          ))}
+        </div>
+      )}
+      {data.demo ? <div style={{marginTop: stage === 'resolve' ? 20 : stage === 'expand' ? 30 : 48}}><Pill variant="mute" size={20}>实拍 / 白板 / 原型录屏素材位</Pill></div> : null}
     </div>
   );
 };
@@ -152,11 +164,13 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
   let pos = 0;
   for (let index = 1; index < progressCount; index++) pos += p(f, index * segmentDuration, index * segmentDuration + 13);
   const localFrame = f - idx * segmentDuration;
-  const enter = p(localFrame, 0, progressCount === 4 ? 10 : 18);
-  const numberIn = p(localFrame, 0, 23);
-  const titleIn = p(localFrame, 5, 29);
-  const descriptionIn = p(localFrame, 11, 35);
-  const segmentedIn = p(localFrame, 18, 39);
+  const stage = progressStage(idx, progressCount);
+  const previous = idx > 0 ? data.progress[idx - 1] : null;
+  const cardIn = p(localFrame, 0, stage === 'expand' ? 27 : stage === 'resolve' ? 19 : progressCount === 4 ? 10 : 18);
+  const numberIn = stage === 'lock' ? p(localFrame, 0, 23) : p(localFrame, 4, stage === 'expand' ? 19 : 15);
+  const titleIn = stage === 'lock' ? p(localFrame, 5, 29) : p(localFrame, stage === 'expand' ? 7 : 8, stage === 'expand' ? 27 : 22);
+  const descriptionIn = stage === 'lock' ? p(localFrame, 11, 35) : p(localFrame, stage === 'expand' ? 15 : 11, stage === 'expand' ? 32 : 27);
+  const segmentedIn = stage === 'lock' ? p(localFrame, 18, 39) : p(localFrame, stage === 'expand' ? 20 : 14, stage === 'expand' ? 33 : 30);
   const closing = p(
     f,
     durationInFrames - PROGRESS_CLOSING_WIPE_FRAMES,
@@ -171,8 +185,18 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
         <Small style={{opacity: 0.7}}>DAY ONE</Small>
         <div style={{fontSize: 75, fontWeight: 700, marginTop: 10}}>今天，向前一步。</div>
       </div>
-      <Card onBlue style={{position: 'absolute', left: 110, top: 329, width: 1040, height: 570, overflow: 'hidden', transform: `translateY(${24 * (1 - enter)}px) scale(${mix(1, 0.97, closing)})`, opacity: enter}}>
-        <Sketch item={r} />
+      {previous && localFrame < 27 ? (
+        <Card onBlue style={{position: 'absolute', left: 110, top: 329, width: 1040, height: 570, overflow: 'hidden'}}>
+          <Sketch item={previous} stage={progressStage(idx - 1, progressCount)} />
+          {hasMedia(previous.media) ? (
+            <Freeze frame={Math.ceil(idx * segmentDuration) - 1}>
+              <LocalMedia asset={previous.media} from={Math.floor((idx - 1) * segmentDuration)} durationInFrames={Math.ceil(durationInFrames - (idx - 1) * segmentDuration)} style={{position: 'absolute', inset: 0}} />
+            </Freeze>
+          ) : null}
+        </Card>
+      ) : null}
+      <Card onBlue style={{position: 'absolute', left: 110, top: 329, width: 1040, height: 570, overflow: 'hidden', transformOrigin: stage === 'expand' ? 'left center' : 'center center', transform: stage === 'expand' ? `translateY(${20 * (1 - cardIn)}px) scale(${mix(0.84, 1, cardIn) * mix(1, 0.97, closing)})` : stage === 'resolve' ? `translateX(${40 * (1 - cardIn)}px) scale(${mix(0.98, 1, cardIn) * mix(1, 0.97, closing)})` : `translateY(${24 * (1 - cardIn)}px) scale(${mix(1, 0.97, closing)})`, opacity: stage === 'lock' ? cardIn : 1, clipPath: stage === 'expand' ? `inset(0 ${100 * (1 - cardIn)}% 0 0 round ${R.card}px)` : stage === 'resolve' ? `inset(0 0 0 ${100 * (1 - cardIn)}% round ${R.card}px)` : undefined}}>
+        <Sketch item={r} stage={stage} />
         {hasMedia(r.media) ? (
           <LocalMedia
             asset={r.media}
@@ -183,7 +207,14 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
         ) : null}
       </Card>
       <MaterialPlate onBlue style={{position: 'absolute', left: 1190, top: 329, width: 660, height: 570}} />
-      <div style={{position: 'absolute', left: 1230, top: 385, width: 590, color: 'white', perspective: 1050, perspectiveOrigin: '0% 45%', transformStyle: 'preserve-3d'}}>
+      {previous && localFrame < 14 ? (
+        <div style={{position: 'absolute', left: 1230, top: 385, width: 590, color: 'white', opacity: 1 - p(localFrame, 0, 10), transform: `translateY(${-18 * p(localFrame, 0, 10)}px)`}}>
+          <div style={{fontSize: 95, fontWeight: 700, letterSpacing: -5, opacity: 0.25}}>0{idx}</div>
+          <div style={{fontSize: 64, fontWeight: 700, marginTop: 25}}>{previous.title}</div>
+          <div style={{fontSize: 31, lineHeight: 1.8, marginTop: 30, maxWidth: 540}}>{previous.description}</div>
+        </div>
+      ) : null}
+      <div style={{position: 'absolute', left: 1230, top: 385, width: 590, color: 'white', perspective: 1050, perspectiveOrigin: '0% 45%', transformStyle: 'preserve-3d', transform: `translateY(${-14 * closing}px)`}}>
         <div
           style={{
             fontSize: 95,
@@ -191,7 +222,7 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
             letterSpacing: -5,
             opacity: numberIn * 0.25,
             transformOrigin: 'left bottom',
-            transform: `translate3d(0, ${-26 * (1 - numberIn)}px, ${-120 * (1 - numberIn)}px) rotateX(${14 * (1 - numberIn)}deg)`,
+            transform: stage === 'lock' ? `translate3d(0, ${-26 * (1 - numberIn)}px, ${-120 * (1 - numberIn)}px) rotateX(${14 * (1 - numberIn)}deg)` : stage === 'expand' ? `translateX(${-30 * (1 - numberIn)}px) scale(${mix(0.9, 1, numberIn)})` : `translateY(${12 * (1 - numberIn)}px)`,
           }}
         >
           0{idx + 1}
@@ -203,7 +234,7 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
             marginTop: 25,
             opacity: titleIn,
             transformOrigin: 'left center',
-            transform: `translate3d(${128 * (1 - titleIn)}px, 0, ${48 * (1 - titleIn)}px) rotateY(${-12 * (1 - titleIn)}deg)`,
+            transform: stage === 'lock' ? `translate3d(${128 * (1 - titleIn)}px, 0, ${48 * (1 - titleIn)}px) rotateY(${-12 * (1 - titleIn)}deg)` : stage === 'expand' ? `translateX(${-72 * (1 - titleIn)}px) scale(${mix(0.92, 1, titleIn)})` : `translateY(${18 * (1 - titleIn)}px) scale(${mix(0.98, 1, titleIn)})`,
           }}
         >
           {r.title}
@@ -216,12 +247,12 @@ export const Progress: React.FC<{durationInFrames?: number}> = ({durationInFrame
             maxWidth: 540,
             opacity: descriptionIn,
             transformOrigin: 'left top',
-            transform: `translate3d(0, ${72 * (1 - descriptionIn)}px, ${-34 * (1 - descriptionIn)}px) rotateX(${-9 * (1 - descriptionIn)}deg)`,
+            transform: stage === 'lock' ? `translate3d(0, ${72 * (1 - descriptionIn)}px, ${-34 * (1 - descriptionIn)}px) rotateX(${-9 * (1 - descriptionIn)}deg)` : stage === 'expand' ? `translateX(${-26 * (1 - descriptionIn)}px)` : `translateY(${14 * (1 - descriptionIn)}px)`,
           }}
         >
           {r.description}
         </div>
-        <div style={{opacity: segmentedIn, transform: `translate3d(0, ${20 * (1 - segmentedIn)}px, ${-16 * (1 - segmentedIn)}px)`}}>
+        <div style={{opacity: segmentedIn, transform: stage === 'lock' ? `translate3d(0, ${20 * (1 - segmentedIn)}px, ${-16 * (1 - segmentedIn)}px)` : `translateX(${12 * (1 - segmentedIn)}px)`}}>
           <Segmented count={progressCount} pos={pos} width={Math.max(180, progressCount * 100)} onBlue style={{marginTop: 44}} />
         </div>
       </div>

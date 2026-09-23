@@ -4,7 +4,7 @@
 
 当前有三个 composition：
 
-- `XiHackTeamIntro`：四人主版本，48.6 秒。六个章节都由旋钮短暂选档；五次“正文 → 下一枚旋钮”会先把上一页在约 0.6 秒内收回旋钮，随后选档，再以不同方向缩放 / 推进进入内容，旋钮不会常驻。问题、方案和今天分别使用异向聚拢、共轴接力与浅层 2.5D 文字入场，其余章节保持安静对照。开场、Story、今天和收尾使用同一套以 inset / sunken 为主、raised / lifted 为辅的材质层级；人物卡仍是等待真实照片的占位结构。章节边界同时服从乐句、重拍和文字阅读停顿，不为凑满一分钟拉长。
+- `XiHackTeamIntro`：四人主版本，48.6 秒。六个章节都由旋钮短暂选档；五次“正文 → 下一枚旋钮”会先把上一页在约 0.6 秒内收回旋钮，随后选档，再以不同方向缩放 / 推进进入内容，旋钮不会常驻。问题与方案分别使用异向聚拢和共轴接力；「今天」的三条进展改为锁定、展开、收束三种连续节奏，不再把同一套文字入场重复三次。开场、Story、今天和收尾使用同一套以 inset / sunken 为主、raised / lifted 为辅的材质层级；人物卡仍是等待真实照片的占位结构。章节边界同时服从乐句、重拍和文字阅读停顿，不为凑满一分钟拉长。
 - `XiHackTeamIntro5P`：五人派生版本。除人物名单、五卡宽度 / 间距和逐人聚焦节奏外，与四人主版本共享同一套内容、时间线、声音和视觉系统。
 - `DialTest`：8 秒旋钮组件试验，用于单独检查材质、档位、按压和离场；不再与主片割裂成另一条叙事方案。
 
@@ -23,11 +23,11 @@ npm run preflight:5p
 npm run render:5p
 ```
 
-四人版导出到 `out/xihack-team-intro-4p-scene-return.mp4`，五人版导出到 `out/xihack-team-intro-5p-scene-return.mp4`。上一轮 `*-optimized.mp4` 文件保留供对比。`npm run render` 仍等价于 `render:4p`。Remotion Studio 中选择 `DialTest` 可单独检查旋钮。
+四人版导出到 `out/xihack-team-intro-4p-today-rhythm.mp4`，五人版导出到 `out/xihack-team-intro-5p-today-rhythm.mp4`。上一轮 `*-scene-return.mp4` 与 `*-optimized.mp4` 文件保留供对比。`npm run render` 仍等价于 `render:4p`。Remotion Studio 中选择 `DialTest` 可单独检查旋钮。
 
 ## 审核版成片
 
-当前用于交叉评审的四人 / 五人完整 MP4 发布在 [GitHub Scene Return Candidate 2026-09-23](https://github.com/yoruuuchan/xihack-motion-template/releases/tag/scene-return-candidate-2026-09-23)。上一轮双版本仍保留在 `four-five-candidate-2026-09-23` Release 供 A/B。视频作为 Release assets 提供，不把二进制永久写进 Git 历史；对应源码、精确元数据和审核边界见 [`docs/REVIEW-CANDIDATE.md`](docs/REVIEW-CANDIDATE.md)。
+当前用于交叉评审的四人 / 五人完整 MP4 发布在 [GitHub Today Rhythm Candidate 2026-09-23](https://github.com/yoruuuchan/xihack-motion-template/releases/tag/today-rhythm-candidate-2026-09-23)。上一轮双版本仍保留在 `scene-return-candidate-2026-09-23` Release 供 A/B。视频作为 Release assets 提供，不把二进制永久写进 Git 历史；对应源码、精确元数据和审核边界见 [`docs/REVIEW-CANDIDATE.md`](docs/REVIEW-CANDIDATE.md)。
 
 四人主版本现场只改 [`src/content.json`](src/content.json) 与 `public/` 下的素材；若最终为五人，再单独修改 [`src/content-5p.json`](src/content-5p.json) 的五人名单：
 

@@ -6,8 +6,8 @@
   "scripts": {
     "studio": "remotion studio src/index.ts --no-open",
     "render": "npm run render:4p",
-    "render:4p": "remotion render src/index.ts XiHackTeamIntro out/xihack-team-intro-4p-scene-return.mp4 --codec=h264 --crf=19 --concurrency=2 --timeout=120000",
-    "render:5p": "remotion render src/index.ts XiHackTeamIntro5P out/xihack-team-intro-5p-scene-return.mp4 --codec=h264 --crf=19 --concurrency=2 --timeout=120000",
+    "render:4p": "remotion render src/index.ts XiHackTeamIntro out/xihack-team-intro-4p-today-rhythm.mp4 --codec=h264 --crf=19 --concurrency=2 --timeout=120000",
+    "render:5p": "remotion render src/index.ts XiHackTeamIntro5P out/xihack-team-intro-5p-today-rhythm.mp4 --codec=h264 --crf=19 --concurrency=2 --timeout=120000",
     "preflight": "node scripts/preflight.mjs",
     "preflight:5p": "node scripts/preflight.mjs --variant=5p",
     "check": "tsc --noEmit"

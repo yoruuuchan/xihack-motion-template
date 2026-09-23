@@ -5,10 +5,10 @@ Updated: 2026-09-23
 ## Current status
 
 - The previously reviewed **70/100** carrier is preserved locally as `out/xihack-team-intro-70-baseline.mp4`; it is no longer the latest render and was not overwritten.
-- Yoru rated an earlier candidate at about **78/100**. A human viewer then reported that the returns from each content page to the next selector still looked like cuts. The current carrier implements that feedback but has not yet received a replacement score; do not describe it as final visual approval.
-- The latest dual carrier is identified by tag `scene-return-candidate-2026-09-23` on `main`.
+- Yoru rated an earlier candidate at about **78/100**. Later feedback identified cut-like page returns and then repetitive motion in Today’s three items. The current carrier implements both rounds of feedback but has not received a replacement score; do not describe it as final visual approval.
+- The latest dual carrier is identified by tag `today-rhythm-candidate-2026-09-23` on `main`.
 - Repository: `git@github.com:yoruuuchan/xihack-motion-template.git`.
-- The implementation and this handoff are committed to `main`; verify synchronization with `origin/main` before resuming. Both public review carriers are attached to the `scene-return-candidate-2026-09-23` GitHub prerelease rather than committed as repository blobs. The prior `four-five-candidate-2026-09-23` prerelease remains available for A/B.
+- The implementation and this handoff are committed to `main`; verify synchronization with `origin/main` before resuming. Both public review carriers are attached to the `today-rhythm-candidate-2026-09-23` GitHub prerelease rather than committed as repository blobs. The prior `scene-return-candidate-2026-09-23` prerelease remains available for A/B.
 - Do not restart the design direction or reintroduce rejected experiments in a new session. Continue from the current main branch and the locks below.
 
 ## Latest creative feedback — implemented in the current candidate
@@ -21,6 +21,7 @@ The current candidate addresses the three points from the 70/100 review and the 
 4. Remaining Story / Today fallback canvases, state blocks, semantic pills, shared tiles, and the DialTest display use one tactile material system. Environmental washes and functional lines remain intentionally un-carded.
 5. Material hierarchy is now **inset > raised**: display beds, persistent information carriers, list rows, and selected states are predominantly sunken; raised depth is reserved for pick-up-able, focused, or operable foreground objects.
 6. The bottom ruler's real progress, timecode, and click remain on their true frames; only its active chapter label waits for the old page to finish returning.
+7. Today’s three progress entries no longer repeat one identical card and text entrance: the first locks a three-point view, the second expands the evidence slot, and the third resolves into a result list before the established checkpoint reveal.
 
 The opening-bottom sentence `一起，把想法往前推一步。` has been removed with no replacement copy. The same inset-first preference is recorded in the source DESIGN system at commit `834b075`.
 
@@ -30,14 +31,16 @@ Implementation exception approved by Yoru and honored in code: the people chapte
 
 ## Latest verified carriers
 
-- Four-person file: `out/xihack-team-intro-4p-scene-return.mp4` (ignored by Git), 8,995,652 bytes, SHA-256 `1E139C3816F8A0B6433BE3056B5528E2F42233336CFE2958F1498E3F0EC5084A`.
-- Five-person file: `out/xihack-team-intro-5p-scene-return.mp4` (ignored by Git), 9,095,007 bytes, SHA-256 `D6CB311A0EE394B04A6C9A1C28EF6876DB5503AA2230D933EABD60AC9FC81BCD`.
+- Four-person file: `out/xihack-team-intro-4p-today-rhythm.mp4` (ignored by Git), 8,796,642 bytes, SHA-256 `1D87BFA7C7B7D7EEA5FF825D077B7BFBA28315BE4B0B4D3164E862198E7172FA`.
+- Five-person file: `out/xihack-team-intro-5p-today-rhythm.mp4` (ignored by Git), 8,895,856 bytes, SHA-256 `79DB53F3CE5F59BF9B6912D4267A735B0A57C11BFFF471B80A27446C5CA249DC`.
 - Both: H.264 + AAC, 1920×1080, 30fps, 48 kHz stereo, `48.618667s`.
-- Public review release: `https://github.com/yoruuuchan/xihack-motion-template/releases/tag/scene-return-candidate-2026-09-23`.
-- Direct four-person MP4: `https://github.com/yoruuuchan/xihack-motion-template/releases/download/scene-return-candidate-2026-09-23/xihack-team-intro-4p-scene-return.mp4`.
-- Direct five-person MP4: `https://github.com/yoruuuchan/xihack-motion-template/releases/download/scene-return-candidate-2026-09-23/xihack-team-intro-5p-scene-return.mp4`.
-- Preceding A/B files: `out/xihack-team-intro-4p-optimized.mp4` and `out/xihack-team-intro-5p-optimized.mp4` (also on the preceding prerelease).
+- Public review release: `https://github.com/yoruuuchan/xihack-motion-template/releases/tag/today-rhythm-candidate-2026-09-23`.
+- Direct four-person MP4: `https://github.com/yoruuuchan/xihack-motion-template/releases/download/today-rhythm-candidate-2026-09-23/xihack-team-intro-4p-today-rhythm.mp4`.
+- Direct five-person MP4: `https://github.com/yoruuuchan/xihack-motion-template/releases/download/today-rhythm-candidate-2026-09-23/xihack-team-intro-5p-today-rhythm.mp4`.
+- Preceding A/B files: `out/xihack-team-intro-4p-scene-return.mp4` and `out/xihack-team-intro-5p-scene-return.mp4` (also on the preceding prerelease).
+- Older A/B files: `out/xihack-team-intro-4p-optimized.mp4` and `out/xihack-team-intro-5p-optimized.mp4` (also on an earlier prerelease).
 - Return previews: `out/scene-return-4p-next-preview.mp4` and `out/scene-return-5p-today-preview.mp4` (ignored by Git).
+- Today rhythm preview: `out/today-three-beat-variation-preview.mp4` (ignored by Git).
 - Five-person normal-speed People preview: `out/people-5p-preview.mp4` (ignored by Git).
 - Four-person normal-speed Solution handoff preview: `out/solution-handoff-4p-final-preview.mp4` (ignored by Git).
 - Normal-speed checkpoint handoff excerpt: `out/checkpoint-handoff-preview.mp4` (ignored by Git).
@@ -45,7 +48,7 @@ Implementation exception approved by Yoru and honored in code: the people chapte
 - Preserved 70/100 carrier: `out/xihack-team-intro-70-baseline.mp4`, SHA-256 `44E7B5FB8A7F8B0BE1354AB077238BAA0A871E27AA0166A2ECC64DA218C24A4B` (ignored by Git).
 - Local BGM is present at `public/music/alanajordan-brazilian-tropicalia-instrumental-01-485592.mp3` and intentionally excluded from Git.
 
-Both final MP4s were checked for Chinese, Latin, digits, punctuation, weights, and monospace roles. No unintended font fallback was observed. Exported frames confirm the page return from Opening to Problem, the five-person People to Today return, the Today checkpoint return, and the ruler's delayed active label.
+Both final MP4s were checked for Chinese, Latin, digits, punctuation, weights, and monospace roles. No unintended font fallback was observed. Exported frames confirm the three distinct Today layouts, both item handoffs, the checkpoint, and the five-person People placeholder layout. The local video browser rejected direct file playback, so normal-speed aesthetic approval of the new rhythm remains with Yoru.
 
 ## Read first in the next session
 
@@ -80,7 +83,7 @@ Both final MP4s were checked for Chinese, Latin, digits, punctuation, weights, a
 
 ## Highest-value next iteration
 
-Start by watching the current full carrier at normal speed. Check whether the returns are now readable without feeling repetitive, especially near 8.67s, 34.63s, and 43.30s. Then continue from specific observations:
+Start by watching the current full carrier at normal speed. Check whether Today’s lock → expand → resolve progression now reads as one phrase rather than three repeated pages, especially near 37.7s and 39.9s. Also check that the previously revised page returns remain legible near 8.67s, 34.63s, and 43.30s. Then continue from specific observations:
 
 1. Record only the remaining specific motion or material seams that still feel weak in the current candidate; do not reopen the whole visual system without evidence from normal-speed viewing.
 2. Replace demonstration project copy and story/progress media with the real event content, then validate text fitting, media crops, and local video clocks.

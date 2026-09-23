@@ -1,22 +1,22 @@
-# XiHack Motion Scene-Return Candidate — 2026-09-23
+# XiHack Motion Today-Rhythm Candidate — 2026-09-23
 
-This prerelease carries the four-person master and its explicit five-person derivative after the page-to-selector return pass. Both are complete 48.6-second demo films. Watch the four-person MP4 at normal speed first, especially its five scene-to-dial seams; then use the five-person film to judge the People chapter and its return into Today.
+This prerelease carries the four-person master and its explicit five-person derivative after the three-beat Today rhythm pass. Both are complete 48.6-second demo films. Watch the four-person MP4 at normal speed first, especially Today at 35.4–43.3 seconds; then use the five-person film to judge the People chapter and its return into Today.
 
 ## Download
 
-- Release: <https://github.com/yoruuuchan/xihack-motion-template/releases/tag/scene-return-candidate-2026-09-23>
-- Four-person MP4: <https://github.com/yoruuuchan/xihack-motion-template/releases/download/scene-return-candidate-2026-09-23/xihack-team-intro-4p-scene-return.mp4>
-- Five-person MP4: <https://github.com/yoruuuchan/xihack-motion-template/releases/download/scene-return-candidate-2026-09-23/xihack-team-intro-5p-scene-return.mp4>
-- Preceding dual candidate for A/B: <https://github.com/yoruuuchan/xihack-motion-template/releases/tag/four-five-candidate-2026-09-23>
+- Release: <https://github.com/yoruuuchan/xihack-motion-template/releases/tag/today-rhythm-candidate-2026-09-23>
+- Four-person MP4: <https://github.com/yoruuuchan/xihack-motion-template/releases/download/today-rhythm-candidate-2026-09-23/xihack-team-intro-4p-today-rhythm.mp4>
+- Five-person MP4: <https://github.com/yoruuuchan/xihack-motion-template/releases/download/today-rhythm-candidate-2026-09-23/xihack-team-intro-5p-today-rhythm.mp4>
+- Preceding dual candidate for A/B: <https://github.com/yoruuuchan/xihack-motion-template/releases/tag/scene-return-candidate-2026-09-23>
 - Review prompt: [`EXTERNAL-REVIEW-PROMPT.md`](EXTERNAL-REVIEW-PROMPT.md)
 
 ## Carrier metadata
 
 - Both: H.264 video + AAC audio; 1920×1080; 30fps; 48 kHz stereo; 48.618667 seconds
-- Four-person size: 8,995,652 bytes
-- Four-person SHA-256: `1E139C3816F8A0B6433BE3056B5528E2F42233336CFE2958F1498E3F0EC5084A`
-- Five-person size: 9,095,007 bytes
-- Five-person SHA-256: `D6CB311A0EE394B04A6C9A1C28EF6876DB5503AA2230D933EABD60AC9FC81BCD`
+- Four-person size: 8,796,642 bytes
+- Four-person SHA-256: `1D87BFA7C7B7D7EEA5FF825D077B7BFBA28315BE4B0B4D3164E862198E7172FA`
+- Five-person size: 8,895,856 bytes
+- Five-person SHA-256: `79DB53F3CE5F59BF9B6912D4267A735B0A57C11BFFF471B80A27446C5CA249DC`
 
 ## Candidate scope
 
@@ -27,8 +27,8 @@ This prerelease carries the four-person master and its explicit five-person deri
 - The four-person master and five-person derivative are separate authored compositions; portraits and project content are still demonstration placeholders.
 - The runtime intentionally stays below one minute instead of padding to 60 seconds.
 
-The new pass makes the previous full scene contract toward the selector during each of the five returns. The page lifts from the background, follows a short curved path, narrows into the dial, and fades only near arrival. The dial and its chapter title form underneath; the bottom ruler's progress and timecode remain frame-accurate while the active chapter label changes after the return. The first boot and selector-to-content overlap remain as before. The same motion component drives the four- and five-person versions, including the five-card People exit.
+The new pass changes only Today’s internal three-item progression. Its first item establishes a locked three-point view; the middle item enlarges its evidence slot and unfolds the corresponding text; the final item settles into a quieter result list before the existing checkpoint takes over. At item boundaries, the outgoing card remains briefly visible while the next arrives. The preceding scene-to-selector return, bottom ruler, six chapter boundaries, BGM, and four/five-person People compositions remain intact.
 
-Both carriers passed TypeScript, variant-specific content/media preflight, full decode, representative exported-frame review, and actual-carrier font checks. Preview excerpts exist locally for the four-person Opening → Problem and Today → Next seams and the five-person People → Today seam. Final aesthetic approval still belongs to a normal-speed human viewing; the source and frame checks alone do not establish it.
+Both carriers passed TypeScript, variant-specific content/media preflight, full decode, representative exported-frame review, and actual-carrier font checks. A Today excerpt exists locally at `out/today-three-beat-variation-preview.mp4`. Browser policy prevented the agent from playing that local file in-browser, so the rhythm still needs normal-speed human review; source and frame checks alone do not establish aesthetic approval.
 
 The BGM is Alanajordan's `Brazilian Tropicalia Instrumental 01`; source and local-asset boundaries are documented in [`public/music/README.md`](../public/music/README.md). The raw audio file remains outside Git.
