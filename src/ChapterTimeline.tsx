@@ -1,7 +1,7 @@
 import React from 'react';
 import {interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {C, font, mono} from './design';
-import {CHAPTERS, DIAL_INGRESS_FRAMES, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterAtFrame, chapterSceneDuration, chapterSceneStart, chapterStart, dialPressPeak} from './timeline';
+import {CHAPTERS, DIAL_RETURN_FRAMES, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterAtFrame, chapterSceneDuration, chapterSceneStart, chapterStart, dialPressPeak} from './timeline';
 
 const formatTime = (seconds: number) => {
   const safe = Math.max(0, seconds);
@@ -14,7 +14,7 @@ export const ChapterTimeline = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   const {chapter, index: timelineIndex} = chapterAtFrame(frame);
-  const displayFrame = Math.max(0, frame - DIAL_INGRESS_FRAMES);
+  const displayFrame = Math.max(0, frame - DIAL_RETURN_FRAMES);
   const {index: activeIndex} = chapterAtFrame(displayFrame);
   const localFrame = frame - chapterStart(timelineIndex);
   const sceneStart = chapterSceneStart(chapter);
@@ -50,10 +50,10 @@ export const ChapterTimeline = () => {
               style={{
                 position: 'absolute',
                 left: `${left}%`,
-                top: 22 - (index === activeIndex ? clickPulse * 3 : 0),
-                width: 2 + (index === activeIndex ? clickPulse * 2 : 0),
-                height: 18 + (index === activeIndex ? clickPulse * 6 : 0),
-                background: index <= activeIndex ? (onBlue ? 'white' : C.teal) : line,
+                top: 22 - (index === timelineIndex ? clickPulse * 3 : 0),
+                width: 2 + (index === timelineIndex ? clickPulse * 2 : 0),
+                height: 18 + (index === timelineIndex ? clickPulse * 6 : 0),
+                background: index <= activeIndex || (index === timelineIndex && clickPulse > 0) ? (onBlue ? 'white' : C.teal) : line,
               }}
             />
             <div

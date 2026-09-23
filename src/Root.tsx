@@ -9,7 +9,7 @@ import {DemoStamp,font} from './design';
 import {content as data, contentFive, type Member} from './content';
 import {ChapterTimeline} from './ChapterTimeline';
 import {Soundtrack} from './Soundtrack';
-import {CHAPTERS, DIAL_INGRESS_FRAMES, FPS, TOTAL_DURATION, chapterSceneStart, chapterStart, type ChapterId} from './timeline';
+import {CHAPTERS, FPS, TOTAL_DURATION, chapterSceneDuration, chapterSceneStart, chapterStart, type ChapterId} from './timeline';
 
 const sceneByChapter = {
   team: (durationInFrames: number) => <Opening durationInFrames={durationInFrames} />,
@@ -28,21 +28,25 @@ const Film: React.FC<FilmProps> = ({teamSize}) => {
     {CHAPTERS.map((chapter, index) => {
       const sceneStart = chapterSceneStart(chapter);
       const sceneDuration = chapter.durationInFrames - sceneStart;
-      const holdForIngress = index < CHAPTERS.length - 1 ? DIAL_INGRESS_FRAMES : 0;
+      const previous = index > 0 ? CHAPTERS[index - 1] : null;
+      const previousSceneDuration = previous ? chapterSceneDuration(previous) : 0;
       return (
-        <Sequence key={chapter.id} from={chapterStart(index)} durationInFrames={chapter.durationInFrames + holdForIngress} name={`${chapter.code} / ${chapter.label}`}>
+        <Sequence key={chapter.id} from={chapterStart(index)} durationInFrames={chapter.durationInFrames} name={`${chapter.code} / ${chapter.label}`}>
           <Sequence from={sceneStart} durationInFrames={sceneDuration} name={`${chapter.label} / SCENE`}>
             {sceneByChapter[chapter.id](sceneDuration, members)}
           </Sequence>
-          {holdForIngress > 0 ? (
-            <Sequence from={chapter.durationInFrames} durationInFrames={holdForIngress} name={`${chapter.label} / HOLD`}>
-              <Freeze frame={sceneDuration - 1}>
-                {sceneByChapter[chapter.id](sceneDuration, members)}
-              </Freeze>
-            </Sequence>
-          ) : null}
           <Sequence durationInFrames={chapter.dialFrames} name={`${chapter.label} / DIAL`}>
-            <DialCue chapterId={chapter.id} fromIndex={Math.max(0, chapter.dialTarget - 1)} toIndex={chapter.dialTarget} durationInFrames={chapter.dialFrames} />
+            <DialCue
+              chapterId={chapter.id}
+              fromIndex={Math.max(0, chapter.dialTarget - 1)}
+              toIndex={chapter.dialTarget}
+              durationInFrames={chapter.dialFrames}
+              previousScene={previous ? (
+                <Freeze frame={previousSceneDuration - 1}>
+                  {sceneByChapter[previous.id](previousSceneDuration, members)}
+                </Freeze>
+              ) : undefined}
+            />
           </Sequence>
         </Sequence>
       );

@@ -2,15 +2,15 @@
 
 请先下载并以正常速度完整观看四人主版本，再用五人派生版本重点检查人物章适配，最后阅读仓库代码：
 
-- 成片与 Release：<https://github.com/yoruuuchan/xihack-motion-template/releases/tag/four-five-candidate-2026-09-23>
-- 四人主版本：`xihack-team-intro-4p-optimized.mp4`
-- 五人派生版本：`xihack-team-intro-5p-optimized.mp4`
+- 成片与 Release：<https://github.com/yoruuuchan/xihack-motion-template/releases/tag/scene-return-candidate-2026-09-23>
+- 四人主版本：`xihack-team-intro-4p-scene-return.mp4`
+- 五人派生版本：`xihack-team-intro-5p-scene-return.mp4`
 - 仓库：<https://github.com/yoruuuchan/xihack-motion-template>
-- 审核基线：tag `four-five-candidate-2026-09-23`
+- 审核基线：tag `scene-return-candidate-2026-09-23`
 
 你是一位同时理解视觉导演、Motion Design、信息层级与 Remotion 模板工程的创意审片人。请把它当成一套已经建立明确方向、仍可继续精炼的黑客松首日团队介绍模板：现场只替换项目名、问题、方案、4 或 5 名成员、当天进展和真实素材，就要在一分钟以内稳定出片。
 
-这条片子的核心概念是一台带实体操作感的项目导航仪：旋钮完成“选择章节”这个动作，点击后离场，正文接棒；底部是真实时间标尺。材质语言偏新拟态 / 拟物，并明确偏好 **内凹 > 外凸**。不同章节允许不同文字运动性格，少量 2.5D 用来改变空间感，但稳定状态必须回到清晰可读的二维排版。
+这条片子的核心概念是一台带实体操作感的项目导航仪：前一页向旋钮收拢，旋钮完成“选择章节”后离场，正文接棒；底部是真实时间标尺。材质语言偏新拟态 / 拟物，并明确偏好 **内凹 > 外凸**。不同章节允许不同文字运动性格，少量 2.5D 用来改变空间感，但稳定状态必须回到清晰可读的二维排版。
 
 请把以下边界视为已经做出的导演选择，而不是默认要推翻的限制：
 

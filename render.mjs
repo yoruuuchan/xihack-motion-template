@@ -3,7 +3,7 @@ import {selectComposition,renderMedia} from '@remotion/renderer';
 import path from 'node:path';
 const browserExecutable=process.env.REMOTION_BROWSER_EXECUTABLE;
 const compositionId=process.env.REMOTION_COMPOSITION || 'XiHackTeamIntro';
-const outputLocation=process.env.REMOTION_OUTPUT || 'out/xihack-team-intro-4p-optimized.mp4';
+const outputLocation=process.env.REMOTION_OUTPUT || 'out/xihack-team-intro-4p-scene-return.mp4';
 const serveUrl=await bundle({entryPoint:path.resolve('src/index.ts'),outDir:path.resolve('out/bundle')});
 const composition=await selectComposition({serveUrl,id:compositionId,browserExecutable});
 let last=-1;

@@ -1,6 +1,6 @@
-import {CHAPTER_DATA, DIAL_EXIT_MOTION_FRAMES, DIAL_INGRESS_FRAMES, DIAL_SCENE_OVERLAP, FPS, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_HOLD_FRAMES, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterSceneDuration, chapterSceneStart, chapterStart, dialClickFrame, dialExitMotionStart, dialIngressEnd, dialPressPeak, dialTurnEnd} from './timeline-config.mjs';
+import {CHAPTER_DATA, DIAL_EXIT_MOTION_FRAMES, DIAL_INGRESS_FRAMES, DIAL_RETURN_FRAMES, DIAL_SCENE_OVERLAP, FPS, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_HOLD_FRAMES, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterSceneDuration, chapterSceneStart, chapterStart, dialClickFrame, dialExitMotionStart, dialIngressEnd, dialPressPeak, dialTurnEnd} from './timeline-config.mjs';
 
-export {DIAL_EXIT_MOTION_FRAMES, DIAL_INGRESS_FRAMES, DIAL_SCENE_OVERLAP, FPS, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_HOLD_FRAMES, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterSceneDuration, chapterSceneStart, chapterStart, dialClickFrame, dialExitMotionStart, dialIngressEnd, dialPressPeak, dialTurnEnd};
+export {DIAL_EXIT_MOTION_FRAMES, DIAL_INGRESS_FRAMES, DIAL_RETURN_FRAMES, DIAL_SCENE_OVERLAP, FPS, OPENING_TIMELINE_BLUE_END, PROGRESS_CLOSING_HOLD_FRAMES, PROGRESS_CLOSING_WIPE_FRAMES, TOTAL_DURATION, chapterSceneDuration, chapterSceneStart, chapterStart, dialClickFrame, dialExitMotionStart, dialIngressEnd, dialPressPeak, dialTurnEnd};
 
 export type ChapterId = 'team' | 'problem' | 'solution' | 'people' | 'today' | 'next';
 

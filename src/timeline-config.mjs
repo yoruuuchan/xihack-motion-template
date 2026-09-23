@@ -2,6 +2,7 @@ export const FPS = 30;
 export const DIAL_SCENE_OVERLAP = 6;
 export const DIAL_EXIT_MOTION_FRAMES = 11;
 export const DIAL_INGRESS_FRAMES = 10;
+export const DIAL_RETURN_FRAMES = 18;
 export const OPENING_TIMELINE_BLUE_END = 66;
 export const PROGRESS_CLOSING_WIPE_FRAMES = 35;
 export const PROGRESS_CLOSING_HOLD_FRAMES = 15;

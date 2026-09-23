@@ -266,3 +266,12 @@ Execution rule: work file by file, keep this checklist current, and render only 
 - [x] Tune only the five-card width, gap, attached identity text, and focus cadence; keep placeholder portrait styling unchanged.
 - [x] Render the five-person People chapter preview first, then the complete five-person carrier after the layout passes.
 - [x] Verify H.264 + AAC, 1920×1080, 30fps, under 60 seconds, end-to-end decode, and final-carrier font behavior for both versions.
+
+## Phase 11 — Scene returns into the selector (2026-09-23)
+
+- [x] Record the user's Mac-like page-to-selector motion reference before implementation.
+- [x] Make the outgoing page itself detach, contract, and travel into the dial across an 18-frame shared return window; keep the first boot unchanged.
+- [x] Let the next selector appear underneath the contracting page and defer only the ruler's active chapter label until the page has finished returning.
+- [x] Preserve the four-person master and five-person derivative as separate complete carriers; keep their preceding `*-optimized.mp4` files for A/B.
+- [x] Inspect the Opening → Problem, five-person People → Today, and Today → Next seams, then export and decode both complete MP4s.
+- [x] Confirm that exported frames preserve the People placeholders, true timeline progress, and intended CJK / Latin / mono fonts.

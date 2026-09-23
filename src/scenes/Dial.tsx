@@ -1,8 +1,8 @@
 import React from 'react';
-import {interpolateColors, useCurrentFrame} from 'remotion';
+import {Easing, interpolateColors, useCurrentFrame} from 'remotion';
 import {content as data} from '../content';
 import {C, Pill, Shell, Small, io, mix, mono, neo, p} from '../design';
-import {CHAPTERS, DIAL_SCENE_OVERLAP, dialExitMotionStart, dialIngressEnd, dialTurnEnd, type ChapterId} from '../timeline';
+import {CHAPTERS, DIAL_RETURN_FRAMES, DIAL_SCENE_OVERLAP, dialExitMotionStart, dialIngressEnd, dialPressPeak, dialTurnEnd, type ChapterId} from '../timeline';
 
 // DIRECTION: the rotary selector chooses a section, then yields to that section's scene.
 // It is a transition device, not a permanent overlay. DialCue drives all six chapters
@@ -135,7 +135,36 @@ const ingressMotion: Record<ChapterId, {scale: number; x: number; y: number; rot
   next: {scale: 1.2, x: 0, y: 105, rotate: 0, textX: 90, textY: -34},
 };
 
-export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex: number; durationInFrames: number}> = ({chapterId, fromIndex, toIndex, durationInFrames}) => {
+const returnEase = Easing.bezier(0.35, 0, 0.65, 1);
+
+const ReturnWindow: React.FC<{children: React.ReactNode}> = ({children}) => {
+  const f = useCurrentFrame();
+  const lift = p(f, 0, 4, io);
+  const travel = p(f, 3, DIAL_RETURN_FRAMES - 1, returnEase);
+  const verticalClose = p(f, 5, DIAL_RETURN_FRAMES - 1, returnEase);
+  const vanish = p(f, DIAL_RETURN_FRAMES - 5, DIAL_RETURN_FRAMES - 1, io);
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        inset: 0,
+        zIndex: 4,
+        overflow: 'hidden',
+        borderRadius: 48 * lift,
+        boxShadow: `0 ${24 * lift}px ${60 * lift}px rgba(42,55,86,${0.28 * lift})`,
+        opacity: 1 - vanish,
+        transformOrigin: '960px 540px',
+        translate: `${-490 * travel}px ${-24 * Math.sin(Math.PI * travel)}px`,
+        scale: `${mix(1, 0.975, lift) * mix(1, 0.055, travel)} ${mix(1, 0.985, lift) * mix(1, 0.04, verticalClose)}`,
+        rotate: `${-2.2 * Math.sin(Math.PI * travel)}deg`,
+      }}
+    >
+      {children}
+    </div>
+  );
+};
+
+export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex: number; durationInFrames: number; previousScene?: React.ReactNode}> = ({chapterId, fromIndex, toIndex, durationInFrames, previousScene}) => {
   const f = useCurrentFrame();
   const from = DETENTS[Math.max(0, Math.min(DETENTS.length - 1, fromIndex))];
   const to = DETENTS[Math.max(0, Math.min(DETENTS.length - 1, toIndex))];
@@ -170,8 +199,11 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
   const motion = exitMotion[chapterId];
   const entry = ingressMotion[chapterId];
   const lit = Math.min(1, 0.68 + Math.max(0, press) * 0.32);
-  const shellIn = chapterId === 'team' ? 1 : ingress;
-  const textIn = p(f, Math.max(2, dialIngressEnd(durationInFrames) - 4), dialIngressEnd(durationInFrames) + 4);
+  const pressPeak = dialPressPeak(durationInFrames);
+  const knobIn = previousScene ? p(f, Math.max(6, pressPeak - 7), pressPeak - 1, io) : 1;
+  const textIn = previousScene
+    ? p(f, Math.max(8, pressPeak - 6), pressPeak + 1)
+    : p(f, Math.max(2, dialIngressEnd(durationInFrames) - 4), dialIngressEnd(durationInFrames) + 4);
   const solutionHandoff = chapterId === 'solution'
     ? p(f, durationInFrames - DIAL_SCENE_OVERLAP - 9, durationInFrames - DIAL_SCENE_OVERLAP, io)
     : 0;
@@ -182,13 +214,16 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
       : mix(0.12, 1.55, p(solutionHandoff, 0.74, 1, io));
   const solutionTravel = p(solutionHandoff, 0.3, 0.84, io);
   return (
-    <div style={{position: 'absolute', inset: 0, opacity: shellIn * (1 - Math.min(1, fadeExit * 2))}}>
+    <div style={{position: 'absolute', inset: 0, opacity: 1 - Math.min(1, fadeExit * 2)}}>
       <Shell>
         <div style={{position: 'absolute', inset: 0, background: 'repeating-linear-gradient(90deg, transparent 0 119px, rgba(14,21,37,0.025) 119px 120px)'}} />
+        {previousScene ? <ReturnWindow>{previousScene}</ReturnWindow> : null}
         <div
           style={{
             position: 'absolute',
             inset: 0,
+            zIndex: 3,
+            opacity: knobIn,
             transformOrigin: '720px 540px',
             translate: `${260 + entry.x * (1 - ingress) + motion.x * motionExit}px ${entry.y * (1 - ingress) + motion.y * motionExit}px`,
             scale: mix(entry.scale, 1, ingress) * mix(1, motion.scale, motionExit),
@@ -202,6 +237,7 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
             position: 'absolute',
             left: 1190,
             top: 360,
+            zIndex: 3,
             opacity: textIn * (1 - textExit),
             translate: `${entry.textX * (1 - ingress) + motion.textX * motionExit}px ${entry.textY * (1 - ingress)}px`,
           }}
@@ -218,6 +254,7 @@ export const DialCue: React.FC<{chapterId: ChapterId; fromIndex: number; toIndex
               position: 'absolute',
               left: mix(1345, 1074, solutionTravel),
               top: mix(590, 540, solutionTravel),
+              zIndex: 3,
               width: 310,
               height: 3,
               borderRadius: 999,
